@@ -1,80 +1,20 @@
-package interact;
+package transactSQL;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-public class Database {
-    static Connection conn;
-    static String url;
-    static String user;
-    static String password;
-    static String data;
-    static Statement statement;
+public class Insert extends DatabaseConnection{
+
     static int[] letterCounts = new int[26];
     static int counter;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
 
-    //  The getProperties() de-structures the narrative of this code somewhat, but it is found here to leverage class variables for the db connection, to prevent parameterization!!!
-    public static void getProperties() {
-        //  Read the DB url and credentials from the configuration file...
-        System.out.println("Reading the watson.properties file...");
-        java.util.Properties props = new java.util.Properties();
-        try {
-            props.load(new FileInputStream("watson.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        url = props.getProperty("url");
-        user = props.getProperty("user");
-        password = props.getProperty("password");
-        data = props.getProperty("data");
-        System.out.println("Successfully read the following values: ");
-        System.out.println("Database url: " + url);
-        System.out.println("Username: " + user);
-        System.out.println("Password: " + password);
-        System.out.println("DB File Location: " + data);
-        System.out.println();
-    }
-    public static void create() throws Exception {
-        System.out.println("Preparing to create the watson database...");
-        //  RESTART the mssqlserver service (to assure there is no other process accessing the DB)
-        System.out.println("Restarting the MSSQLSERVER Service (to ensure individual access to the database)...");
-        ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "net stop mssqlserver && ping 127.0.0.1 -n 2 > nul && net start mssqlserver");
-        builder.redirectErrorStream(true);
-        Process p = builder.start();
-        BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream()));
-        String line;
-        while (true) {
-            line = r.readLine();
-            if (line == null) { break; }
-            System.out.println(line);
-        }
-
-        System.out.println("Dropping and re-creating the 'watson' database...");
-        try {
-            conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
-            statement = conn.createStatement();                       //  Create a SQL statement object to send to the database
-            //  WORKS!
-            statement.addBatch("drop database watson;"
-                    + "WAITFOR DELAY '00:00:05';"
-                    + "create database watson;"
-                    + "use watson;"
-                    + "create table Words_tbl (word varchar(5) primary key(word));");
-            statement.executeBatch();
-
-        } catch (SQLException e) {
-//					  e.printStackTrace();
-        }
-        System.out.println("'watson' database created!");
-        System.out.println();
-
-        url = url + ":1433;DatabaseName=watson";
-    }
     private static void letterEnumerator(String word) {
         //  COUNT the occurrence of every letter in every word...
         for(int i = 0; i < word.length(); i++) {
@@ -109,6 +49,8 @@ public class Database {
             }
         }
     }  //  End-of-letterEnumerator()
+
+
     public static void loadKnownWords() {
         //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
         System.out.println("Loading known words into the 'watson' database...");
@@ -141,4 +83,5 @@ public class Database {
 //		}
 //        Matrix.seedFrequency(letterCounts);
     }
+
 }
