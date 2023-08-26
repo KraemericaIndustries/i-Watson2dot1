@@ -29,18 +29,18 @@ public class Messages {
     public static void report(int numTurns) throws SQLException {
         System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " ********************************************************************************************");
 
+        dataStructures.Matrix.print();
+
         System.out.println("The MOST COMMON letters in the database (from MOST to LEAST) are: ");
 
         ResultSet resultSet = transactSQL.Query.select("select * from letterCounts_tbl order by Count DESC");  //  Execute the statement object
         //  Process the result
         while(resultSet.next()) {
-//            ToDo: Get rid of the trailing comma on the next line somehow...
+//          ToDo: Get rid of the trailing comma on the next line somehow...
             System.out.print(resultSet.getString(1) + "=" + resultSet.getInt(2) + ", ");
         }
         System.out.println();
 
-
-//ToDo: Research references on the return on 'select count (*)' statements.  There may be a better way than this...
         resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
         //  Process the result
         while(resultSet.next()) {

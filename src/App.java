@@ -9,7 +9,8 @@ public class App {
         transactSQL.DatabaseConnection.getProperties();
         transactSQL.Create.watsonDB();
         transactSQL.Insert.loadKnownWords();
-//        transactSQL.Query.wordsFromDB();
+        dataStructures.Matrix.initialize();
+        //        transactSQL.Query.wordsFromDB();
         print.Messages.play();
 
         do {
