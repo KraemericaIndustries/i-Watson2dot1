@@ -47,6 +47,16 @@ public class Messages {
             System.out.println("There are " + ((Number) resultSet.getObject(1)).intValue() + " words remaining in the database.");
         }
         System.out.println("*************************************************************************************************************************************************************************");
+        System.out.println();
+    }
+    public static void strategies(int numTurns) {
+        if(numTurns == 0) {
+            System.out.println("*****************************************************************  GENERAL STRATEGIES  ********************************************************************************");
+            System.out.println(" - Try to Eliminate the MOST COMMON, UNKNOWN letters as quickly as possible.  Doing so narrows the field of possible words the most quickly");
+            System.out.println(" - Successive guesses should only vary by ONE UNKNOWN letter at a time.  Doing so allows us to learn the most from responses.");
+            System.out.println("***********************************************************************************************************************************************************************");
+            System.out.println();
+        }
     }
 //    public static void endGame(String guess, int counter) throws SQLException {
 //
