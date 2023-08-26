@@ -26,10 +26,10 @@ public class DatabaseConnection {
         url = props.getProperty("url");
         user = props.getProperty("user");
         password = props.getProperty("password");
-        System.out.println("Successfully read the following values: ");
-        System.out.println("Database url: " + url);
-        System.out.println("Username: " + user);
-        System.out.println("Password: " + password);
+        System.out.println(" > Successfully read the following values: ");
+        System.out.println(" > Database url: " + url);
+        System.out.println(" > Username: " + user);
+        System.out.println(" > Password: " + password);
         System.out.println();
     }
 

@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Query extends DatabaseConnection{
@@ -36,4 +37,21 @@ public class Query extends DatabaseConnection{
         }
         System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
     }
+
+    public static ResultSet countWordsInDB(String selectQuery) {
+        ResultSet resultSet = null;
+
+        try {
+            conn = DriverManager.getConnection(url, user, password);
+            statement = conn.createStatement();
+            resultSet = statement.executeQuery(selectQuery);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+
+
+
 }

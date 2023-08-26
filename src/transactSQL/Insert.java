@@ -53,7 +53,7 @@ public class Insert extends DatabaseConnection{
         try {
             File file = new File("FiveLetterWords.txt");
             Scanner input = new Scanner(file);
-            System.out.println("Seeding known 5 letter words into the 'watson' database...");
+
             while (input.hasNextLine()) {
                 line = (input.nextLine().toUpperCase());
                 letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
@@ -71,7 +71,7 @@ public class Insert extends DatabaseConnection{
             System.out.println("file not found");
 //			e.printStackTrace();
         }
-        System.out.println("Number of words successfully added to the Database: " + counter);
+        System.out.println(" > Number of words successfully added to the Database: " + counter);
         System.out.println();
 //  DEBUG:  Show letter counts:
 //		for(int j = 0; j <= letterCounts.length - 1; j++) {
@@ -94,7 +94,9 @@ public class Insert extends DatabaseConnection{
         } catch (SQLException e) {
 //					  e.printStackTrace();
         }
-        System.out.println("'watson' database created!");
+        System.out.println(" > Seeding letter counts into the 'watson' database was Successful");
+        System.out.println(" > 'watson' database populated!");
+        System.out.println(" > Ready for play...");
         System.out.println();
 
 

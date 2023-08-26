@@ -37,7 +37,7 @@ public class Create extends DatabaseConnection{
         } catch (SQLException e) {
 //					  e.printStackTrace();
         }
-        System.out.println("'watson' database created!");
+        System.out.println(" > 'watson' database created!");
         System.out.println();
 
         url = url + ":1433;DatabaseName=watson";
