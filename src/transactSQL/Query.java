@@ -38,7 +38,7 @@ public class Query extends DatabaseConnection{
         System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
     }
 
-    public static ResultSet countWordsInDB(String selectQuery) {
+    public static ResultSet select(String selectQuery) {
         ResultSet resultSet = null;
 
         try {

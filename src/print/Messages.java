@@ -1,9 +1,5 @@
 package print;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -33,14 +29,23 @@ public class Messages {
     public static void report(int numTurns) throws SQLException {
         System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " ********************************************************************************************");
 
-        int numWords = 0;
+        System.out.println("The MOST COMMON letters in the database (from MOST to LEAST) are: ");
 
-        ResultSet resultSet = transactSQL.Query.countWordsInDB("select count (*) from Words_tbl");  //  Execute the statement object
+        ResultSet resultSet = transactSQL.Query.select("select * from letterCounts_tbl order by Count DESC");  //  Execute the statement object
         //  Process the result
         while(resultSet.next()) {
-            numWords =  ((Number) resultSet.getObject(1)).intValue();
+//            ToDo: Get rid of the trailing comma on the next line somehow...
+            System.out.print(resultSet.getString(1) + "=" + resultSet.getInt(2) + ", ");
         }
-        System.out.println("There are " + numWords + " words remaining in the database.");
+        System.out.println();
+
+
+//ToDo: Research references on the return on 'select count (*)' statements.  There may be a better way than this...
+        resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
+        //  Process the result
+        while(resultSet.next()) {
+            System.out.println("There are " + ((Number) resultSet.getObject(1)).intValue() + " words remaining in the database.");
+        }
         System.out.println("*************************************************************************************************************************************************************************");
     }
 //    public static void endGame(String guess, int counter) throws SQLException {
