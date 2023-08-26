@@ -9,12 +9,10 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Insert extends DatabaseConnection{
-
     static int[] letterCounts = new int[26];
     static int counter;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
-
     private static void letterEnumerator(String word) {
         //  COUNT the occurrence of every letter in every word...
         for(int i = 0; i < word.length(); i++) {
@@ -49,8 +47,6 @@ public class Insert extends DatabaseConnection{
             }
         }
     }  //  End-of-letterEnumerator()
-
-
     public static void loadKnownWords() {
         //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
         System.out.println("Loading known words into the 'watson' database...");
@@ -83,5 +79,4 @@ public class Insert extends DatabaseConnection{
 //		}
 //        Matrix.seedFrequency(letterCounts);
     }
-
 }

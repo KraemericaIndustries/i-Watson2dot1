@@ -26,11 +26,12 @@ public class Create extends DatabaseConnection{
             conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
             statement = conn.createStatement();                       //  Create a SQL statement object to send to the database
             //  WORKS!
-            statement.addBatch("drop database watson;"
-                    + "WAITFOR DELAY '00:00:05';"
-                    + "create database watson;"
-                    + "use watson;"
-                    + "create table Words_tbl (word varchar(5) primary key(word));");
+            statement.addBatch("drop database watson;" +
+                                   "WAITFOR DELAY '00:00:05';"  +
+                                   "create database watson;" +
+                                   "use watson;"  +
+                                   "create table Words_tbl (word varchar(5) primary key(word));" +
+                                   "create table letterCounts_tbl (Letter varchar, Count int);");
             statement.executeBatch();
 
         } catch (SQLException e) {
