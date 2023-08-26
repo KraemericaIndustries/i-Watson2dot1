@@ -78,5 +78,25 @@ public class Insert extends DatabaseConnection{
 //			System.out.println("Letter count @ index " + j + ":" + letterCounts[j]);
 //		}
 //        Matrix.seedFrequency(letterCounts);
+
+        System.out.println("Seeding letter counts into the 'watson' database...");
+        try {
+            conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
+            statement = conn.createStatement();                       //  Create a SQL statement object to send to the database
+            //  WORKS!
+
+            for(int i = 0; i < letterCounts.length; i++) {
+                statement.addBatch("insert into letterCounts_tbl values ('" + (char)(i+65) + "', " + letterCounts[i] + ");");
+            }
+
+            statement.executeBatch();
+
+        } catch (SQLException e) {
+//					  e.printStackTrace();
+        }
+        System.out.println("'watson' database created!");
+        System.out.println();
+
+
     }
 }
