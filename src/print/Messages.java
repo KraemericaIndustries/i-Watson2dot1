@@ -41,7 +41,7 @@ public class Messages {
         while(resultSet.next()) {
             sb.append(resultSet.getString(1) + "=" + resultSet.getInt(2) + ", ");
         }
-        System.out.print((sb.toString()).substring(0, sb.toString().length()-2));
+        System.out.print((sb).substring(0, sb.length()-2));
         System.out.println();
 
         resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
