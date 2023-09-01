@@ -21,7 +21,7 @@ public class App {
             print.Messages.strategies(numTurns);
 
 
-
+            print.Messages.specificStrategies();
 
 
             guess = read.Keyboard.guess();                        //  TYPE a guess

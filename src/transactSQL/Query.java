@@ -51,8 +51,4 @@ public class Query extends DatabaseConnection{
         }
         return resultSet;
     }
-
-
-
-
 }

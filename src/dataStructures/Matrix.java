@@ -2,7 +2,7 @@ package dataStructures;
 
 public class Matrix {
 
-    static int[][] truthTable = new int[10][28];
+    public static int[][] truthTable = new int[10][28];
     static int turnIndex;
 
     public static void initialize() {
@@ -10,6 +10,7 @@ public class Matrix {
         for(int i = 0; i < 27; i++) {
             truthTable[2][i] = (i+65);
             truthTable[4][i] = (i+65);
+            truthTable[5][i] = 0;
         }
         System.out.println(" > Success!");
     }
@@ -17,22 +18,22 @@ public class Matrix {
     public static void print() {
 
         System.out.print("[0] Known IN:        ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[0][i]);
+        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[0][i-1]);
         System.out.println();
         System.out.print("[1] Known OUT:       ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[1][i]);
+        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[1][i-1]);
         System.out.println();
         System.out.print("[2] Unknown:         ");
-        for(int i = 0; i < truthTable[0].length-2; i++) System.out.print((char)(truthTable[2][i]));
+        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print((char)(truthTable[2][i-1]));
         System.out.println();
         System.out.print("[3] Known Together:  ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print( + truthTable[3][i]);
+        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print( + truthTable[3][i-1]);
         System.out.println();
         System.out.print("[4] Columns:         ");
-        for(int i = 0; i < truthTable[0].length-2; i++) System.out.print((char)(truthTable[4][i]));
+        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print((char)(truthTable[4][i-1]));
         System.out.println();
         System.out.print("[5] Turns:           ");
-        for(int i = 0; i < truthTable[0].length-2; i++) System.out.print((char)(truthTable[5][i]));
+        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[5][i-1]);
         System.out.println();
 
 //        for (int[] ints : truthTable) {

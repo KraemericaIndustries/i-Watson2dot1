@@ -5,7 +5,7 @@ import java.sql.SQLException;
 
 public class Messages {
 
-    static String mostCommonLetters;
+    public static String mostCommonLetters;
 
     //  Introduce the game, and how it is played...
     public static void welcome() {
@@ -62,7 +62,7 @@ public class Messages {
         }
     }
 
-    public static void specificStrategies() {
+    public static void specificStrategies() throws SQLException {
         System.out.println("*****************************************************************  SPECIFIC STRATEGIES  *******************************************************************************");
 
         analyze.Report.previousGuesses();
