@@ -31,7 +31,7 @@ public class Messages {
         System.out.println();
     }
     public static void report(int numTurns) throws SQLException {
-        System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " ********************************************************************************************");
+        System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " *****************************************************************************************");
         //  Print the Matrix...
         dataStructures.Matrix.print();
 
@@ -49,7 +49,7 @@ public class Messages {
         //  Print the number of words remaining in the DB...
         resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
         System.out.println("There are " + morph.ResultSetTo.numWords(resultSet) + " words remaining in the database.");
-        System.out.println("*************************************************************************************************************************************************************************");
+        System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
     public static void strategies(int numTurns) {

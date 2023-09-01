@@ -8,6 +8,7 @@ public class Matrix {
     public static void initialize() {
         System.out.println("Initializing truth table...");
         for(int i = 0; i < 27; i++) {
+            truthTable[2][i] = (i+65);
             truthTable[4][i] = (i+65);
         }
         System.out.println(" > Success!");
@@ -22,7 +23,7 @@ public class Matrix {
         for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[1][i]);
         System.out.println();
         System.out.print("Unknown:         ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[2][i]);
+        for(int i = 0; i < truthTable[0].length-2; i++) System.out.print((char)(truthTable[2][i]));
         System.out.println();
         System.out.print("Known Together:  ");
         for(int i = 1; i < truthTable[0].length-1; i++) System.out.print( + truthTable[3][i]);
