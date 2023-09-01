@@ -61,6 +61,17 @@ public class Messages {
             System.out.println();
         }
     }
+
+    public static void specificStrategies() {
+        System.out.println("*****************************************************************  SPECIFIC STRATEGIES  *******************************************************************************");
+
+        analyze.Report.previousGuesses();
+
+
+        System.out.println("***********************************************************************************************************************************************************************");
+    }
+
+
 //    public static void endGame(String guess, int counter) throws SQLException {
 //
 //        int count = 0;  //  Counter for the number of words remaining in the DB

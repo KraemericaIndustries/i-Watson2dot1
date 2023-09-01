@@ -16,20 +16,23 @@ public class Matrix {
 
     public static void print() {
 
-        System.out.print("Known IN:        ");
+        System.out.print("[0] Known IN:        ");
         for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[0][i]);
         System.out.println();
-        System.out.print("Known OUT:       ");
+        System.out.print("[1] Known OUT:       ");
         for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[1][i]);
         System.out.println();
-        System.out.print("Unknown:         ");
+        System.out.print("[2] Unknown:         ");
         for(int i = 0; i < truthTable[0].length-2; i++) System.out.print((char)(truthTable[2][i]));
         System.out.println();
-        System.out.print("Known Together:  ");
+        System.out.print("[3] Known Together:  ");
         for(int i = 1; i < truthTable[0].length-1; i++) System.out.print( + truthTable[3][i]);
         System.out.println();
-        System.out.print("                 ");
+        System.out.print("[4] Columns:         ");
         for(int i = 0; i < truthTable[0].length-2; i++) System.out.print((char)(truthTable[4][i]));
+        System.out.println();
+        System.out.print("[5] Turns:           ");
+        for(int i = 0; i < truthTable[0].length-2; i++) System.out.print((char)(truthTable[5][i]));
         System.out.println();
 
 //        for (int[] ints : truthTable) {

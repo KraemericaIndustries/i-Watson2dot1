@@ -19,6 +19,11 @@ public class App {
 //            Messages.printGeneralStrategies();
 //            words = reportAnalysis(mostToLeastFrequentLetters);  //  ASSESS the Report, suggest strategies, take action (Matrix.size == 0. Matrix.size == 1 and so on).
             print.Messages.strategies(numTurns);
+
+
+
+
+
             guess = read.Keyboard.guess();                        //  TYPE a guess
             response = read.Keyboard.response();                  //  TYPE the response
             numTurns++;                                          //  INCREMENT the counter for the number of turns taken.
