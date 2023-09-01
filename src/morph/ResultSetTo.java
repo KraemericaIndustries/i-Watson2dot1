@@ -21,7 +21,7 @@ public class ResultSetTo {
         int numWords = 0;
 
         while(resultSet.next()) {
-            ((Number) resultSet.getObject(1)).intValue();
+            numWords = ((Number) resultSet.getObject(1)).intValue();
         }
         return numWords;
     }
