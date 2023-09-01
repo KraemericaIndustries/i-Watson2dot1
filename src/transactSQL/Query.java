@@ -12,7 +12,8 @@ public class Query extends DatabaseConnection{
 
     static File file = new File("test.txt");
 
-    //  wordsFromDB() ToDo: This method needs to DELETE the "test.txt" file from the filesystem prior to each run.  A non-hardcoded absolute path to the file would be preferrable
+    //  wordsFromDB() ToDo: This method needs to DELETE the "test.txt" file from the filesystem prior to each run.  A non-hardcoded absolute path to the file would be preferable
+    //  wordsFromDB() ToDo: Refactor this method.  Resultset parameter to write.File.XYZ to improve structure
     public static void wordsFromDB() {
         System.out.println("Retrieving all remaining words from the 'watson' database...");
         int counter = 0;

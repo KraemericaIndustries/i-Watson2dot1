@@ -4,19 +4,23 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Messages {
+
+    static String mostCommonLetters;
+
     //  Introduce the game, and how it is played...
     public static void welcome() {
 
         System.out.println("*****************************************************************  WELCOME  *******************************************************************************************");
-        System.out.println("Welcome to the Word Guessing Game Helper!\n" +
-                "\n" +
-                "Your opponent will  choose a familiar 5 letter word, with each letter appearing ONLY ONCE. (Valid: 'GLYPH'.  Invalid: 'DROOP')\n" +
-                "See if you can guess the word!  Each time you make a guess, your opponent will respond with a number.\n" +
-                "The number represents the number of letters in your guess that appear in the word chosen by your opponent.\n" +
-                "Example:  If the opponent chooses 'LOSER' and you guess 'POSER' the response would be 4 ('O' makes 1, 'S' makes 2, 'E' makes 3, and 'R' makes 4.)\n" +
-                "Will you be able to identify your opponent's word?\n" +
-                "I'm going to help - by suggesting your most strategic plays possible!\n" +
-                "First - let me get myself set up...");
+        System.out.println("""
+                Welcome to the Word Guessing Game Helper!
+
+                Your opponent will  choose a familiar 5 letter word, with each letter appearing ONLY ONCE. (Valid: 'GLYPH'.  Invalid: 'DROOP')
+                See if you can guess the word!  Each time you make a guess, your opponent will respond with a number.
+                The number represents the number of letters in your guess that appear in the word chosen by your opponent.
+                Example:  If the opponent chooses 'LOSER' and you guess 'POSER' the response would be 4 ('O' makes 1, 'S' makes 2, 'E' makes 3, and 'R' makes 4.)
+                Will you be able to identify your opponent's word?
+                I'm going to help - by suggesting your most strategic plays possible!
+                First - let me get myself set up...""");
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
@@ -28,27 +32,23 @@ public class Messages {
     }
     public static void report(int numTurns) throws SQLException {
         System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " ********************************************************************************************");
-
+        //  Print the Matrix...
         dataStructures.Matrix.print();
 
+        //  Query the most common letters from the database, and format the result into something useful...
         System.out.println("The MOST COMMON letters in the database (from MOST to LEAST) are: ");
-
         ResultSet resultSet = transactSQL.Query.select("select * from letterCounts_tbl order by Count DESC");  //  Execute the statement object
-        //  Process the result
+        String letterCountsString = morph.ResultSetTo.letterCountsString(resultSet);
+        System.out.println(letterCountsString);
 
-        StringBuilder sb = new StringBuilder();  //  Use StringBuilder to concatenate results, and exclude the trailing delimiter with Substring()
-
-        while(resultSet.next()) {
-            sb.append(resultSet.getString(1) + "=" + resultSet.getInt(2) + ", ");
-        }
-        System.out.print((sb).substring(0, sb.length()-2));
+        //  Test print of the 'letters only' String needed in the desired implementation of 'suggest guesses'...
+        mostCommonLetters = morph.LetterCountsString.mostCommonLettersString(letterCountsString);
+        System.out.println(mostCommonLetters);
         System.out.println();
 
+        //  Print the number of words remaining in the DB...
         resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
-        //  Process the result
-        while(resultSet.next()) {
-            System.out.println("There are " + ((Number) resultSet.getObject(1)).intValue() + " words remaining in the database.");
-        }
+        System.out.println("There are " + morph.ResultSetTo.numWords(resultSet) + " words remaining in the database.");
         System.out.println("*************************************************************************************************************************************************************************");
         System.out.println();
     }
