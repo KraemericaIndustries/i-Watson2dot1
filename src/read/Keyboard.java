@@ -1,14 +1,17 @@
 package read;
 
+import dataStructures.Matrix;
+
 import java.util.Scanner;
 
 public class Keyboard {
     //  INPUT a guess...
-    public static String guess() {
+    public static void guess() {
 
         String guess;
 
         do {
+            System.out.print("Turn # " + (Matrix.turnIndex - 4) + ".  Guess a 5 letter word: ");
             Scanner input= new Scanner(System.in);
             guess = input.nextLine();
             System.out.println();
@@ -19,14 +22,18 @@ public class Keyboard {
             }
 
         } while (guess.length() != 5);  //  Discard guesses that are NOT 5 letters.
-        return guess;
+
+
+        dataStructures.Matrix.pushGuess(guess);
+
     }
     //  INPUT a response...
-    public static int response() {
+    public static void response() {
 
         int response;
 
         do {
+            System.out.println("What was the response?: ");
             Scanner input= new Scanner(System.in);
             response = input.nextInt();
             System.out.println();
@@ -36,6 +43,6 @@ public class Keyboard {
             }
 
         } while (response > 5 || response < 0);  //  Discard responses that are NOT 0 through 5.
-        return response;
+        dataStructures.Matrix.pushResponse(response);
     }
 }

@@ -3,7 +3,7 @@ package dataStructures;
 public class Matrix {
 
     public static int[][] truthTable = new int[10][28];
-    static int turnIndex;
+    public static int turnIndex = 5;
 
     public static void initialize() {
         System.out.println("Initializing truth table...");
@@ -33,7 +33,7 @@ public class Matrix {
         for(int i = 1; i < truthTable[0].length-1; i++) System.out.print((char)(truthTable[4][i-1]));
         System.out.println();
         System.out.print("[5] Turns:           ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[5][i-1]);
+        for(int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[5][i]);
         System.out.println();
 
 //        for (int[] ints : truthTable) {
@@ -46,13 +46,13 @@ public class Matrix {
 //        }
 //        System.out.println("DEBUG > yIndex is: " + turnIndex);
     }
-    public void push (String guess, int response){
+    public static void pushGuess(String guess) {
+
+        truthTable[turnIndex][0] = 1;  //  Set a print mask on the truthTable at the first column of every row
 
         for(int i = 0; i <5; i++) {
-            char letter = guess.charAt(i);
 
-            switch (letter) {
-
+            switch (guess.charAt(i)) {
                 case 'A' -> truthTable[turnIndex][1] = 1;
                 case 'B' -> truthTable[turnIndex][2] = 1;
                 case 'C' -> truthTable[turnIndex][3] = 1;
@@ -81,10 +81,10 @@ public class Matrix {
                 case 'Z' -> truthTable[turnIndex][26] = 1;
             }
         }
-        truthTable[turnIndex][0] = 1;
-        truthTable[turnIndex][27] = response;
-        turnIndex++;
-//        System.out.println("DEBUG > yIndex is: " + y)
     }
 
+    public static void pushResponse(int response) {
+        truthTable[turnIndex][27] = response;
+        turnIndex++;
+    }
 }

@@ -1,3 +1,5 @@
+import dataStructures.Matrix;
+
 public class App {
     public static void main(String[] args) throws Exception {
 
@@ -18,14 +20,13 @@ public class App {
             print.Messages.strategies(numTurns);
             print.Messages.specificStrategies();
 
-            guess = read.Keyboard.guess();                        //  TYPE a guess
-
-            response = read.Keyboard.response();                  //  TYPE the response
-            numTurns++;                                          //  INCREMENT the counter for the number of turns taken.
+            read.Keyboard.guess();                        //  TYPE a guess
+            read.Keyboard.response();                  //  TYPE the response
+            print.Messages.report(numTurns);
 //            insertTurn(guess, response);                         //  Take a turn, and INSERT it into the Matrix.
 //            ResultEngine.printResults(words, numTurns);          //  REWORK NEEDED!! PRINT AND ASSESS AGAINST MATRIX, NOT to the DB.
             
-        } while (response < 5);
+        } while (Matrix.truthTable[Matrix.turnIndex-1][27] < 5);
 
         //  **END GAME***
 //        print.Messages.endGame(guess, numTurns);  //  Once the response to the previous guess is 5...
