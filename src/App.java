@@ -3,8 +3,6 @@ import dataStructures.Matrix;
 public class App {
     public static void main(String[] args) throws Exception {
 
-        String guess;
-        int response;
         int numTurns = 0;
 
         print.Messages.welcome();

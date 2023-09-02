@@ -2,14 +2,20 @@ package dataStructures;
 
 public class Matrix {
 
-    public static int[][] truthTable = new int[10][28];
+    public static int[][] truthTable = new int[15][28];
     public static int turnIndex = 5;
 
     public static void initialize() {
         System.out.println("Initializing truth table...");
-        for(int i = 0; i < 27; i++) {
-            truthTable[2][i] = (i+65);
-            truthTable[4][i] = (i+65);
+        truthTable[0][0] = 1;  //  Set print mask
+        truthTable[1][0] = 1;
+        truthTable[2][0] = 1;
+        truthTable[3][0] = 1;
+        truthTable[4][0] = 1;
+
+        for(int i = 1; i < truthTable[0].length; i++) {
+            truthTable[2][i] = (i+64);
+            truthTable[4][i] = (i+64);
             truthTable[5][i] = 0;
         }
         System.out.println(" > Success!");
@@ -17,24 +23,68 @@ public class Matrix {
 
     public static void print() {
 
-        System.out.print("[0] Known IN:        ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[0][i-1]);
-        System.out.println();
-        System.out.print("[1] Known OUT:       ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print(truthTable[1][i-1]);
-        System.out.println();
-        System.out.print("[2] Unknown:         ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print((char)(truthTable[2][i-1]));
-        System.out.println();
-        System.out.print("[3] Known Together:  ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print( + truthTable[3][i-1]);
-        System.out.println();
-        System.out.print("[4] Columns:         ");
-        for(int i = 1; i < truthTable[0].length-1; i++) System.out.print((char)(truthTable[4][i-1]));
-        System.out.println();
-        System.out.print("[5] Turns:           ");
-        for(int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[5][i]);
-        System.out.println();
+        if (truthTable[0][0] == 1) {
+            System.out.print("[0] Known IN:        ");
+            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print(truthTable[0][i]);
+            System.out.println();
+        }  if (truthTable[1][0] == 1) {
+            System.out.print("[1] Known OUT:       ");
+            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print(truthTable[1][i]);
+            System.out.println();
+        }  if (truthTable[2][0] == 1) {
+            System.out.print("[2] Unknown:         ");
+            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print((char) (truthTable[2][i]));
+            System.out.println();
+        }  if (truthTable[3][0] == 1) {
+            System.out.print("[3] Known Together:  ");
+            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print(+truthTable[3][i]);
+            System.out.println();
+        }  if (truthTable[4][0] == 1) {
+            System.out.print("[4] Columns:         ");
+            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print((char) (truthTable[4][i]));
+            System.out.println();
+        }  if (truthTable[5][0] == 1) {
+            System.out.print("[5] Turns:           ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[5][i]);
+            System.out.println();
+        }  if (truthTable[6][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[6][i]);
+            System.out.println();
+        }  if (truthTable[7][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[7][i]);
+            System.out.println();
+        }  if (truthTable[8][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[8][i]);
+            System.out.println();
+        }  if (truthTable[9][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[9][i]);
+            System.out.println();
+        }  if (truthTable[10][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[10][i]);
+            System.out.println();
+        }  if (truthTable[11][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[11][i]);
+            System.out.println();
+        }  if (truthTable[12][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[12][i]);
+            System.out.println();
+        }  if (truthTable[13][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[13][i]);
+            System.out.println();
+        }  if (truthTable[14][0] == 1) {
+            System.out.print("                     ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[14][i]);
+            System.out.println();
+        }
+
 
 //        for (int[] ints : truthTable) {
 //            if (ints[0] == 1 || ints[0] == 9) {
@@ -45,7 +95,7 @@ public class Matrix {
 //            }
 //        }
 //        System.out.println("DEBUG > yIndex is: " + turnIndex);
-    }
+        }
     public static void pushGuess(String guess) {
 
         truthTable[turnIndex][0] = 1;  //  Set a print mask on the truthTable at the first column of every row
