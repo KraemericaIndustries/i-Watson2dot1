@@ -4,7 +4,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Messages {
-
     public static String mostCommonLetters;
 
     //  Introduce the game, and how it is played...
@@ -32,6 +31,9 @@ public class Messages {
     }
     public static void report(int numTurns) throws SQLException {
         System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " *****************************************************************************************");
+
+        if(numTurns > 1) dataStructures.Matrix.analyzeAllTurns();
+
         //  Print the Matrix...
         dataStructures.Matrix.print();
 
@@ -43,7 +45,7 @@ public class Messages {
 
         //  Test print of the 'letters only' String needed in the desired implementation of 'suggest guesses'...
         mostCommonLetters = morph.LetterCountsString.mostCommonLettersString(letterCountsString);
-        System.out.println(mostCommonLetters);
+//        System.out.println(mostCommonLetters);
         System.out.println();
 
         //  Print the number of words remaining in the DB...
@@ -52,21 +54,18 @@ public class Messages {
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
-    public static void strategies(int numTurns) {
-        if(numTurns == 0) {
-            System.out.println("*****************************************************************  GENERAL STRATEGIES  ********************************************************************************");
-            System.out.println(" - Try to Eliminate the MOST COMMON, UNKNOWN letters as quickly as possible.  Doing so narrows the field of possible words the most quickly");
-            System.out.println(" - Successive guesses should only vary by ONE UNKNOWN letter at a time.  Doing so allows us to learn the most from responses.");
-            System.out.println("***********************************************************************************************************************************************************************");
-            System.out.println();
-        }
+    public static void strategies() {
+        System.out.println("*****************************************************************  GENERAL STRATEGIES  ********************************************************************************");
+        System.out.println(" - Try to Eliminate the MOST COMMON, UNKNOWN letters as quickly as possible.  Doing so narrows the field of possible words the most quickly");
+        System.out.println(" - Successive guesses should only vary by ONE UNKNOWN letter at a time.  Doing so allows us to learn the most from responses.");
+        System.out.println("***********************************************************************************************************************************************************************");
+        System.out.println();
     }
 
     public static void specificStrategies() throws SQLException {
         System.out.println("*****************************************************************  SPECIFIC STRATEGIES  *******************************************************************************");
 
         analyze.Report.previousGuesses();
-
 
         System.out.println("***********************************************************************************************************************************************************************");
     }

@@ -22,10 +22,7 @@ public class Keyboard {
             }
 
         } while (guess.length() != 5);  //  Discard guesses that are NOT 5 letters.
-
-
         dataStructures.Matrix.pushGuess(guess);
-
     }
     //  INPUT a response...
     public static void response() {

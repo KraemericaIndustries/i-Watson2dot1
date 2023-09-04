@@ -13,8 +13,10 @@ public class Insert extends DatabaseConnection{
     static int counter;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
+
+    //  COUNT the occurrence of every letter in every word...
     private static void letterEnumerator(String word) {
-        //  COUNT the occurrence of every letter in every word...
+
         for(int i = 0; i < word.length(); i++) {
             switch (word.charAt(i)) {
                 case 'A' -> letterCounts[0]++;
@@ -47,8 +49,9 @@ public class Insert extends DatabaseConnection{
             }
         }
     }  //  End-of-letterEnumerator()
+
+    //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
     public static void loadKnownWords() {
-        //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
         System.out.println("Loading known words into the 'watson' database...");
         try {
             File file = new File("FiveLetterWords.txt");
@@ -98,7 +101,5 @@ public class Insert extends DatabaseConnection{
         System.out.println(" > 'watson' database populated!");
         System.out.println(" > Ready for play...");
         System.out.println();
-
-
     }
 }

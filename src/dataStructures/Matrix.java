@@ -4,7 +4,9 @@ public class Matrix {
 
     public static int[][] truthTable = new int[15][28];
     public static int turnIndex = 5;
+    public static int numTurns = 0;
 
+    //  INITIALIZE the Matrix...
     public static void initialize() {
         System.out.println("Initializing truth table...");
         truthTable[0][0] = 1;  //  Set print mask
@@ -21,6 +23,7 @@ public class Matrix {
         System.out.println(" > Success!");
     }
 
+    //  PRINT the Matrix...
     public static void print() {
 
         if (truthTable[0][0] == 1) {
@@ -84,18 +87,9 @@ public class Matrix {
             for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[14][i]);
             System.out.println();
         }
+    }
 
-
-//        for (int[] ints : truthTable) {
-//            if (ints[0] == 1 || ints[0] == 9) {
-//                for (int j = 0; j < 28; j++) {
-//                    System.out.print(ints[j]);
-//                }
-//                System.out.println();
-//            }
-//        }
-//        System.out.println("DEBUG > yIndex is: " + turnIndex);
-        }
+    //  PUSH a guess into the Matrix...
     public static void pushGuess(String guess) {
 
         truthTable[turnIndex][0] = 1;  //  Set a print mask on the truthTable at the first column of every row
@@ -133,8 +127,22 @@ public class Matrix {
         }
     }
 
+    //  PUSH a response into the Matrix...
     public static void pushResponse(int response) {
         truthTable[turnIndex][27] = response;
         turnIndex++;
+        dataStructures.Matrix.numTurns++;
+    }
+
+    //  ANALYZE all previous turns taken...
+    public static void analyzeAllTurns() {
+
+        for(int r = 5; r < 6; r++) {
+            for(int c = 1; c < 27; c++) {
+                if((truthTable[r][c] ^ truthTable[r+1][c]) == 1) {
+                    truthTable[3][c] = 1;
+                }
+            }
+        }
     }
 }

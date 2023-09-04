@@ -39,6 +39,7 @@ public class Query extends DatabaseConnection{
         System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
     }
 
+    //  Generic method that takes a String{} of a sql query, and returns a result...
     public static ResultSet select(String selectQuery) {
         ResultSet resultSet = null;
 

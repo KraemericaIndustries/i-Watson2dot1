@@ -7,11 +7,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GuessTable {
-    public static ArrayList<String> fiveMostCommon = new ArrayList<>();
-    public static ArrayList<String> fourMostCommon = new ArrayList<>();
-    public static ArrayList<String> threeMostCommon = new ArrayList<>();
-    public static ArrayList<String> nextMostCommon = new ArrayList<>();  //  recursive 2thru6~2thru5...26
-    boolean previousGuessMade;
+    public static ArrayList<String> fiveMostCommon = new ArrayList<>();  //  Store any words from the DB using the 5 most common letters
+    public static ArrayList<String> fourMostCommon = new ArrayList<>();  //  Store any words from the DB using the 4 most common letters
+    public static ArrayList<String> threeMostCommon = new ArrayList<>();  //  Store any words from the DB using the 3 most common letters
+    public static ArrayList<String> nextMostCommon = new ArrayList<>();  //  Store any words from a recursive call  for the 2nd to 5th and 6th...26th most common letters
+
+    //  PUSH words with most common letters from the DB to ArrayLists to minimize DB interactions
     public static void push() throws SQLException {
 
         ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
@@ -59,12 +60,12 @@ public class GuessTable {
 //        for(String word:threeMostCommon) {
 //            System.out.println(word);
 //        }
-
         getNextMostCommon(5);
     }
     public static void pop() {
 
     }
+    //  RECURSIVELY query for the first word that can be made with the next most common letters (2~6, or 2~5...26)
     public static void getNextMostCommon(int c) throws SQLException {
 
         ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +

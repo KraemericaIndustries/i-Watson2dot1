@@ -25,7 +25,6 @@ public class Create extends DatabaseConnection{
         try {
             conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
             statement = conn.createStatement();                       //  Create a SQL statement object to send to the database
-            //  WORKS!
             statement.addBatch("drop database watson;" +
                                    "WAITFOR DELAY '00:00:05';"  +
                                    "create database watson;" +
@@ -35,7 +34,7 @@ public class Create extends DatabaseConnection{
             statement.executeBatch();
 
         } catch (SQLException e) {
-//					  e.printStackTrace();
+//          e.printStackTrace();
         }
         System.out.println(" > 'watson' database created!");
         System.out.println();
