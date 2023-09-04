@@ -7,10 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class GuessTable {
-    static ArrayList<String> fiveMostCommon = new ArrayList<>();
-    static ArrayList<String> fourMostCommon = new ArrayList<>();
-    static ArrayList<String> threeMostCommon = new ArrayList<>();
-    ArrayList<String> nextMostCommon = new ArrayList<>();  //  recursive 2thru6~2thru5...26
+    public static ArrayList<String> fiveMostCommon = new ArrayList<>();
+    public static ArrayList<String> fourMostCommon = new ArrayList<>();
+    public static ArrayList<String> threeMostCommon = new ArrayList<>();
+    public static ArrayList<String> nextMostCommon = new ArrayList<>();  //  recursive 2thru6~2thru5...26
     boolean previousGuessMade;
 
 
@@ -26,11 +26,11 @@ public class GuessTable {
         while(resultSet.next()) {
             fiveMostCommon.add(resultSet.getString(1));
         }
-
-        System.out.println("Five Most Common:");
-        for(String word:fiveMostCommon) {
-            System.out.println(word);
-        }
+//DEBUG:
+//        System.out.println("Five Most Common:");
+//        for(String word:fiveMostCommon) {
+//            System.out.println(word);
+//        }
 
         resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
                 Messages.mostCommonLetters.charAt(0) + "%' and word like '%" +
@@ -42,10 +42,11 @@ public class GuessTable {
             fourMostCommon.add(resultSet.getString(1));
         }
 
-        System.out.println("Four Most Common:");
-        for(String word:fourMostCommon) {
-            System.out.println(word);
-        }
+//DEBUG:
+//        System.out.println("Four Most Common:");
+//        for(String word:fourMostCommon) {
+//            System.out.println(word);
+//        }
 
         resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
                 Messages.mostCommonLetters.charAt(0) + "%' and word like '%" +
@@ -56,11 +57,11 @@ public class GuessTable {
             threeMostCommon.add(resultSet.getString(1));
         }
 
-        System.out.println("Three Most Common:");
-        for(String word:threeMostCommon) {
-            System.out.println(word);
-        }
-        System.out.println();
+//DEBUG:
+//        System.out.println("Three Most Common:");
+//        for(String word:threeMostCommon) {
+//            System.out.println(word);
+//        }
     }
     public static void pop() {
 
