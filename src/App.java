@@ -16,6 +16,9 @@ public class App {
         do {
             print.Messages.report(numTurns);
             print.Messages.strategies(numTurns);
+
+            dataStructures.GuessTable.push();
+
             print.Messages.specificStrategies();
 
             read.Keyboard.guess();                        //  TYPE a guess
