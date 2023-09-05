@@ -15,6 +15,12 @@ public class GuessTable {
     //  PUSH words with most common letters from the DB to ArrayLists to minimize DB interactions
     public static void push() throws SQLException {
 
+        //  EMPTY ALL ArrayLists of suggestions for guesses to prevent duplication and refresh data:
+        fiveMostCommon.clear();
+        fourMostCommon.clear();
+        threeMostCommon.clear();
+        nextMostCommon.clear();
+
         ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
                 Messages.mostCommonLetters.charAt(0) + "%' and word like '%" +
                 Messages.mostCommonLetters.charAt(1) + "%' and word like '%" +
