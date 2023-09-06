@@ -99,7 +99,6 @@ public class Insert extends DatabaseConnection{
         }
         System.out.println(" > Seeding letter counts into the 'watson' database was Successful");
         System.out.println(" > 'watson' database populated!");
-        System.out.println(" > Ready for play...");
         System.out.println();
     }
 }

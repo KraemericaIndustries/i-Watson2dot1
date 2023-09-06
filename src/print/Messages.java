@@ -41,11 +41,11 @@ public class Messages {
         System.out.println("The MOST COMMON letters in the database (from MOST to LEAST) are: ");
         ResultSet resultSet = transactSQL.Query.select("select * from letterCounts_tbl order by Count DESC");  //  Execute the statement object
         String letterCountsString = morph.ResultSetTo.letterCountsString(resultSet);
-        System.out.println(letterCountsString);
+        System.out.println(letterCountsString);  //  A=212, B=...
 
         //  Test print of the 'letters only' String needed in the desired implementation of 'suggest guesses'...
         mostCommonLetters = morph.LetterCountsString.mostCommonLettersString(letterCountsString);
-//        System.out.println(mostCommonLetters);
+        //  System.out.println(mostCommonLetters);  //  AERTS...
         System.out.println();
 
         //  Print the number of words remaining in the DB...

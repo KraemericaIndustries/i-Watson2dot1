@@ -21,6 +21,7 @@ public class Matrix {
             truthTable[5][i] = 0;
         }
         System.out.println(" > Success!");
+        System.out.println(" > Ready for play...");
     }
 
     //  PRINT the Matrix...
@@ -40,8 +41,7 @@ public class Matrix {
             System.out.println();
         }  if (truthTable[3][0] == 1) {
             System.out.print("[3] Known Together:  ");
-            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print(+truthTable[3][i]);
-            System.out.println();
+            morph.MatrixRowTo.commaDelimitedString(3);
         }  if (truthTable[4][0] == 1) {
             System.out.print("[4] Columns:         ");
             for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print((char) (truthTable[4][i]));
