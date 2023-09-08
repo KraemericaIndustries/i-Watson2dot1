@@ -26,5 +26,12 @@ public class Report {
             }
             System.out.println(sb.substring(0, sb.length()-2));
         }
+
+        if(dataStructures.Matrix.truthTable[3][0] == 1) {
+            morph.MatrixRowTo.nextGuess(5, 6);
+        }
+
+
+
     }
 }

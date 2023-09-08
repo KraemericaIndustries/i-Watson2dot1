@@ -5,6 +5,7 @@ public class Matrix {
     public static int[][] truthTable = new int[15][28];
     public static int turnIndex = 5;
     public static int numTurns = 0;
+    public static int numLettersChanged;
 
     //  INITIALIZE the Matrix...
     public static void initialize() {
@@ -143,6 +144,7 @@ public class Matrix {
                 if((truthTable[r][c] ^ truthTable[r+1][c]) == 1) {
                     truthTable[3][0] = 1;  //  Enable print mask
                     truthTable[3][c] = 1;  //  SET bits to 1/true as needed
+                    numLettersChanged++;   //  INCREMENT a counter of the number of letters changed
                 }
             }
         }

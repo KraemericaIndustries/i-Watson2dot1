@@ -1,5 +1,7 @@
 package print;
 
+import dataStructures.Matrix;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -33,8 +35,13 @@ public class Messages {
         System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " *****************************************************************************************");
 
         if(numTurns > 1) dataStructures.Matrix.analyzeAllTurns();
+        if(numTurns >=2 ) {
+            System.out.println("The number of letters changed in the previous two guesses is: " + Matrix.numLettersChanged/2);
+            System.out.print("Letters changed in the previous 2 guesses are: ");
+            morph.MatrixRowTo.commaDelimitedString(3);
+        }
 
-        //  Print the Matrix...
+            //  Print the Matrix...
         dataStructures.Matrix.print();
 
         //  Query the most common letters from the database, and format the result into something useful...
