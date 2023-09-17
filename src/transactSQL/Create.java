@@ -2,9 +2,9 @@ package transactSQL;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
+@SuppressWarnings("ALL")
 public class Create extends DatabaseConnection{
     public static void watsonDB() throws Exception {
         System.out.println("Preparing to create the watson database...");
@@ -22,19 +22,23 @@ public class Create extends DatabaseConnection{
         }
 
         System.out.println("Dropping and re-creating the 'watson' database...");
-        try {
-            conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
-            statement = conn.createStatement();                       //  Create a SQL statement object to send to the database
+        System.out.println("Connecting to: " + url + "...");
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement statement = conn.createStatement() ) {
+            System.out.println(" > Connection established!");
             statement.addBatch("drop database watson;" +
                                    "WAITFOR DELAY '00:00:05';"  +
                                    "create database watson;" +
                                    "use watson;"  +
                                    "create table Words_tbl (word varchar(5) primary key(word));" +
                                    "create table letterCounts_tbl (Letter varchar, Count int);");
-            statement.executeBatch();
-
+            try {
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } catch (SQLException e) {
-//          e.printStackTrace();
+          e.printStackTrace();
         }
         System.out.println(" > 'watson' database created!");
         System.out.println();
