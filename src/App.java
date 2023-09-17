@@ -10,8 +10,10 @@ public class App {
         print.Messages.play();
 
         do {
-            if(dataStructures.Matrix.numTurns == 0) print.Messages.report(dataStructures.Matrix.numTurns);  //  On the first iteration, PRINT a report
-            if(dataStructures.Matrix.numTurns == 0) print.Messages.strategies();                            //  On the first iteration, PRINT general strategy
+            if(dataStructures.Matrix.numTurns == 0) {
+                print.Messages.report(dataStructures.Matrix.numTurns);  //  On the first iteration, PRINT a report
+                print.Messages.strategies();                            //  On the first iteration, PRINT general strategy
+            }
             dataStructures.GuessTable.push();     //  Pre-populate a table of probable guesses to minimize interaction with the DB
             print.Messages.specificStrategies();  //  PRINT specific strategies based on analyze.Report.previousGuesses()
             read.Keyboard.guess();                //  TYPE a guess

@@ -106,11 +106,13 @@ cover
 crack
 craft
 cramp
+crate
 crave
 craze
 crazy
 creed
 cream
+crest
 croan
 crops
 crown
@@ -278,6 +280,7 @@ rants
 raven
 ready
 remit
+rites
 roast
 rogue
 roped
@@ -341,8 +344,10 @@ study
 stung
 stunk
 stock
+store
 stove
 strap
+strew
 strip
 strop
 sugar
@@ -370,6 +375,7 @@ thunk
 timer
 today
 tough
+trace
 track
 trade
 trail

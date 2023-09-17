@@ -1,5 +1,9 @@
 package morph;
 
+import dataStructures.GuessTable;
+
+import java.sql.SQLException;
+
 import static dataStructures.Matrix.truthTable;
 
 public class MatrixRowTo {
@@ -12,7 +16,7 @@ public class MatrixRowTo {
         }
         System.out.println(sb.substring(0, sb.length()-2));
     }
-    public static void nextGuess(int rowOne, int rowTwo) {
+    public static void nextGuess(int rowOne, int rowTwo) throws SQLException {
 
         char firstChar = 0;
         char otherChar = 0;
@@ -68,10 +72,31 @@ public class MatrixRowTo {
         System.out.println("2nd, 3rd, 4th, omitted: " + secondChar + ", " + thirdChar + ", " + fourthChar + ", " + ommittedChar);
 
         //  Finally, select the next most common unknown letter (that is not letters 1 through 4) as the fifth letter...
-        for (char c : print.Messages.mostCommonLetters.toCharArray()) {
-            if(c != firstChar && c != secondChar && c != thirdChar && c != fourthChar && c != ommittedChar && c != otherChar) fifthChar = c;
-            if (fifthChar != 0) break;
+//        for (char c : print.Messages.mostCommonLetters.toCharArray()) {
+//            if(c != firstChar && c != secondChar && c != thirdChar && c != fourthChar && c != ommittedChar && c != otherChar) fifthChar = c;
+//            if (fifthChar != 0) break;
+//        }
+
+
+        //  This usage drives an implementation change dataStructures.GuessTable.getNextMostCommon() to accept a string parameter as that method already has the functionality needed...
+        int c = 0;
+
+        char[] mostCommonChars =print.Messages.mostCommonLetters.toCharArray();
+
+        sb.delete(0, sb.length());
+        sb.append(firstChar).append(secondChar).append(thirdChar).append(fourthChar);
+
+        for (int i = 0; i < mostCommonChars.length; i++) {
+            if(mostCommonChars[i] != firstChar && mostCommonChars[i] != secondChar && mostCommonChars[i] != thirdChar && mostCommonChars[i] != fourthChar && mostCommonChars[i] != ommittedChar && mostCommonChars[i] != otherChar) {
+                c = i;
+                if(c != 0) break;
+            }
         }
-        System.out.println("5th: " + fifthChar);
+        dataStructures.GuessTable.nextMostCommon.clear();
+        dataStructures.GuessTable.getNextMostCommon(sb.toString(), c);
+        System.out.println(GuessTable.nextMostCommon);
+
+        //  Now, query the DB in search of a word made up of these letters...
+
     }
 }

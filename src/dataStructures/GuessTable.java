@@ -66,19 +66,19 @@ public class GuessTable {
 //        for(String word:threeMostCommon) {
 //            System.out.println(word);
 //        }
-        getNextMostCommon(5);
+        getNextMostCommon(Messages.mostCommonLetters.substring(1, 5), 5);
     }
     public static void pop() {
 
     }
     //  RECURSIVELY query for the first word that can be made with the next most common letters (2~6, or 2~5...26)
-    public static void getNextMostCommon(int c) throws SQLException {
+    public static void getNextMostCommon(String letters, int c) throws SQLException {
 
         ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
-                Messages.mostCommonLetters.charAt(1) + "%' and word like '%" +
-                Messages.mostCommonLetters.charAt(2) + "%' and word like '%" +
-                Messages.mostCommonLetters.charAt(3) + "%' and word like '%" +
-                Messages.mostCommonLetters.charAt(4) + "%' and word like '%" +
+                letters.charAt(0) + "%' and word like '%" +
+                letters.charAt(1) + "%' and word like '%" +
+                letters.charAt(2) + "%' and word like '%" +
+                letters.charAt(3) + "%' and word like '%" +
                 Messages.mostCommonLetters.charAt(c) + "%'");
 
         if(resultSet.isBeforeFirst()) {
@@ -86,7 +86,7 @@ public class GuessTable {
                 nextMostCommon.add(resultSet.getString(1));
             }
         } else {
-                getNextMostCommon(c+1);
+                getNextMostCommon(letters, c+1);
         }
 //DEBUG:
 //        System.out.println("nextMostCommon:");
