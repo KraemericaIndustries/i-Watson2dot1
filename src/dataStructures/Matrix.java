@@ -2,7 +2,8 @@ package dataStructures;
 
 public class Matrix {
 
-    public static int[][] truthTable = new int[15][28];
+    public static int lettersRemaining = 28;  //  26 letters, plus a print mask and response equals 28
+    public static int[][] truthTable;
     public static int turnIndex = 5;
     public static int numTurns = 0;
     public static int numLettersChanged;
@@ -10,6 +11,9 @@ public class Matrix {
     //  INITIALIZE the Matrix...
     public static void initialize() {
         System.out.println("Initializing truth table...");
+
+        truthTable  = new int[15][lettersRemaining];
+
         truthTable[0][0] = 1;  //  Set print mask
         truthTable[1][0] = 1;
         truthTable[2][0] = 1;
@@ -45,7 +49,11 @@ public class Matrix {
             morph.MatrixRowTo.commaDelimitedString(3);
         }  if (truthTable[4][0] == 1) {
             System.out.print("[4] Columns:         ");
-            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print((char) (truthTable[4][i]));
+            System.out.print("|");
+            for(int c = 1; c < 27; c++) {
+                System.out.print(" " + (char)(truthTable[4][c]) + " |");
+                if(c == 26) System.out.println("Res|");
+            }
             System.out.println();
         }  if (truthTable[5][0] == 1) {
             System.out.print("[5] Turns:           ");
