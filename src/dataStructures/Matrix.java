@@ -19,6 +19,7 @@ public class Matrix {
         truthTable[2][0] = 1;
 //        truthTable[3][0] = 1;
         truthTable[4][0] = 1;
+        truthTable[5][0] = 1;
 
         for(int i = 1; i < truthTable[0].length; i++) {
             truthTable[2][i] = (i+64);
@@ -31,6 +32,8 @@ public class Matrix {
 
     //  PRINT the Matrix...
     public static void print() {
+
+        String format = "%1$3d";
 
         if (truthTable[0][0] == 1) {
             System.out.print("[0] Known IN:        ");
@@ -54,10 +57,19 @@ public class Matrix {
                 System.out.print(" " + (char)(truthTable[4][c]) + " |");
                 if(c == 26) System.out.println("Res|");
             }
-            System.out.println();
+//            System.out.println();
         }  if (truthTable[5][0] == 1) {
-            System.out.print("[5] Turns:           ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[5][i]);
+            System.out.print("[5] Frequency:       ");
+            System.out.print("|");
+            for(int c = 1; c < 27; c++) {
+                System.out.printf(format, truthTable[5][c]);
+                System.out.print("|");
+                if(c == 26) System.out.println("Res|");
+            }
+            System.out.println();
+        }  if (truthTable[6][0] == 1) {
+            System.out.print("[6] Turns:           ");
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[6][i]);
             System.out.println();
         }  if (truthTable[6][0] == 1) {
             System.out.print("                     ");
