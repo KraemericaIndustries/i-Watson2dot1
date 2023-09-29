@@ -6,6 +6,7 @@ public class App {
         transactSQL.Create.watsonDB();
         dataStructures.Matrix.initialize();
         transactSQL.Insert.loadKnownWords();
+        dataStructures.Matrix.sortByFrequency();
         //  transactSQL.Query.wordsFromDB();
         print.Messages.play();
 

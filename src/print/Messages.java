@@ -45,18 +45,18 @@ public class Messages {
         dataStructures.Matrix.print();
 
         //  Query the most common letters from the database, and format the result into something useful...
-        System.out.println("The MOST COMMON letters in the database (from MOST to LEAST) are: ");
-        ResultSet resultSet = transactSQL.Query.select("select * from letterCounts_tbl order by Count DESC");  //  Execute the statement object
-        String letterCountsString = morph.ResultSetTo.letterCountsString(resultSet);
-        System.out.println(letterCountsString);  //  A=212, B=...
-
-        //  Test print of the 'letters only' String needed in the desired implementation of 'suggest guesses'...
-        mostCommonLetters = morph.LetterCountsString.mostCommonLettersString(letterCountsString);
-        //  System.out.println(mostCommonLetters);  //  AERTS...
-        System.out.println();
+//        System.out.println("The MOST COMMON letters in the database (from MOST to LEAST) are: ");
+//        ResultSet resultSet = transactSQL.Query.select("select * from letterCounts_tbl order by Count DESC");  //  Execute the statement object
+//        String letterCountsString = morph.ResultSetTo.letterCountsString(resultSet);
+//        System.out.println(letterCountsString);  //  A=212, B=...
+//
+//        //  Test print of the 'letters only' String needed in the desired implementation of 'suggest guesses'...
+//        mostCommonLetters = morph.LetterCountsString.mostCommonLettersString(letterCountsString);
+//        //  System.out.println(mostCommonLetters);  //  AERTS...
+//        System.out.println();
 
         //  Print the number of words remaining in the DB...
-        resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
+        ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
         System.out.println("There are " + morph.ResultSetTo.numWords(resultSet) + " words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();

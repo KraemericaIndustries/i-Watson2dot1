@@ -2,7 +2,7 @@ package dataStructures;
 
 public class Matrix {
 
-    public static int lettersRemaining = 28;  //  26 letters, plus a print mask and response equals 28
+    public static int lettersRemaining = 29;  //  26 letters, plus a print mask, response, and sort column equals 29
     public static int[][] truthTable;
     public static int turnIndex = 5;
     public static int numTurns = 0;
@@ -30,6 +30,30 @@ public class Matrix {
         System.out.println(" > Ready for play...");
     }
 
+    //  SORT the Matrix (by letter frequency DESC, as found in the 5th row)...
+    public static void sortByFrequency() {
+        //  0 = print mask, and 1 is deemed to be sorted
+        //  1 = deemed already sorted
+        System.out.println("Sorting truth table...");
+        for (int c = 2; c < 27; c++) {  //  FOR every column from index of 2 until index of 26 (our UNSORTED range of letters)
+
+            for(int r = 4; r < truthTable.length; r++) {  //  FOR each row in that column
+                truthTable[r][truthTable[r].length-1] = truthTable[r][c];     //  COPY the values of that column to column 28 (which is our temporary location)
+            }
+            int index = c - 1;  //  The index position of the last data element known to be sorted correctly
+            while (index >= 0 && truthTable[5][index] < truthTable[5][28]) {  //  WHILE sortCorrectly index >=0 AND check that the value at that index is LESS THAN the row to sorted in column 28
+                for(int r = 5; r < truthTable.length; r++) {
+                    truthTable[r][index + 1] = truthTable[r][index];  //  COPY the values known to be sorted correctly one row to the RIGHT
+                }
+                index--;  //  DECREMENT the index (to check the index value against the value at the previous index)
+            }
+            for(int r = 4; r < truthTable.length; r++) {
+                truthTable[r][index+1] = truthTable[r][28];  //  COPY the values of the column to be sorted to the column FOLLOWING the last column known to be sorted correctly
+            }
+        }
+        System.out.println(" > truth table sorted!");
+    }
+
     //  PRINT the Matrix...
     public static void print() {
 
@@ -37,15 +61,15 @@ public class Matrix {
 
         if (truthTable[0][0] == 1) {
             System.out.print("[0] Known IN:        ");
-            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print(truthTable[0][i]);
+            for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print(truthTable[0][i]);
             System.out.println();
         }  if (truthTable[1][0] == 1) {
             System.out.print("[1] Known OUT:       ");
-            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print(truthTable[1][i]);
+            for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print(truthTable[1][i]);
             System.out.println();
         }  if (truthTable[2][0] == 1) {
             System.out.print("[2] Unknown:         ");
-            for (int i = 1; i < truthTable[0].length - 1; i++) System.out.print((char) (truthTable[2][i]));
+            for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print((char) (truthTable[2][i]));
             System.out.println();
         }  if (truthTable[3][0] == 1) {
             System.out.print("[3] Known Together:  ");
