@@ -42,7 +42,7 @@ public class Matrix {
             }
             int index = c - 1;  //  The index position of the last data element known to be sorted correctly
             while (index >= 0 && truthTable[5][index] < truthTable[5][28]) {  //  WHILE sortCorrectly index >=0 AND check that the value at that index is LESS THAN the row to sorted in column 28
-                for(int r = 5; r < truthTable.length; r++) {
+                for(int r = 4; r < truthTable.length; r++) {
                     truthTable[r][index + 1] = truthTable[r][index];  //  COPY the values known to be sorted correctly one row to the RIGHT
                 }
                 index--;  //  DECREMENT the index (to check the index value against the value at the previous index)
