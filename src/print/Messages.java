@@ -61,6 +61,17 @@ public class Messages {
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
+    public static void results(int numTurns) {
+        System.out.println("*****************************************************************  RESULT # " + (numTurns + 1) + " *****************************************************************************************");
+        System.out.println("ANALYSIS:");
+        if(Matrix.truthTable[6][0] == 0) {
+            System.out.println(" - There is no data from any previous guess");
+        }
+        System.out.println("SUGGESTION:");
+        System.out.println(" - Make the first guess possible using the 5 most common letters possible");
+        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson());
+        System.out.println("***********************************************************************************************************************************************************************");
+    }
     public static void strategies() {
         System.out.println("*****************************************************************  GENERAL STRATEGIES  ********************************************************************************");
         System.out.println(" - Try to Eliminate the MOST COMMON, UNKNOWN letters as quickly as possible.  Doing so narrows the field of possible words the most quickly");
@@ -68,7 +79,6 @@ public class Messages {
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
-
     public static void specificStrategies() throws SQLException {
         System.out.println("*****************************************************************  SPECIFIC STRATEGIES  *******************************************************************************");
 

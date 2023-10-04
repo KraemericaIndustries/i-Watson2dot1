@@ -1,5 +1,8 @@
 package transactSQL;
 
+import dataStructures.Matrix;
+import print.Messages;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -11,6 +14,33 @@ import java.sql.SQLException;
 public class Query extends DatabaseConnection{
 
     static File file = new File("test.txt");
+
+
+    public static String getWord(int first, int second, int third, int fourth, int fifth) throws SQLException {
+
+        ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
+                (char)Matrix.truthTable[4][first] + "%' and word like '%" +
+                (char)Matrix.truthTable[4][second] + "%' and word like '%" +
+                (char)Matrix.truthTable[4][third] + "%' and word like '%" +
+                (char)Matrix.truthTable[4][fourth] + "%' and word like '%" +
+                (char)Matrix.truthTable[4][fifth] + "%'");
+
+        if(resultSet.isBeforeFirst()) {
+            while(resultSet.next()) {
+                return (resultSet.getString(1));
+            }
+        } else {
+            getWord(first, second, third, fourth, (fifth+1));
+        }
+//DEBUG:
+//        System.out.println("nextMostCommon:");
+//        for(String word:nextMostCommon) {
+//            System.out.println(word);
+//        }
+
+        return null;
+    }
+
 
     //  wordsFromDB() ToDo: This method needs to DELETE the "test.txt" file from the filesystem prior to each run.  A non-hardcoded absolute path to the file would be preferable
     //  wordsFromDB() ToDo: Refactor this method.  Resultset parameter to write.File.XYZ to improve structure

@@ -23,8 +23,7 @@ public class Create extends DatabaseConnection{
 
         System.out.println("Dropping and re-creating the 'watson' database...");
         System.out.println("Connecting to: " + url + "...");
-        try (Connection conn = DriverManager.getConnection(url, user, password);
-             Statement statement = conn.createStatement() ) {
+        try (Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement();) {
             System.out.println(" > Connection established!");
             statement.addBatch("drop database watson;" +
                                    "WAITFOR DELAY '00:00:05';"  +
@@ -38,7 +37,7 @@ public class Create extends DatabaseConnection{
                 e.printStackTrace();
             }
         } catch (SQLException e) {
-          e.printStackTrace();
+            e.printStackTrace();
         }
         System.out.println(" > 'watson' database created!");
         System.out.println();

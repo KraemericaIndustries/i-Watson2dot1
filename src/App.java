@@ -13,12 +13,10 @@ public class App {
         print.Messages.play();
 
         do {
-            if(dataStructures.Matrix.numTurns == 0) {
-                print.Messages.report(dataStructures.Matrix.numTurns);  //  On the first iteration, PRINT a report
-                print.Messages.strategies();                            //  On the first iteration, PRINT general strategy
-            }
-            dataStructures.GuessTable.push();     //  Pre-populate a table of probable guesses to minimize interaction with the DB
-            print.Messages.specificStrategies();  //  PRINT specific strategies based on analyze.Report.previousGuesses()
+            print.Messages.report(dataStructures.Matrix.numTurns);   //  PRINT the report
+            print.Messages.results(dataStructures.Matrix.numTurns);  //  PRINT the results
+//            dataStructures.GuessTable.push();     //  Pre-populate a table of probable guesses to minimize interaction with the DB
+//            print.Messages.specificStrategies();  //  PRINT specific strategies based on analyze.Report.previousGuesses()
             read.Keyboard.guess();                //  TYPE a guess
             read.Keyboard.response();             //  TYPE the response
             print.Messages.report(dataStructures.Matrix.numTurns);  //  PRINT a report
