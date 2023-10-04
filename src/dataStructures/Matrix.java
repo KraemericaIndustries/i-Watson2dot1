@@ -95,43 +95,40 @@ public class Matrix {
 //            System.out.println();
         }  if (truthTable[6][0] == 1) {
             System.out.print("[6] Turns:           ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[6][i]);
-            System.out.println();
-        }  if (truthTable[6][0] == 1) {
-            System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[6][i]);
+            System.out.print("|");
+            for (int i = 1; i < truthTable[0].length-1; i++) System.out.print(" " + truthTable[6][i] + " |");
             System.out.println();
         }  if (truthTable[7][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[7][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[6][i]);
             System.out.println();
         }  if (truthTable[8][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[8][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[7][i]);
             System.out.println();
         }  if (truthTable[9][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[9][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[8][i]);
             System.out.println();
         }  if (truthTable[10][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[10][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[9][i]);
             System.out.println();
         }  if (truthTable[11][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[11][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[10][i]);
             System.out.println();
         }  if (truthTable[12][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[12][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[11][i]);
             System.out.println();
         }  if (truthTable[13][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[13][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[12][i]);
             System.out.println();
         }  if (truthTable[14][0] == 1) {
             System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[14][i]);
+            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[13][i]);
             System.out.println();
         }
     }
