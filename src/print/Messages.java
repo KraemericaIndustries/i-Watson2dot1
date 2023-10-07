@@ -5,6 +5,8 @@ import dataStructures.Matrix;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static dataStructures.Matrix.truthTable;
+
 public class Messages {
     public static String mostCommonLetters;
 
@@ -62,12 +64,19 @@ public class Messages {
         System.out.println();
     }
     public static void results(int numTurns) {
+
+        int numGuesses = 0;
+
         System.out.println("*****************************************************************  RESULT # " + (numTurns + 1) + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
-        if(Matrix.truthTable[6][0] == 0) {
-            System.out.println(" - There is no data from any previous guess");
+        for(int r = 6; r < truthTable.length; r++) {
+            if(truthTable[r][0] == 1) numGuesses++;
         }
-        System.out.println("SUGGESTION:");
+        System.out.println(" - Previous guesses for which there is data available: " + numGuesses);
+
+
+
+        System.out.println("ADVICE:");
         System.out.println(" - Make the first guess possible using the 5 most common letters possible");
         System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson());
         System.out.println("***********************************************************************************************************************************************************************");

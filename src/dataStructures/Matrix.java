@@ -61,15 +61,19 @@ public class Matrix {
 
         String format = "%1$3d";
 
+        System.out.print("[0] Known IN:        ");
         if (truthTable[0][0] == 1) {
-            System.out.print("[0] Known IN:        ");
             for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print((char)truthTable[0][i]);
-            System.out.println();
-        }  if (truthTable[1][0] == 1) {
-            System.out.print("[1] Known OUT:       ");
+        }
+        System.out.println();
+
+        System.out.print("[1] Known OUT:       ");
+        if (truthTable[1][0] == 1) {
             for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print((char)truthTable[1][i]);
-            System.out.println();
-        }  if (truthTable[2][0] == 1) {
+        }
+        System.out.println();
+
+        if (truthTable[2][0] == 1) {
             System.out.print("[2] Unknown:         ");
             for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print((char)(truthTable[2][i]));
             System.out.println();
@@ -139,7 +143,7 @@ public class Matrix {
         truthTable[turnIndex][0] = 1;  //  Set a print mask on the truthTable at the first column of every row
 
         for(int i = 0; i <5; i++) {                              //  FOR every letter in the guess
-            int asciiChar = (int)guess.charAt(i);                   //  CONVERT the letter to ASCII
+            int asciiChar = guess.charAt(i);                        //  CONVERT the letter to ASCII
             for(int c = 1; c < (truthTable[4].length-2); c++) {     //  FOR every remaining letter in a row
                 if(asciiChar == truthTable[4][c]) {                     //  IF the ASCII value ==  the column title
                     truthTable[turnIndex][c] = 1;                       //  SET 1 (true) for that column/letter on that row/guess

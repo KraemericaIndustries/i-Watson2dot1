@@ -11,7 +11,7 @@ public class Keyboard {
         String guess;
 
         do {
-            System.out.print("Turn # " + (Matrix.turnIndex - 4) + ".  Guess a 5 letter word: ");
+            System.out.print("Turn # " + (Matrix.turnIndex - 5) + ".  Guess a 5 letter word: ");
             Scanner input= new Scanner(System.in);
             guess = input.nextLine();
             System.out.println();
