@@ -63,8 +63,8 @@ public class Insert extends DatabaseConnection{
                 line = (input.nextLine().toUpperCase());
                 letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
                 try {
-                    Connection conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
-                    Statement statement = conn.createStatement();  						 //  Create a SQL statement object to send to the database
+                    Connection conn = DriverManager.getConnection(url, user, password);                               //  Establish Connection Object
+                    Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database
                     counter = counter + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
                 } catch (SQLException e) {
 //					  e.printStackTrace();

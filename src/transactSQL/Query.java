@@ -1,7 +1,6 @@
 package transactSQL;
 
 import dataStructures.Matrix;
-import print.Messages;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -32,7 +31,7 @@ public class Query extends DatabaseConnection{
         } else {
             getWord(first, second, third, fourth, (fifth+1));
         }
-//DEBUG:
+//  DEBUG:
 //        System.out.println("nextMostCommon:");
 //        for(String word:nextMostCommon) {
 //            System.out.println(word);

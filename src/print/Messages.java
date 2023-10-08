@@ -8,7 +8,6 @@ import java.sql.SQLException;
 import static dataStructures.Matrix.truthTable;
 
 public class Messages {
-    public static String mostCommonLetters;
 
     //  Introduce the game, and how it is played...
     public static void welcome() {
@@ -27,12 +26,16 @@ public class Messages {
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
+
+    //  START the game...
     public static void play() {
         System.out.println("*****************************************************************  THE GAME  ******************************************************************************************");
         System.out.println("Let's play!!!");
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
+
+    //  PRINT a report...
     public static void report(int numTurns) throws SQLException {
         System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " *****************************************************************************************");
 
@@ -43,19 +46,8 @@ public class Messages {
             morph.MatrixRowTo.commaDelimitedString(3);
         }
 
-            //  Print the Matrix...
+        //  Print the Matrix...
         dataStructures.Matrix.print();
-
-        //  Query the most common letters from the database, and format the result into something useful...
-//        System.out.println("The MOST COMMON letters in the database (from MOST to LEAST) are: ");
-//        ResultSet resultSet = transactSQL.Query.select("select * from letterCounts_tbl order by Count DESC");  //  Execute the statement object
-//        String letterCountsString = morph.ResultSetTo.letterCountsString(resultSet);
-//        System.out.println(letterCountsString);  //  A=212, B=...
-//
-//        //  Test print of the 'letters only' String needed in the desired implementation of 'suggest guesses'...
-//        mostCommonLetters = morph.LetterCountsString.mostCommonLettersString(letterCountsString);
-//        //  System.out.println(mostCommonLetters);  //  AERTS...
-//        System.out.println();
 
         //  Print the number of words remaining in the DB...
         ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
@@ -63,6 +55,8 @@ public class Messages {
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
+
+    //  PRINT the result(s) of a given turn...
     public static void results(int numTurns) {
 
         int numGuesses = 0;
@@ -78,25 +72,40 @@ public class Messages {
 
         System.out.println("ADVICE:");
         System.out.println(" - Make the first guess possible using the 5 most common letters possible");
+        //  ToDo: IMPLEMENT the getWords() method
+        //  ToDo: getWords() sends an array of strings to base the sql query on
+        //  Todo: MT array = get 2 most common
+        //  ToDo: seeded (from truthTable) array means use these letters in recursive queries
+//  SAMPLE recursive sql select...
+/*  RECURSIVELY query for the first word that can be made with the next most common letters (2~6, or 2~5...26)
+    public static void getNextMostCommon(String letters, int c) throws SQLException {
+
+        ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
+                letters.charAt(0) + "%' and word like '%" +
+                letters.charAt(1) + "%' and word like '%" +
+                letters.charAt(2) + "%' and word like '%" +
+                letters.charAt(3) + "%' and word like '%" +
+                Messages.mostCommonLetters.charAt(c) + "%'");
+
+        if(resultSet.isBeforeFirst()) {
+            while(resultSet.next()) {
+                nextMostCommon.add(resultSet.getString(1));
+            }
+        } else {
+                getNextMostCommon(letters, c+1);
+        }*/
+//DEBUG:
+//        System.out.println("nextMostCommon:");
+//        for(String word:nextMostCommon) {
+//            System.out.println(word);
+//        }
+
         System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson());
         System.out.println("***********************************************************************************************************************************************************************");
     }
-    public static void strategies() {
-        System.out.println("*****************************************************************  GENERAL STRATEGIES  ********************************************************************************");
-        System.out.println(" - Try to Eliminate the MOST COMMON, UNKNOWN letters as quickly as possible.  Doing so narrows the field of possible words the most quickly");
-        System.out.println(" - Successive guesses should only vary by ONE UNKNOWN letter at a time.  Doing so allows us to learn the most from responses.");
-        System.out.println("***********************************************************************************************************************************************************************");
-        System.out.println();
-    }
-    public static void specificStrategies() throws SQLException {
-        System.out.println("*****************************************************************  SPECIFIC STRATEGIES  *******************************************************************************");
 
-        analyze.Report.previousGuesses();
-
-        System.out.println("***********************************************************************************************************************************************************************");
-    }
-
-
+//  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...
+//
 //    public static void endGame(String guess, int counter) throws SQLException {
 //
 //        int count = 0;  //  Counter for the number of words remaining in the DB

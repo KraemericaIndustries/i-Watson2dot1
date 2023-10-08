@@ -6,6 +6,8 @@ import java.sql.*;
 
 @SuppressWarnings("ALL")
 public class Create extends DatabaseConnection{
+
+    //  CREATE to watson DB...
     public static void watsonDB() throws Exception {
         System.out.println("Preparing to create the watson database...");
         //  RESTART the mssqlserver service (to assure there is no other process accessing the DB)

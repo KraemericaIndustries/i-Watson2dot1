@@ -14,8 +14,8 @@ public class DatabaseConnection {
     static Statement statement;
     static ResultSet resultSet;
 
+    //  READ the watson DB url and credentials from the configuration file...
     public static void getProperties() {
-        //  Read the DB url and credentials from the configuration file...
         System.out.println("Reading the watson.properties file...");
         java.util.Properties props = new java.util.Properties();
         try {
@@ -26,7 +26,7 @@ public class DatabaseConnection {
         url = props.getProperty("url");
         user = props.getProperty("user");
         password = props.getProperty("password");
-//DEBUG:
+//  DEBUG:
 //        System.out.println(" > Successfully read the following values: ");
 //        System.out.println(" > Database url: " + url);
 //        System.out.println(" > Username: " + user);

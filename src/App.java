@@ -8,20 +8,15 @@ public class App {
         transactSQL.Create.watsonDB();
         dataStructures.Matrix.initialize();
         transactSQL.Insert.loadKnownWords();
-//        dataStructures.Matrix.print();
         dataStructures.Matrix.sortByFrequency();
-//        dataStructures.Matrix.print();
-        //  transactSQL.Query.wordsFromDB();
         print.Messages.play();
 
         do {
             if(numTurns ==0) print.Messages.report(numTurns);   //  PRINT the report
-            print.Messages.results(numTurns);  //  PRINT the results
-//            dataStructures.GuessTable.push();     //  Pre-populate a table of probable guesses to minimize interaction with the DB
-//            print.Messages.specificStrategies();  //  PRINT specific strategies based on analyze.Report.previousGuesses()
-            read.Keyboard.guess();                //  TYPE a guess
-            read.Keyboard.response();             //  TYPE the response
-            print.Messages.report(numTurns);  //  PRINT a report
+            print.Messages.results(numTurns);                   //  PRINT the results
+            read.Keyboard.guess();                              //  TYPE a guess
+            read.Keyboard.response();                           //  TYPE the response
+            print.Messages.report(numTurns);                    //  PRINT a report
         } while (dataStructures.Matrix.truthTable[dataStructures.Matrix.turnIndex-1][27] < 5);  //  While the most recent response is less than 5
 
         //  **END GAME***

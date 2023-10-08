@@ -17,13 +17,10 @@ public class Matrix {
         truthTable[0][0] = 0;  //  Set print mask
         truthTable[1][0] = 0;
         truthTable[2][0] = 1;
-//        truthTable[3][0] = 1;
         truthTable[4][0] = 1;
         truthTable[5][0] = 1;
 
         for(int i = 1; i < truthTable[0].length; i++) {
-//            truthTable[0][i] = (i+64);
-//            truthTable[1][i] = (i+64);
             truthTable[2][i] = (i+64);
             truthTable[4][i] = (i+64);
             truthTable[5][i] = 0;
@@ -39,18 +36,18 @@ public class Matrix {
         System.out.println("Sorting truth table...");
         for (int c = 2; c < 27; c++) {  //  FOR every column from index of 2 until index of 26 (our UNSORTED range of letters)
 
-            for(int r = 0; r < truthTable.length; r++) {  //  FOR each row in that column
+            for(int r = 0; r < truthTable.length; r++) {                      //  FOR each row in that column
                 truthTable[r][truthTable[r].length-1] = truthTable[r][c];     //  COPY the values of that column to column 28 (which is our temporary location)
             }
-            int index = c - 1;  //  The index position of the last data element known to be sorted correctly
+            int index = c - 1;                                                                    //  The index position of the last data element known to be sorted correctly
             while (index >= 0 && truthTable[5][index] < truthTable[5][truthTable[5].length-1]) {  //  WHILE sortCorrectly index >=0 AND check that the value at that index is LESS THAN the row to sorted in column 28
                 for(int r = 0; r < truthTable.length; r++) {
-                    truthTable[r][index + 1] = truthTable[r][index];  //  COPY the values known to be sorted correctly one row to the RIGHT
+                    truthTable[r][index + 1] = truthTable[r][index];                              //  COPY the values known to be sorted correctly one row to the RIGHT
                 }
-                index--;  //  DECREMENT the index (to check the index value against the value at the previous index)
+                index--;                                                                          //  DECREMENT the index (to check the index value against the value at the previous index)
             }
             for(int r = 0; r < truthTable.length; r++) {
-                truthTable[r][index+1] = truthTable[r][28];  //  COPY the values of the column to be sorted to the column FOLLOWING the last column known to be sorted correctly
+                truthTable[r][index+1] = truthTable[r][28];                                       //  COPY the values of the column to be sorted to the column FOLLOWING the last column known to be sorted correctly
             }
         }
         System.out.println(" > truth table sorted!");
@@ -150,35 +147,6 @@ public class Matrix {
                     break;
                 }
             }
-
-//            switch (guess.charAt(i)) {
-//                case 'A' -> truthTable[turnIndex][1] = 1;
-//                case 'B' -> truthTable[turnIndex][2] = 1;
-//                case 'C' -> truthTable[turnIndex][3] = 1;
-//                case 'D' -> truthTable[turnIndex][4] = 1;
-//                case 'E' -> truthTable[turnIndex][5] = 1;
-//                case 'F' -> truthTable[turnIndex][6] = 1;
-//                case 'G' -> truthTable[turnIndex][7] = 1;
-//                case 'H' -> truthTable[turnIndex][8] = 1;
-//                case 'I' -> truthTable[turnIndex][9] = 1;
-//                case 'J' -> truthTable[turnIndex][10] = 1;
-//                case 'K' -> truthTable[turnIndex][11] = 1;
-//                case 'L' -> truthTable[turnIndex][12] = 1;
-//                case 'M' -> truthTable[turnIndex][13] = 1;
-//                case 'N' -> truthTable[turnIndex][14] = 1;
-//                case 'O' -> truthTable[turnIndex][15] = 1;
-//                case 'P' -> truthTable[turnIndex][16] = 1;
-//                case 'Q' -> truthTable[turnIndex][17] = 1;
-//                case 'R' -> truthTable[turnIndex][18] = 1;
-//                case 'S' -> truthTable[turnIndex][19] = 1;
-//                case 'T' -> truthTable[turnIndex][20] = 1;
-//                case 'U' -> truthTable[turnIndex][21] = 1;
-//                case 'V' -> truthTable[turnIndex][22] = 1;
-//                case 'W' -> truthTable[turnIndex][23] = 1;
-//                case 'X' -> truthTable[turnIndex][24] = 1;
-//                case 'Y' -> truthTable[turnIndex][25] = 1;
-//                case 'Z' -> truthTable[turnIndex][26] = 1;
-//            }
         }
     }
 

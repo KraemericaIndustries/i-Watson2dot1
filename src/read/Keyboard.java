@@ -5,6 +5,7 @@ import dataStructures.Matrix;
 import java.util.Scanner;
 
 public class Keyboard {
+
     //  INPUT a guess...
     public static void guess() {
 
@@ -24,6 +25,7 @@ public class Keyboard {
         } while (guess.length() != 5);  //  Discard guesses that are NOT 5 letters.
         dataStructures.Matrix.pushGuess(guess);
     }
+
     //  INPUT a response...
     public static void response() {
 

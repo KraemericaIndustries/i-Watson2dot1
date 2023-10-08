@@ -9,9 +9,10 @@ import static transactSQL.DatabaseConnection.*;
 
 public class Connect {
 
+    //  Establish a connection to the watson DB, to remain open while recursive sql select statements identify and return words from the DB...
     public static String watson() {
 
-        try (Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement();) {
+        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
             return transactSQL.Query.getWord(1, 2, 3, 4, 5);
 
