@@ -69,38 +69,12 @@ public class Messages {
         System.out.println(" - Previous guesses for which there is data available: " + numGuesses);
 
 
-
         System.out.println("ADVICE:");
         System.out.println(" - Make the first guess possible using the 5 most common letters possible");
         //  ToDo: IMPLEMENT the getWords() method
-        //  ToDo: getWords() sends an array of strings to base the sql query on
-        //  Todo: MT array = get 2 most common
-        //  ToDo: seeded (from truthTable) array means use these letters in recursive queries
 //  SAMPLE recursive sql select...
-/*  RECURSIVELY query for the first word that can be made with the next most common letters (2~6, or 2~5...26)
-    public static void getNextMostCommon(String letters, int c) throws SQLException {
 
-        ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
-                letters.charAt(0) + "%' and word like '%" +
-                letters.charAt(1) + "%' and word like '%" +
-                letters.charAt(2) + "%' and word like '%" +
-                letters.charAt(3) + "%' and word like '%" +
-                Messages.mostCommonLetters.charAt(c) + "%'");
-
-        if(resultSet.isBeforeFirst()) {
-            while(resultSet.next()) {
-                nextMostCommon.add(resultSet.getString(1));
-            }
-        } else {
-                getNextMostCommon(letters, c+1);
-        }*/
-//DEBUG:
-//        System.out.println("nextMostCommon:");
-//        for(String word:nextMostCommon) {
-//            System.out.println(word);
-//        }
-
-        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson());
+        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson());  //  CONNECT to DB (to get guesses)
         System.out.println("***********************************************************************************************************************************************************************");
     }
 

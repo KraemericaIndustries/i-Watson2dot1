@@ -14,7 +14,7 @@ public class Connect {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
-            return transactSQL.Query.getWord(1, 2, 3, 4, 5);
+            return transactSQL.Query.getWords(1, 1, 2, 3, 4, 5);
 
         } catch (SQLException e) {
             e.printStackTrace();

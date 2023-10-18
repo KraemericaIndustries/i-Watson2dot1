@@ -14,29 +14,27 @@ public class Query extends DatabaseConnection{
 
     static File file = new File("test.txt");
 
+    //  QUERY the DB for numWords with the first through fifth MOST COMMON letters, to use as a guess...
+    /*
+    https://stackoverflow.com/questions/77309450/sql-query-to-return-only-the-most-exclusive-pattern-matches-for-varchar-data-t
+    */
+    public static String getWords(int numWords, int first, int second, int third, int fourth, int fifth) throws SQLException {
 
-    public static String getWord(int first, int second, int third, int fourth, int fifth) throws SQLException {
+        ResultSet resultSet = transactSQL.Query.select(
+"SELECT TOP (" + numWords + ") Word " +
+          "FROM Words_tbl YT " +
+          "CROSS JOIN (VALUES('" +
+          (char)Matrix.truthTable[4][first] + "'),('" +
+          (char)Matrix.truthTable[4][second] + "'),('" +
+          (char)Matrix.truthTable[4][third] + "'),('" +
+          (char)Matrix.truthTable[4][fourth] + "'),('" +
+          (char)Matrix.truthTable[4][fifth] + "'))L(Letter) " +
+          "GROUP BY YT.Word " +
+          "ORDER BY COUNT(CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN 1 END) DESC");
 
-        ResultSet resultSet = transactSQL.Query.select("select * from Words_tbl where word like '%" +
-                (char)Matrix.truthTable[4][first] + "%' and word like '%" +
-                (char)Matrix.truthTable[4][second] + "%' and word like '%" +
-                (char)Matrix.truthTable[4][third] + "%' and word like '%" +
-                (char)Matrix.truthTable[4][fourth] + "%' and word like '%" +
-                (char)Matrix.truthTable[4][fifth] + "%'");
-
-        if(resultSet.isBeforeFirst()) {
-            while(resultSet.next()) {
-                return (resultSet.getString(1));
-            }
-        } else {
-            getWord(first, second, third, fourth, (fifth+1));
+        while(resultSet.next()) {
+            return (resultSet.getString(1));
         }
-//  DEBUG:
-//        System.out.println("nextMostCommon:");
-//        for(String word:nextMostCommon) {
-//            System.out.println(word);
-//        }
-
         return null;
     }
 
@@ -70,6 +68,7 @@ public class Query extends DatabaseConnection{
 
     //  Generic method that takes a String{} of a sql query, and returns a result...
     public static ResultSet select(String selectQuery) {
+
         ResultSet resultSet = null;
 
         try {
