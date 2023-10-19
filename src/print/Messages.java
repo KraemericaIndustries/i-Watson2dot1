@@ -2,7 +2,6 @@ package print;
 
 import dataStructures.Matrix;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static dataStructures.Matrix.truthTable;
@@ -50,14 +49,17 @@ public class Messages {
         dataStructures.Matrix.print();
 
         //  Print the number of words remaining in the DB...
-        ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
-        System.out.println("There are " + morph.ResultSetTo.numWords(resultSet) + " words remaining in the database.");
+//        ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
+//        System.out.println("There are " + morph.ResultSetTo.numWords(resultSet) + " words remaining in the database.");
+
+        System.out.println("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.");
+
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(int numTurns) {
+    public static void results(int numTurns) throws SQLException {
 
         int numGuesses = 0;
 
@@ -74,7 +76,7 @@ public class Messages {
         //  ToDo: IMPLEMENT the getWords() method
 //  SAMPLE recursive sql select...
 
-        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson());  //  CONNECT to DB (to get guesses)
+        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords"));  //  CONNECT to DB (to get guesses)
         System.out.println("***********************************************************************************************************************************************************************");
     }
 

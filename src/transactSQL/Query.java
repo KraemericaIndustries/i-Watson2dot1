@@ -39,6 +39,18 @@ public class Query extends DatabaseConnection{
     }
 
 
+    public static String getNumWordInDB() throws SQLException {
+
+        int numWords = 0;
+
+        ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");
+
+        while(resultSet.next()) {
+            numWords = ((Number) resultSet.getObject(1)).intValue();
+        }
+        return String.valueOf(numWords);
+    }
+
     //  wordsFromDB() ToDo: This method needs to DELETE the "test.txt" file from the filesystem prior to each run.  A non-hardcoded absolute path to the file would be preferable
     //  wordsFromDB() ToDo: Refactor this method.  Resultset parameter to write.File.XYZ to improve structure
     public static void wordsFromDB() {

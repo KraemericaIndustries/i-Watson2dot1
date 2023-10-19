@@ -10,12 +10,18 @@ import static transactSQL.DatabaseConnection.*;
 public class Connect {
 
     //  Establish a connection to the watson DB, to remain open while recursive sql select statements identify and return words from the DB...
-    public static String watson() {
+    public static String watson(String reason) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
-            return transactSQL.Query.getWords(1, 1, 2, 3, 4, 5);
-
+            switch(reason) {
+                case "getWords":
+                    return transactSQL.Query.getWords(1, 1, 2, 3, 4, 5);
+                case "getNumWordsInDB":
+                    return transactSQL.Query.getNumWordInDB();
+                default:
+                    System.out.println("Reason for connecting to the DB not recognized.");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
