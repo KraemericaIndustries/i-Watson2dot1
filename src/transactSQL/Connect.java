@@ -16,7 +16,11 @@ public class Connect {
 
             switch(reason) {
                 case "getWords":
-                    return transactSQL.Query.getWords(1, 1, 2, 3, 4, 5);
+                    if(dataStructures.Matrix.truthTable[6][1] == 0) {
+                        return transactSQL.Query.getWords(1, 1, 2, 3, 4, 5);
+                    } else {
+                        return transactSQL.Query.getWords(1, 2, 3, 4, 5, 6);
+                    }
                 case "getNumWordsInDB":
                     return transactSQL.Query.getNumWordInDB();
                 default:
