@@ -2,8 +2,6 @@ package print;
 
 import dataStructures.Matrix;
 
-import java.sql.SQLException;
-
 import static dataStructures.Matrix.truthTable;
 
 public class Messages {
@@ -35,7 +33,7 @@ public class Messages {
     }
 
     //  PRINT a report...
-    public static void report(int numTurns) throws SQLException {
+    public static void report(int numTurns) {
         System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " *****************************************************************************************");
 
         if(numTurns > 1) dataStructures.Matrix.analyzeAllTurns();
@@ -47,11 +45,6 @@ public class Messages {
 
         //  Print the Matrix...
         dataStructures.Matrix.print();
-
-        //  Print the number of words remaining in the DB...
-//        ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");  //  Execute the statement object
-//        System.out.println("There are " + morph.ResultSetTo.numWords(resultSet) + " words remaining in the database.");
-
         System.out.println("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.");
 
         System.out.println("***********************************************************************************************************************************************************************");
@@ -59,7 +52,7 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(int numTurns) throws SQLException {
+    public static void results(int numTurns) {
 
         int numGuesses = 0;
 

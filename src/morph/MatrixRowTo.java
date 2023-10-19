@@ -9,8 +9,8 @@ public class MatrixRowTo {
 
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 1; i <27; i++) {
-                if(truthTable[row][i] == 1) sb.append(((char) (i + 64))).append(", ");
+        for(int c = 1; c <27; c++) {
+            if(truthTable[row][c] == 1) sb.append(((char) (truthTable[4][c]))).append(", ");
         }
         System.out.println(sb.substring(0, sb.length()-2));
     }

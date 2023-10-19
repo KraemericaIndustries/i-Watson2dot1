@@ -100,8 +100,9 @@ public class Matrix {
             for (int i = 1; i < truthTable[0].length-1; i++) System.out.print(" " + truthTable[6][i] + " |");
             System.out.println();
         }  if (truthTable[7][0] == 1) {
-            System.out.print("                     ");
-            for (int i = 1; i < truthTable[0].length; i++) System.out.print(truthTable[6][i]);
+            System.out.print("[7] Turns:           ");
+            System.out.print("|");
+            for (int i = 1; i < truthTable[0].length-1; i++) System.out.print(" " + truthTable[7][i] + " |");
             System.out.println();
         }  if (truthTable[8][0] == 1) {
             System.out.print("                     ");
@@ -161,7 +162,7 @@ public class Matrix {
     public static void analyzeAllTurns() {
 
         //  XOR all guesses... (WIP)
-        for(int r = 5; r < 6; r++) {
+        for(int r = 6; r < 7; r++) {
             for(int c = 1; c < 27; c++) {
                 if((truthTable[r][c] ^ truthTable[r+1][c]) == 1) {
                     truthTable[3][0] = 1;  //  Enable print mask
