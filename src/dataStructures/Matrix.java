@@ -4,6 +4,12 @@ public class Matrix {
 
     public static int lettersRemaining = 29;  //  26 letters, plus a print mask, response, and sort column equals 29
     public static int[][] truthTable;
+    public static int knownIn = 0;
+    public static int knownOut= 1;
+    public static int unknown= 2;
+    public static int knownTogether= 3;
+    public static int columns = 4;
+    public static int frequency = 5;
     public static int turnIndex = 6;
     public static int numTurns = 0;
     public static int numLettersChanged;
@@ -14,16 +20,16 @@ public class Matrix {
 
         truthTable  = new int[15][lettersRemaining];
 
-        truthTable[0][0] = 0;  //  Set print mask
-        truthTable[1][0] = 0;
-        truthTable[2][0] = 1;
-        truthTable[4][0] = 1;
-        truthTable[5][0] = 1;
+        truthTable[knownIn][0] = 0;  //  Set print mask
+        truthTable[knownOut][0] = 0;
+        truthTable[unknown][0] = 1;
+        truthTable[columns][0] = 1;
+        truthTable[frequency][0] = 1;
 
         for(int i = 1; i < truthTable[0].length; i++) {
-            truthTable[2][i] = (i+64);
-            truthTable[4][i] = (i+64);
-            truthTable[5][i] = 0;
+            truthTable[unknown][i] = (i+64);
+            truthTable[columns][i] = (i+64);
+            truthTable[frequency][i] = 0;
         }
         System.out.println(" > Success!");
         System.out.println(" > Ready for play...");
@@ -40,7 +46,7 @@ public class Matrix {
                 truthTable[r][truthTable[r].length-1] = truthTable[r][c];     //  COPY the values of that column to column 28 (which is our temporary location)
             }
             int index = c - 1;                                                                    //  The index position of the last data element known to be sorted correctly
-            while (index >= 0 && truthTable[5][index] < truthTable[5][truthTable[5].length-1]) {  //  WHILE sortCorrectly index >=0 AND check that the value at that index is LESS THAN the row to sorted in column 28
+            while (index >= 0 && truthTable[frequency][index] < truthTable[frequency][truthTable[frequency].length-1]) {  //  WHILE sortCorrectly index >=0 AND check that the value at that index is LESS THAN the row to sorted in column 28
                 for(int r = 0; r < truthTable.length; r++) {
                     truthTable[r][index + 1] = truthTable[r][index];                              //  COPY the values known to be sorted correctly one row to the RIGHT
                 }
@@ -59,37 +65,37 @@ public class Matrix {
         String format = "%1$3d";
 
         System.out.print("[0] Known IN:        ");
-        if (truthTable[0][0] == 1) {
+        if (truthTable[knownIn][0] == 1) {
             for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print((char)truthTable[0][i]);
         }
         System.out.println();
 
         System.out.print("[1] Known OUT:       ");
-        if (truthTable[1][0] == 1) {
+        if (truthTable[knownOut][0] == 1) {
             for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print((char)truthTable[1][i]);
         }
         System.out.println();
 
-        if (truthTable[2][0] == 1) {
+        if (truthTable[unknown][0] == 1) {
             System.out.print("[2] Unknown:         ");
             for (int i = 1; i < truthTable[0].length - 2; i++) System.out.print((char)(truthTable[2][i]));
             System.out.println();
-        }  if (truthTable[3][0] == 1) {
+        }  if (truthTable[knownTogether][0] == 1) {
             System.out.print("[3] Known Together:  ");
             morph.MatrixRowTo.commaDelimitedString(3);
-        }  if (truthTable[4][0] == 1) {
+        }  if (truthTable[columns][0] == 1) {
             System.out.print("[4] Columns:         ");
             System.out.print("|");
             for(int c = 1; c < 27; c++) {
-                System.out.print(" " + (char)(truthTable[4][c]) + " |");
+                System.out.print(" " + (char)(truthTable[columns][c]) + " |");
                 if(c == 26) System.out.println("Res|");
             }
 //            System.out.println();
-        }  if (truthTable[5][0] == 1) {
+        }  if (truthTable[frequency][0] == 1) {
             System.out.print("[5] Frequency:       ");
             System.out.print("|");
             for(int c = 1; c < 27; c++) {
-                System.out.printf(format, truthTable[5][c]);
+                System.out.printf(format, truthTable[frequency][c]);
                 System.out.print("|");
                 if(c == 26) System.out.println("Res|");
             }
@@ -142,8 +148,8 @@ public class Matrix {
 
         for(int i = 0; i <5; i++) {                              //  FOR every letter in the guess
             int asciiChar = guess.charAt(i);                        //  CONVERT the letter to ASCII
-            for(int c = 1; c < (truthTable[4].length-2); c++) {     //  FOR every remaining letter in a row
-                if(asciiChar == truthTable[4][c]) {                     //  IF the ASCII value ==  the column title
+            for(int c = 1; c < (truthTable[columns].length-2); c++) {     //  FOR every remaining letter in a row
+                if(asciiChar == truthTable[columns][c]) {                     //  IF the ASCII value ==  the column title
                     truthTable[turnIndex][c] = 1;                       //  SET 1 (true) for that column/letter on that row/guess
                     break;
                 }
@@ -165,8 +171,8 @@ public class Matrix {
         for(int r = 6; r < 7; r++) {
             for(int c = 1; c < 27; c++) {
                 if((truthTable[r][c] ^ truthTable[r+1][c]) == 1) {
-                    truthTable[3][0] = 1;  //  Enable print mask
-                    truthTable[3][c] = 1;  //  SET bits to 1/true as needed
+                    truthTable[knownTogether][0] = 1;  //  Enable print mask
+                    truthTable[knownTogether][c] = 1;  //  SET bits to 1/true as needed
                     numLettersChanged++;   //  INCREMENT a counter of the number of letters changed
                 }
             }

@@ -44,6 +44,6 @@ public class Create extends DatabaseConnection{
         System.out.println(" > 'watson' database created!");
         System.out.println();
 
-        url = url + ":1433;DatabaseName=watson";
+        url = url + "DatabaseName=watson";
     }
 }
