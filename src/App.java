@@ -18,7 +18,7 @@ public class App {
             read.Keyboard.response();                          //  TYPE the response
             //  ToDo: dataStructures.Matrix.sanitizeLastTurn() needed
             print.Messages.report(numTurns);                   //  PRINT a report
-        } while (dataStructures.Matrix.truthTable[dataStructures.Matrix.turnIndex-1][27] < 5);  //  stareWhile the most recent response is less than 5
+        } while (dataStructures.Matrix.truthTable[dataStructures.Matrix.turnIndex-1][27] < 5);  //  While the most recent response is less than 5
 
         //  **END GAME***
 //        print.Messages.endGame(guess, numTurns);  //  Once the response to the previous guess is 5...

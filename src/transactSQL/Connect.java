@@ -1,10 +1,13 @@
 package transactSQL;
 
+import dataStructures.Matrix;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import static dataStructures.Matrix.truthTable;
 import static transactSQL.DatabaseConnection.*;
 
 public class Connect {
@@ -17,12 +20,11 @@ public class Connect {
             switch(reason) {
                 case "getWords":
 
-//                    if() {
-//
-//                    }
+                    if(truthTable[Matrix.knownTogether][Matrix.knownTogether] == 1) {
+//                        Todo: determine the index positions of letters in knownTogether (XOR?)  //  Pass a row?  build.wordsQuery()?
+//                        Todo: search DB for a word using the mostCommonLetters that are not those letters
 
-
-                    if(dataStructures.Matrix.truthTable[6][1] == 0) {
+                    } else if (truthTable[6][1] == 0) {
                         return transactSQL.Query.getWords(1, 1, 2, 3, 4, 5);
                     } else {
                         return transactSQL.Query.getWords(1, 2, 3, 4, 5, 6);

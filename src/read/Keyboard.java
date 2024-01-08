@@ -15,7 +15,7 @@ public class Keyboard {
             System.out.print("Turn # " + (Matrix.turnIndex - 5) + ".  Guess a 5 letter word: ");
             Scanner input= new Scanner(System.in);
             guess = input.nextLine();
-            System.out.println();
+//            System.out.println();
             guess = guess.toUpperCase();  //  Regardless of the case in the InputStream typed at the keyboard, convert the String contents of the 'guessString' variable to UPPERCASE
 
             if (guess.length() != 5) {
@@ -32,7 +32,7 @@ public class Keyboard {
         int response;
 
         do {
-            System.out.println("What was the response?: ");
+            System.out.print("What was the response?: ");
             Scanner input= new Scanner(System.in);
             response = input.nextInt();
             System.out.println();
