@@ -1,3 +1,5 @@
+import dataStructures.LetterGroup1D;
+
 import static dataStructures.Matrix.numTurns;
 
 public class App {
@@ -6,6 +8,19 @@ public class App {
         print.Messages.welcome();
         transactSQL.DatabaseConnection.getProperties();
         transactSQL.Create.watsonDB();
+
+        LetterGroup1D knownIn = new LetterGroup1D(5);
+        LetterGroup1D knownOut = new LetterGroup1D(21);
+        LetterGroup1D unknown = new LetterGroup1D(26);
+        LetterGroup1D knownTogether = new LetterGroup1D(5);
+
+        unknown.seed();
+
+        knownIn.print();
+        knownOut.print();
+        knownTogether.print();
+        unknown.print();
+
         dataStructures.Matrix.initialize();
         transactSQL.Insert.loadKnownWords();
         dataStructures.Matrix.sortByFrequency();
