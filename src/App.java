@@ -1,25 +1,33 @@
 import dataStructures.LetterGroup1D;
+import dataStructures.LetterGroup2D;
 
 import static dataStructures.Matrix.numTurns;
 
 public class App {
     public static void main(String[] args) throws Exception {
 
+        //  SETUP...
         print.Messages.welcome();
         transactSQL.DatabaseConnection.getProperties();
         transactSQL.Create.watsonDB();
 
+        //  CREATE LetterGroup Objects to facilitate play...
         LetterGroup1D knownIn = new LetterGroup1D(5);
         LetterGroup1D knownOut = new LetterGroup1D(21);
         LetterGroup1D unknown = new LetterGroup1D(26);
         LetterGroup1D knownTogether = new LetterGroup1D(5);
+        LetterGroup2D frequency = new LetterGroup2D();
 
         unknown.seed();
+        frequency.set(0,0,1);
+        frequency.set(1,2,3);
+
 
         knownIn.print();
         knownOut.print();
         knownTogether.print();
-        unknown.print();
+        if(unknown.hasLetters == true) unknown.print();
+        frequency.print();
 
         dataStructures.Matrix.initialize();
         transactSQL.Insert.loadKnownWords();

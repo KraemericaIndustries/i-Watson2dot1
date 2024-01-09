@@ -2,7 +2,7 @@ package dataStructures;
 
 public class LetterGroup1D {
 
-    boolean hasLetters = false;
+    public boolean hasLetters = false;
     char[] array1D;
 
     public LetterGroup1D(int size) {
@@ -18,5 +18,6 @@ public class LetterGroup1D {
 
     public void print() {
         if(hasLetters) System.out.print(array1D);
+        System.out.println();
     }
 }
