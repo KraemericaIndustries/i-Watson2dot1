@@ -25,6 +25,7 @@ public class App {
 
 //        dataStructures.Matrix.initialize();
         transactSQL.Insert.loadKnownWords(frequency);
+        frequency.sortByFrequency();
         frequency.print();
         dataStructures.Matrix.sortByFrequency();
         print.Messages.play();
