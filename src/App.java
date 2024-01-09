@@ -17,20 +17,15 @@ public class App {
         LetterGroup1D unknown = new LetterGroup1D(26);
         LetterGroup1D knownTogether = new LetterGroup1D(5);
         LetterGroup2D frequency = new LetterGroup2D();
-
         unknown.seed();
-        frequency.set(0,0,1);
-        frequency.set(1,2,3);
+        frequency.seed();
+//        //DEBUG:
+//        frequency.set(0,0,1);
+//        frequency.set(1,2,3);
 
-
-        knownIn.print();
-        knownOut.print();
-        knownTogether.print();
-        if(unknown.hasLetters == true) unknown.print();
+//        dataStructures.Matrix.initialize();
+        transactSQL.Insert.loadKnownWords(frequency);
         frequency.print();
-
-        dataStructures.Matrix.initialize();
-        transactSQL.Insert.loadKnownWords();
         dataStructures.Matrix.sortByFrequency();
         print.Messages.play();
 

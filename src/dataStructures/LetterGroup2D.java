@@ -14,14 +14,29 @@ public class LetterGroup2D {
         array2D[row][col] = value;
     }
 
+    public void seed() {
+        hasLetters = true;
+        for(int i = 0; i < 26; i++) {  //  Seed UNKNOWN with all the letters of the alphabet
+            array2D[0][i] = (char)(i+65);
+        }
+    }
+
     public void print() {
-        if(hasLetters) {
-            for(int row = 0; row < 2; row++) {
-                for(int col = 0; col < 26; col++) {
-                    System.out.print(array2D[row][col]);
-                }
-                System.out.println();
-            }
+
+        String format = "%1$3d";
+
+        System.out.print("Letters:         ");
+        System.out.print("|");
+        for(int c = 0; c < 26; c++) {
+            System.out.print(" " + (char)(array2D[0][c]) + " |");
+        }
+        System.out.println();
+
+        System.out.print("Frequency:       ");
+        System.out.print("|");
+        for(int c = 0; c < 26; c++) {
+            System.out.printf(format, array2D[1][c]);
+            System.out.print("|");
         }
     }
 }

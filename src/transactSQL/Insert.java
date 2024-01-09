@@ -1,5 +1,7 @@
 package transactSQL;
 
+import dataStructures.LetterGroup2D;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.sql.Connection;
@@ -8,8 +10,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-import static dataStructures.Matrix.truthTable;
-
 public class Insert extends DatabaseConnection{
 //    static int[] letterCounts = new int[26];
     static int counter;
@@ -17,43 +17,43 @@ public class Insert extends DatabaseConnection{
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
 
     //  COUNT the occurrence of every letter in every word...
-    private static void letterEnumerator(String word) {
+    private static void letterEnumerator(String word, LetterGroup2D frequency) {
 
         for(int i = 0; i < word.length(); i++) {
             switch (word.charAt(i)) {
-                case 'A' -> truthTable[5][1]++;
-                case 'B' -> truthTable[5][2]++;
-                case 'C' -> truthTable[5][3]++;
-                case 'D' -> truthTable[5][4]++;
-                case 'E' -> truthTable[5][5]++;
-                case 'F' -> truthTable[5][6]++;
-                case 'G' -> truthTable[5][7]++;
-                case 'H' -> truthTable[5][8]++;
-                case 'I' -> truthTable[5][9]++;
-                case 'J' -> truthTable[5][10]++;
-                case 'K' -> truthTable[5][11]++;
-                case 'L' -> truthTable[5][12]++;
-                case 'M' -> truthTable[5][13]++;
-                case 'N' -> truthTable[5][14]++;
-                case 'O' -> truthTable[5][15]++;
-                case 'P' -> truthTable[5][16]++;
-                case 'Q' -> truthTable[5][17]++;
-                case 'R' -> truthTable[5][18]++;
-                case 'S' -> truthTable[5][19]++;
-                case 'T' -> truthTable[5][20]++;
-                case 'U' -> truthTable[5][21]++;
-                case 'V' -> truthTable[5][22]++;
-                case 'W' -> truthTable[5][23]++;
-                case 'X' -> truthTable[5][24]++;
-                case 'Y' -> truthTable[5][25]++;
-                case 'Z' -> truthTable[5][26]++;
+                case 'A' -> frequency.array2D[1][0]++;
+                case 'B' -> frequency.array2D[1][1]++;
+                case 'C' -> frequency.array2D[1][2]++;
+                case 'D' -> frequency.array2D[1][3]++;
+                case 'E' -> frequency.array2D[1][4]++;
+                case 'F' -> frequency.array2D[1][5]++;
+                case 'G' -> frequency.array2D[1][6]++;
+                case 'H' -> frequency.array2D[1][7]++;
+                case 'I' -> frequency.array2D[1][8]++;
+                case 'J' -> frequency.array2D[1][9]++;
+                case 'K' -> frequency.array2D[1][10]++;
+                case 'L' -> frequency.array2D[1][11]++;
+                case 'M' -> frequency.array2D[1][12]++;
+                case 'N' -> frequency.array2D[1][13]++;
+                case 'O' -> frequency.array2D[1][14]++;
+                case 'P' -> frequency.array2D[1][15]++;
+                case 'Q' -> frequency.array2D[1][16]++;
+                case 'R' -> frequency.array2D[1][17]++;
+                case 'S' -> frequency.array2D[1][18]++;
+                case 'T' -> frequency.array2D[1][19]++;
+                case 'U' -> frequency.array2D[1][20]++;
+                case 'V' -> frequency.array2D[1][21]++;
+                case 'W' -> frequency.array2D[1][22]++;
+                case 'X' -> frequency.array2D[1][23]++;
+                case 'Y' -> frequency.array2D[1][24]++;
+                case 'Z' -> frequency.array2D[1][25]++;
                 default -> System.out.println("Unknown letter, or some other flaw");
             }
         }
     }  //  End-of-letterEnumerator()
 
     //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
-    public static void loadKnownWords() {
+    public static void loadKnownWords(LetterGroup2D frequency) {
         System.out.println("Loading known words into the 'watson' database...");
         try {
             File file = new File("FiveLetterWords.txt");
@@ -61,7 +61,7 @@ public class Insert extends DatabaseConnection{
 
             while (input.hasNextLine()) {
                 line = (input.nextLine().toUpperCase());
-                letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+                letterEnumerator(line.toUpperCase(), frequency);  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                               //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database
