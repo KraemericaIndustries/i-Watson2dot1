@@ -16,8 +16,11 @@ public class LetterGroup1D {
         }
     }
 
-    public void print() {
-        if(hasLetters) System.out.print(array1D);
+    public void print(String heading) {
+        System.out.print(heading);
+        if(hasLetters) {
+            System.out.print(array1D);
+        }
         System.out.println();
     }
 }

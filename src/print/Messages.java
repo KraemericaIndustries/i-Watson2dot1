@@ -1,5 +1,7 @@
 package print;
 
+import dataStructures.LetterGroup1D;
+import dataStructures.LetterGroup2D;
 import dataStructures.Matrix;
 
 import static dataStructures.Matrix.truthTable;
@@ -33,18 +35,24 @@ public class Messages {
     }
 
     //  PRINT a report...
-    public static void report(int numTurns) {
-        System.out.println("*****************************************************************  REPORT # " + (numTurns + 1) + " *****************************************************************************************");
+    public static void report(LetterGroup1D knownIn, LetterGroup1D knownOut, LetterGroup1D knownTogether, LetterGroup2D frequency, LetterGroup2D turns) {
+        System.out.println("*****************************************************************  REPORT # " + (turns.playIndex + 1) + " *****************************************************************************************");
 
-        if(numTurns > 1) dataStructures.Matrix.analyzeAllTurns();
-        if(numTurns >=2 ) {
-            System.out.println("The number of letters changed in the previous two guesses is: " + Matrix.numLettersChanged/2);
-            System.out.print("Letters changed in the previous 2 guesses are: ");
-            morph.MatrixRowTo.commaDelimitedString(3);
-        }
+//        if(numTurns > 1) dataStructures.Matrix.analyzeAllTurns();
+//        if(numTurns >=2 ) {
+//            System.out.println("The number of letters changed in the previous two guesses is: " + Matrix.numLettersChanged/2);
+//            System.out.print("Letters changed in the previous 2 guesses are: ");
+//            morph.MatrixRowTo.commaDelimitedString(3);
+//        }
 
         //  Print the Matrix...
-        dataStructures.Matrix.print();
+        knownIn.print("Known IN: ");
+        knownOut.print("Known OUT: ");
+        knownTogether.print("Known TOGETHER: ");
+        frequency.printFrequency();
+        turns.printTurns();
+        System.out.println();
+        System.out.println();
         System.out.println("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.");
 
         System.out.println("***********************************************************************************************************************************************************************");

@@ -4,9 +4,11 @@ public class LetterGroup2D {
 
     boolean hasLetters = false;
     public int[][] array2D;
+    int turnIndex = 0;
+    public int playIndex = 0;
 
-    public LetterGroup2D() {
-        array2D = new int[2][27];
+    public LetterGroup2D(int rows, int cols) {
+        array2D = new int[rows][cols];
     }
 
     public void set(int row, int col, int value) {
@@ -45,7 +47,7 @@ public class LetterGroup2D {
         System.out.println(" > truth table sorted!");
     }
 
-    public void print() {
+    public void printFrequency() {
 
         String format = "%1$3d";
 
@@ -62,5 +64,10 @@ public class LetterGroup2D {
             System.out.printf(format, array2D[1][c]);
             System.out.print("|");
         }
+        System.out.println();
+    }
+
+    public void printTurns() {
+        System.out.print("Turns:           ");
     }
 }
