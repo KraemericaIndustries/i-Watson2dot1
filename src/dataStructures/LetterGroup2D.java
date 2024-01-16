@@ -4,7 +4,7 @@ public class LetterGroup2D {
 
     boolean hasLetters = false;
     public int[][] array2D;
-    int turnIndex = 0;
+    public int turnIndex = 0;
     public int playIndex = 0;
 
     public LetterGroup2D(int rows, int cols) {

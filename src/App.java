@@ -30,7 +30,7 @@ public class App {
 
         do {
             if(turns.playIndex == 0) print.Messages.report(knownIn, knownOut, knownTogether, frequency, turns);  //  PRINT the report
-            print.Messages.results(numTurns);                  //  PRINT the results
+            print.Messages.results(turns, knownTogether, frequency);      //  PRINT the results
             read.Keyboard.guess();                             //  TYPE a guess
             read.Keyboard.response();                          //  TYPE the response
             //  ToDo: dataStructures.Matrix.sanitizeLastTurn() needed

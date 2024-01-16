@@ -2,9 +2,6 @@ package print;
 
 import dataStructures.LetterGroup1D;
 import dataStructures.LetterGroup2D;
-import dataStructures.Matrix;
-
-import static dataStructures.Matrix.truthTable;
 
 public class Messages {
 
@@ -60,16 +57,13 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(int numTurns) {
+    public static void results(LetterGroup2D turns, LetterGroup1D knownTogether, LetterGroup2D frequency) {
 
-        int numGuesses = 0;
+//        int numGuesses = 0;
 
-        System.out.println("*****************************************************************  RESULT # " + (numTurns + 1) + " *****************************************************************************************");
+        System.out.println("*****************************************************************  RESULT # " + (turns.playIndex + 1) + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
-        for(int r = 6; r < truthTable.length; r++) {
-            if(truthTable[r][0] == 1) numGuesses++;
-        }
-        System.out.println(" - Previous guesses for which there is data available: " + numGuesses);
+        System.out.println(" - Previous guesses for which there is data available: " + turns.turnIndex);
 
 
         System.out.println("ADVICE:");
@@ -77,7 +71,7 @@ public class Messages {
         //  ToDo: IMPLEMENT the getWords() method
 //  SAMPLE recursive sql select...
 
-        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords"));  //  CONNECT to DB (to get guesses)
+        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency));  //  CONNECT to DB (to get guesses)
         System.out.println("***********************************************************************************************************************************************************************");
     }
 
