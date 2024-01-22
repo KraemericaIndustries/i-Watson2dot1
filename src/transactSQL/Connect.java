@@ -14,8 +14,7 @@ import static transactSQL.DatabaseConnection.*;
 
 public class Connect {
 
-    //  Establish a connection to the watson DB, to remain open while recursive sql select statements identify and return words from the DB...
-
+    //  Overloaded method to establish a connection to the watson DB for a given reason.  Connection to remain open while sql  statements run their course...
     public static String watson(String reason) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
@@ -38,20 +37,14 @@ public class Connect {
 
             switch(reason) {
                 case "getWords":
-
                     if(knownTogether.hasLetters == false) {
 //                        Todo: determine the index positions of letters in knownTogether (XOR?)  //  Pass a row?  build.wordsQuery()?
 //                        Todo: search DB for a word using the mostCommonLetters that are not those letters
                         return transactSQL.Query.getWords(1, 0, 1, 2, 3, 4, frequency);
 
-                    }
-//                    else if (truthTable[6][1] == 0) {
-//                        return transactSQL.Query.getWords(1, 1, 2, 3, 4, 5);
-//                    }
-                    else {
+                    } else {
                         return transactSQL.Query.getWords(1, 2, 3, 4, 5, 6, frequency);
                     }
-
                 case "getNumWordsInDB":
                     return transactSQL.Query.getNumWordInDB();
                 default:

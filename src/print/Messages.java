@@ -2,8 +2,13 @@ package print;
 
 import dataStructures.LetterGroup1D;
 import dataStructures.LetterGroup2D;
+import dataStructures.Turn;
+
+import java.util.LinkedList;
 
 public class Messages {
+
+    public static int reportNumber = 1;
 
     //  Introduce the game, and how it is played...
     public static void welcome() {
@@ -32,23 +37,19 @@ public class Messages {
     }
 
     //  PRINT a report...
-    public static void report(LetterGroup1D knownIn, LetterGroup1D knownOut, LetterGroup1D knownTogether, LetterGroup2D frequency, LetterGroup2D turns) {
-        System.out.println("*****************************************************************  REPORT # " + (turns.playIndex + 1) + " *****************************************************************************************");
-
-//        if(numTurns > 1) dataStructures.Matrix.analyzeAllTurns();
-//        if(numTurns >=2 ) {
-//            System.out.println("The number of letters changed in the previous two guesses is: " + Matrix.numLettersChanged/2);
-//            System.out.print("Letters changed in the previous 2 guesses are: ");
-//            morph.MatrixRowTo.commaDelimitedString(3);
-//        }
+    public static void report(LetterGroup1D knownIn, LetterGroup1D knownOut, LetterGroup1D knownTogether, LetterGroup2D frequency, LinkedList<Turn> Turns ) {
+        System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
         //  Print the Matrix...
         knownIn.print("Known IN: ");
         knownOut.print("Known OUT: ");
         knownTogether.print("Known TOGETHER: ");
         frequency.printFrequency();
-        turns.printTurns();
-        System.out.println();
+
+        for(Turn t : Turns) {
+            t.printTurn();
+        }
+
         System.out.println();
         System.out.println("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.");
 
@@ -57,21 +58,35 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(LetterGroup2D turns, LetterGroup1D knownTogether, LetterGroup2D frequency) {
+    public static void results(LetterGroup1D knownTogether, LetterGroup2D frequency, LinkedList<Turn> Turns) {
 
 //        int numGuesses = 0;
 
-        System.out.println("*****************************************************************  RESULT # " + (turns.playIndex + 1) + " *****************************************************************************************");
+        System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
-        System.out.println(" - Previous guesses for which there is data available: " + turns.turnIndex);
-
-
+        System.out.println(" - Previous guesses for which there is data available: " + Turns.size());
+        System.out.println();
+        if(!Turns.isEmpty()) {
+            for(Turn t : Turns) {
+                t.printTurn();
+            }
+        }
+        System.out.println();
         System.out.println("ADVICE:");
-        System.out.println(" - Make the first guess possible using the 5 most common letters possible");
+        if(reportNumber == 1) {
+            System.out.println(" - Make the first guess possible using the 5 most common letters possible");
+            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency));  //  CONNECT to DB (to get guesses)
+        } else if (reportNumber == 2) {
+            System.out.println(" - With only " + Turns.size() + " previous play, very little can be learned.");
+            System.out.println(" - I suggest making the first guess possible using the 2nd through 6th most common letters...");
+            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency));  //  CONNECT to DB (to get guesses)
+        }
+
+
         //  ToDo: IMPLEMENT the getWords() method
 //  SAMPLE recursive sql select...
 
-        System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency));  //  CONNECT to DB (to get guesses)
+
         System.out.println("***********************************************************************************************************************************************************************");
     }
 
