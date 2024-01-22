@@ -38,11 +38,12 @@ public class Turn {
     //  PRINT a turn...
     public void printTurn() {
 
-        System.out.print("You previously guessed " + guess + ", and the response was " + response + ".  If I remove letters for which a determination has been made, this means " + updatedResponse + " of ");
+        System.out.print("You previously guessed " + guess + ", and the response was " + response + ".  If I remove letters for which a determination has been made, this means " + updatedResponse + " of [");
         for(int i = 0; i < sortedGuess[0].length - 1; i++) {
-            System.out.print((char)sortedGuess[0][i]);
+            if(i < sortedGuess[0].length - 2) System.out.print((char)sortedGuess[0][i] + ", ");
+            else System.out.print((char)sortedGuess[0][i]);
         }
-        System.out.println(" are in your opponents word.");
+        System.out.println("] are in your opponents word.");
     }
 
     //  SORT a guess by letter frequency (which will be needed to drive suggestions for future guesses)...
