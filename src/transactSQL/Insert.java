@@ -54,7 +54,7 @@ public class Insert extends DatabaseConnection{
     }  //  End-of-letterEnumerator()
 
     //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
-    public static void loadKnownWords(LetterGroup2D frequency) {
+    public static void loadKnownWords(Frequency frequency) {
         System.out.println("Loading known words into the 'watson' database...");
         try {
             File file = new File("FiveLetterWords.txt");

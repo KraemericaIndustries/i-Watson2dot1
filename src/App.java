@@ -20,26 +20,26 @@ public class App {
         LetterGroup1D knownOut = new LetterGroup1D(21);
         LetterGroup1D unknown = new LetterGroup1D(26);
         LetterGroup1D knownTogether = new LetterGroup1D(5);
-        LetterGroup2D frequency = new LetterGroup2D(2, 27);
+        Frequency frequency = new Frequency();
         LinkedList<Turn> Turns = new LinkedList<>();
 
         //  SETUP: Populate tables with initial letter values...
         unknown.seed();
-        frequency.seed();
 
         //  SETUP: Load tables...
         transactSQL.Insert.loadKnownWords(frequency);
+        frequency.loadLinkedHashMap();
+        frequency.sort();
+        System.out.println(frequency.frequency);
 
-        Frequency.loadLinkedHashMap();
-
-        frequency.sortByFrequency();
+        //  PLAY the game...
         print.Messages.play();
 
         do {
 //            if(Turns.isEmpty()) print.Messages.report(knownIn, knownOut, knownTogether, frequency, Turns);  //  PRINT a report of possible determinations
-            print.Messages.report(knownIn, knownOut, knownTogether, frequency, Turns);  //  PRINT a report of possible determinations
-            print.Messages.results(knownTogether, frequency, Turns);                                        //  PRINT the results of previous plays and determinations
-            Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent(), frequency));    //  TAKE a turn by making a guess
+//            print.Messages.report(knownIn, knownOut, knownTogether, frequency, Turns);  //  PRINT a report of possible determinations
+//            print.Messages.results(knownTogether, frequency, Turns);                                        //  PRINT the results of previous plays and determinations
+//            Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent(), frequency));    //  TAKE a turn by making a guess
             Messages.reportNumber++;                                                                        //  INCREMENT the number of turns taken
         } while (Turns.getLast().response < 5);  //  While the most recent response is less than 5
 
