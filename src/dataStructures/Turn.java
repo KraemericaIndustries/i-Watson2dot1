@@ -20,11 +20,11 @@ public class Turn {
             //  This will be used further  downstream for strategic play
             for(frequencyIndex = 0; frequencyIndex < frequency.array2D[0].length; frequencyIndex++) {
 
-                int guessLetterAscii = (int)guess.charAt(guessIndex);
+                int guessLetterAscii = guess.charAt(guessIndex);
                 int frequencyLetterAscii = frequency.array2D[0][frequencyIndex];
 
-                if (guessLetterAscii ==  frequencyLetterAscii) {
-                    sortedGuess[0][sortedGuessIndex] = (int)guess.charAt(guessIndex);
+                if (guessLetterAscii == frequencyLetterAscii) {
+                    sortedGuess[0][sortedGuessIndex] = guess.charAt(guessIndex);
                     sortedGuess[1][sortedGuessIndex] = frequency.array2D[1][frequencyIndex];
                     sortedGuessIndex++;
                     break;

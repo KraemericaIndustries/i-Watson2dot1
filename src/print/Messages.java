@@ -75,11 +75,11 @@ public class Messages {
         System.out.println("ADVICE:");
         if(reportNumber == 1) {
             System.out.println(" - Make the first guess possible using the 5 most common letters possible");
-            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency));  //  CONNECT to DB (to get guesses)
+            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency, Turns));  //  CONNECT to DB (to get guesses)
         } else if (reportNumber == 2) {
             System.out.println(" - With only " + Turns.size() + " previous play, very little can be learned.");
             System.out.println(" - I suggest making the first guess possible using the 2nd through 6th most common letters...");
-            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency));  //  CONNECT to DB (to get guesses)
+            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, frequency, Turns));  //  CONNECT to DB (to get guesses)
         }
 
 

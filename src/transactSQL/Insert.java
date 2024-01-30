@@ -1,5 +1,6 @@
 package transactSQL;
 
+import dataStructures.Frequency;
 import dataStructures.LetterGroup2D;
 
 import java.io.File;
@@ -61,7 +62,7 @@ public class Insert extends DatabaseConnection{
 
             while (input.hasNextLine()) {
                 line = (input.nextLine().toUpperCase());
-                letterEnumerator(line.toUpperCase(), frequency);  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+                Frequency.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                               //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database
