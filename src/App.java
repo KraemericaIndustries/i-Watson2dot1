@@ -1,13 +1,10 @@
-import dataStructures.Frequency;
-import dataStructures.LetterGroup1D;
-import dataStructures.LetterGroup2D;
-import dataStructures.Turn;
+import dataStructures.*;
 import print.Messages;
 
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 public class App {
+
     public static void main(String[] args) throws Exception {
 
         //  SETUP:
@@ -16,21 +13,17 @@ public class App {
         transactSQL.Create.watsonDB();
 
         //  SETUP: Create LetterGroup objects to facilitate play...
-        LetterGroup1D knownIn = new LetterGroup1D(5);
-        LetterGroup1D knownOut = new LetterGroup1D(21);
-        LetterGroup1D unknown = new LetterGroup1D(26);
-        LetterGroup1D knownTogether = new LetterGroup1D(5);
-        Frequency frequency = new Frequency();
+        Unknown unknown = new Unknown();
+        LetterGroup knownIn = new LetterGroup();
+        LetterGroup knownOut = new LetterGroup();
+        LetterGroup knownTogether = new LetterGroup();
         LinkedList<Turn> Turns = new LinkedList<>();
 
-        //  SETUP: Populate tables with initial letter values...
-        unknown.seed();
-
         //  SETUP: Load tables...
-        transactSQL.Insert.loadKnownWords(frequency);
-        frequency.loadLinkedHashMap();
-        frequency.sort();
-        System.out.println(frequency.frequency);
+        transactSQL.Insert.loadKnownWords(unknown);
+        unknown.loadLinkedHashMap();
+        unknown.sort();
+        System.out.println("Unknown: " + unknown.letters);
 
         //  PLAY the game...
         print.Messages.play();

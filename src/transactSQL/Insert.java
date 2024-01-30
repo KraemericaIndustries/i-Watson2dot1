@@ -1,6 +1,6 @@
 package transactSQL;
 
-import dataStructures.Frequency;
+import dataStructures.Unknown;
 import dataStructures.LetterGroup2D;
 
 import java.io.File;
@@ -54,7 +54,7 @@ public class Insert extends DatabaseConnection{
     }  //  End-of-letterEnumerator()
 
     //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
-    public static void loadKnownWords(Frequency frequency) {
+    public static void loadKnownWords(Unknown unknown) {
         System.out.println("Loading known words into the 'watson' database...");
         try {
             File file = new File("FiveLetterWords.txt");
@@ -62,7 +62,7 @@ public class Insert extends DatabaseConnection{
 
             while (input.hasNextLine()) {
                 line = (input.nextLine().toUpperCase());
-                Frequency.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+                Unknown.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                               //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database

@@ -46,9 +46,9 @@ public class Messages {
         knownTogether.print("Known TOGETHER: ");
         frequency.printFrequency();
 
-        for(Turn t : Turns) {
-            t.printTurn();
-        }
+//        for(Turn t : Turns) {
+//            t.printTurn();
+//        }
 
         System.out.println();
         System.out.println("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.");
@@ -67,9 +67,9 @@ public class Messages {
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size());
         System.out.println();
         if(!Turns.isEmpty()) {
-            for(Turn t : Turns) {
-                t.printTurn();
-            }
+//            for(Turn t : Turns) {
+//                t.printTurn();
+//            }
         }
         System.out.println();
         System.out.println("ADVICE:");

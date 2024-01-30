@@ -5,8 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Frequency {
-    public LinkedHashMap<Character, Integer> frequency = new LinkedHashMap<>();
+public class Unknown {
+    public LinkedHashMap<Character, Integer> letters = new LinkedHashMap<>();
     static private int[] letterCounts = new int[26];
 
 
@@ -47,13 +47,13 @@ public class Frequency {
 
     public void loadLinkedHashMap() {
         for (int i = 0; i < letterCounts.length; i++) {
-            frequency.put((char)(i + 65), letterCounts[i]);
+            letters.put((char)(i + 65), letterCounts[i]);
         }
     }
     
     public void sort() {
 //        System.out.print("Sorted:   ");
-        LinkedHashMap<Character, Integer> sortedMap = frequency.entrySet()
+        LinkedHashMap<Character, Integer> sortedMap = letters.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(
@@ -62,11 +62,10 @@ public class Frequency {
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 //        System.out.println(sortedMap);
 
-        frequency.clear();
-        frequency.putAll(sortedMap);
+        letters.clear();
+        letters.putAll(sortedMap);
 //        System.out.println("sortTurn() result:               " + turn);
         sortedMap.clear();
 
     }
-
 }
