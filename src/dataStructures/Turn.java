@@ -16,9 +16,10 @@ public class Turn {
 
         this.guess = guess.toUpperCase();
         this.response = response;
+        this.updatedResponse = response;
 
         parseGuessToCollection(guess, unknown);
-        System.out.println("Turn Constructor original parse: " + turn);
+//        System.out.println("Turn Constructor original parse: " + turn);  DEBUG
         sortTurn(turn);
     }
     public void parseGuessToCollection(String guess, Unknown unknown) {
@@ -112,7 +113,7 @@ public class Turn {
         }
     }
     public static void sortTurn(LinkedHashMap<Character, Integer> turn) {
-        System.out.println("sortTurn() original:             " + turn);
+//        System.out.println("sortTurn() original:             " + turn);  DEBUG
         LinkedHashMap<Character, Integer> sortedTurn = turn.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -120,10 +121,10 @@ public class Turn {
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-        System.out.println("sortTurn() sortedTurn:           " + sortedTurn);
+//        System.out.println("sortTurn() sortedTurn:           " + sortedTurn);  DEBUG
         turn.clear();
         turn.putAll(sortedTurn);
-        System.out.println("sortTurn() result:               " + turn);
+//        System.out.println("sortTurn() result:               " + turn);  DEBUG
         sortedTurn.clear();
         System.out.println();
     }

@@ -44,8 +44,10 @@ public class Messages {
         System.out.println("Known TOGETHER: " + knownTogether.letters);
         System.out.println("Unknown: " + unknown.letters);
 
+        System.out.println("Previous Guesses: ");
         for(Turn t : Turns) {
-            System.out.println(t.turn);
+            System.out.println(t.guess + " = " + t.response + ".  " + t.updatedResponse + " of " + t.turn + " are in your opponents word.");
+//            System.out.println(t.turn);
         }
 
         System.out.println();
@@ -58,17 +60,11 @@ public class Messages {
     //  PRINT the result(s) of a given turn...
     public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
 
-//        int numGuesses = 0;
-
         System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size());
         System.out.println();
-        if(!Turns.isEmpty()) {
-//            for(Turn t : Turns) {
-//                t.printTurn();
-//            }
-        }
+
         System.out.println();
         System.out.println("ADVICE:");
         if(reportNumber == 1) {
@@ -80,14 +76,11 @@ public class Messages {
             System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", knownTogether, unknown, Turns));  //  CONNECT to DB (to get guesses)
         }
 
-
         //  ToDo: IMPLEMENT the getWords() method
 //  SAMPLE recursive sql select...
 
-
         System.out.println("***********************************************************************************************************************************************************************");
     }
-
 //  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...
 //
 //    public static void endGame(String guess, int counter) throws SQLException {

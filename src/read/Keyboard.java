@@ -1,7 +1,5 @@
 package read;
 
-import dataStructures.LetterGroup2D;
-import dataStructures.Matrix;
 import print.Messages;
 
 import java.util.Scanner;

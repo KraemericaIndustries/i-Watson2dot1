@@ -1,7 +1,6 @@
 package transactSQL;
 
 import dataStructures.Unknown;
-import dataStructures.LetterGroup2D;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,42 +15,6 @@ public class Insert extends DatabaseConnection{
     static int counter;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
-
-    //  COUNT the occurrence of every letter in every word...
-    private static void letterEnumerator(String word, LetterGroup2D frequency) {
-
-        for(int i = 0; i < word.length(); i++) {
-            switch (word.charAt(i)) {
-                case 'A' -> frequency.array2D[1][0]++;
-                case 'B' -> frequency.array2D[1][1]++;
-                case 'C' -> frequency.array2D[1][2]++;
-                case 'D' -> frequency.array2D[1][3]++;
-                case 'E' -> frequency.array2D[1][4]++;
-                case 'F' -> frequency.array2D[1][5]++;
-                case 'G' -> frequency.array2D[1][6]++;
-                case 'H' -> frequency.array2D[1][7]++;
-                case 'I' -> frequency.array2D[1][8]++;
-                case 'J' -> frequency.array2D[1][9]++;
-                case 'K' -> frequency.array2D[1][10]++;
-                case 'L' -> frequency.array2D[1][11]++;
-                case 'M' -> frequency.array2D[1][12]++;
-                case 'N' -> frequency.array2D[1][13]++;
-                case 'O' -> frequency.array2D[1][14]++;
-                case 'P' -> frequency.array2D[1][15]++;
-                case 'Q' -> frequency.array2D[1][16]++;
-                case 'R' -> frequency.array2D[1][17]++;
-                case 'S' -> frequency.array2D[1][18]++;
-                case 'T' -> frequency.array2D[1][19]++;
-                case 'U' -> frequency.array2D[1][20]++;
-                case 'V' -> frequency.array2D[1][21]++;
-                case 'W' -> frequency.array2D[1][22]++;
-                case 'X' -> frequency.array2D[1][23]++;
-                case 'Y' -> frequency.array2D[1][24]++;
-                case 'Z' -> frequency.array2D[1][25]++;
-                default -> System.out.println("Unknown letter, or some other flaw");
-            }
-        }
-    }  //  End-of-letterEnumerator()
 
     //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
     public static void loadKnownWords(Unknown unknown) {

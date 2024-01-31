@@ -1,7 +1,5 @@
 package transactSQL;
 
-import dataStructures.LetterGroup2D;
-import dataStructures.Matrix;
 import dataStructures.Unknown;
 
 import java.io.BufferedWriter;
