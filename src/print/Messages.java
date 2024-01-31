@@ -1,8 +1,6 @@
 package print;
 
-import dataStructures.LetterGroup1D;
-import dataStructures.LetterGroup2D;
-import dataStructures.Turn;
+import dataStructures.*;
 
 import java.util.LinkedList;
 
@@ -37,18 +35,18 @@ public class Messages {
     }
 
     //  PRINT a report...
-    public static void report(LetterGroup1D knownIn, LetterGroup1D knownOut, LetterGroup1D knownTogether, LetterGroup2D frequency, LinkedList<Turn> Turns ) {
+    public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns ) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
         //  Print the Matrix...
-        knownIn.print("Known IN: ");
-        knownOut.print("Known OUT: ");
-        knownTogether.print("Known TOGETHER: ");
-        frequency.printFrequency();
+        System.out.println("Known IN: " + knownIn.letters);
+        System.out.println("Known OUT: " + knownOut.letters);
+        System.out.println("Known TOGETHER: " + knownTogether.letters);
+        System.out.println("Unknown: " + unknown.letters);
 
-//        for(Turn t : Turns) {
-//            t.printTurn();
-//        }
+        for(Turn t : Turns) {
+            System.out.println(t);
+        }
 
         System.out.println();
         System.out.println("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.");

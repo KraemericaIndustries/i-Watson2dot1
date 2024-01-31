@@ -25,15 +25,17 @@ public class App {
         unknown.loadSortedLetters(unknown.letters);
         System.out.println("Unknown: " + unknown.letters);
 
+        System.out.print("sortedLetters[] of 'Unknown': ");
         for(int i = 0; i < unknown.sortedLetters.length; i++) {
             System.out.print(unknown.sortedLetters[i]);
         }
+        System.out.println();
 
         //  PLAY the game...
         print.Messages.play();
 
         do {
-//            if(Turns.isEmpty()) print.Messages.report(knownIn, knownOut, knownTogether, frequency, Turns);  //  PRINT a report of possible determinations
+            if(Turns.isEmpty()) print.Messages.report(knownIn, knownOut, knownTogether, unknown, Turns);  //  PRINT a report of possible determinations
 //            print.Messages.report(knownIn, knownOut, knownTogether, frequency, Turns);  //  PRINT a report of possible determinations
 //            print.Messages.results(knownTogether, frequency, Turns);                                        //  PRINT the results of previous plays and determinations
 //            Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent(), frequency));    //  TAKE a turn by making a guess
