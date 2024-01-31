@@ -9,7 +9,6 @@ public class LetterGroup {
     public LinkedHashMap<Character, Integer> letters = new LinkedHashMap<>();
     
     public void sort() {
-//        System.out.print("Sorted:   ");
         LinkedHashMap<Character, Integer> sortedMap = letters.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -17,12 +16,8 @@ public class LetterGroup {
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-//        System.out.println(sortedMap);
-
         letters.clear();
         letters.putAll(sortedMap);
-//        System.out.println("sortTurn() result:               " + turn);
         sortedMap.clear();
-
     }
 }

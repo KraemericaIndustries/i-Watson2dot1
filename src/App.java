@@ -21,9 +21,13 @@ public class App {
 
         //  SETUP: Load tables...
         transactSQL.Insert.loadKnownWords(unknown);
-        unknown.loadLinkedHashMap();
         unknown.sort();
+        unknown.loadSortedLetters(unknown.letters);
         System.out.println("Unknown: " + unknown.letters);
+
+        for(int i = 0; i < unknown.sortedLetters.length; i++) {
+            System.out.print(unknown.sortedLetters[i]);
+        }
 
         //  PLAY the game...
         print.Messages.play();
