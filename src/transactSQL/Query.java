@@ -2,6 +2,7 @@ package transactSQL;
 
 import dataStructures.LetterGroup2D;
 import dataStructures.Matrix;
+import dataStructures.Unknown;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -19,17 +20,17 @@ public class Query extends DatabaseConnection{
     /*
     https://stackoverflow.com/questions/77309450/sql-query-to-return-only-the-most-exclusive-pattern-matches-for-varchar-data-t
     */
-    public static String getWords(int numWords, int first, int second, int third, int fourth, int fifth, LetterGroup2D frequency) throws SQLException {
+    public static String getWords(int numWords, int first, int second, int third, int fourth, int fifth, Unknown unknown) throws SQLException {
 
         ResultSet resultSet = transactSQL.Query.select(
 "SELECT TOP (" + numWords + ") Word " +
           "FROM Words_tbl YT " +
           "CROSS JOIN (VALUES('" +
-          (char)frequency.array2D[0][first] + "'),('" +
-          (char)frequency.array2D[0][second] + "'),('" +
-          (char)frequency.array2D[0][third] + "'),('" +
-          (char)frequency.array2D[0][fourth] + "'),('" +
-          (char)frequency.array2D[0][fifth] + "'))L(Letter) " +
+          unknown.sortedLetters[first] + "'),('" +
+                unknown.sortedLetters[second] + "'),('" +
+                unknown.sortedLetters[third] + "'),('" +
+                unknown.sortedLetters[fourth] + "'),('" +
+                unknown.sortedLetters[fifth] + "'))L(Letter) " +
           "GROUP BY YT.Word " +
           "ORDER BY COUNT(CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN 1 END) DESC");
 

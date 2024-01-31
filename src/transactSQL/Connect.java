@@ -1,8 +1,6 @@
 package transactSQL;
 
-import dataStructures.LetterGroup1D;
-import dataStructures.LetterGroup2D;
-import dataStructures.Turn;
+import dataStructures.*;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,17 +29,17 @@ public class Connect {
         return null;
     }
 
-    public static String watson(String reason, LetterGroup1D knownTogether, LetterGroup2D frequency, LinkedList<Turn> Turns) {
+    public static String watson(String reason, LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
             switch(reason) {
                 case "getWords":
                     if(Turns.isEmpty()) {
-                        return transactSQL.Query.getWords(1, 0, 1, 2, 3, 4, frequency);
+                        return transactSQL.Query.getWords(1, 0, 1, 2, 3, 4, unknown);
 
                     } else {
-                        return transactSQL.Query.getWords(1, 2, 3, 4, 5, 6, frequency);
+                        return transactSQL.Query.getWords(1, 2, 3, 4, 5, 6, unknown);
                     }
                 case "getNumWordsInDB":
                     return transactSQL.Query.getNumWordInDB();
