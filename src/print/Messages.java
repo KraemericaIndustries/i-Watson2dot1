@@ -3,6 +3,7 @@ package print;
 import dataStructures.*;
 
 import java.util.LinkedList;
+import java.util.Map;
 
 public class Messages {
 
@@ -38,16 +39,21 @@ public class Messages {
     public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns ) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
-        //  Print the Matrix...
+        //  PRINT the LinkedHashMaps...
         System.out.println("Known IN: " + knownIn.letters);
         System.out.println("Known OUT: " + knownOut.letters);
         System.out.println("Known TOGETHER: " + knownTogether.letters);
         System.out.println("Unknown: " + unknown.letters);
 
+        //  PRINT all previous guesses...
+        //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
         System.out.println("Previous Guesses: ");
         for(Turn t : Turns) {
-            System.out.println(t.guess + " = " + t.response + ".  " + t.updatedResponse + " of " + t.turn + " are in your opponents word.");
-//            System.out.println(t.turn);
+            System.out.print(t.guess + " = " + t.response + ".  " + t.updatedResponse + " of [");
+            for (Map.Entry<Character, Integer> ite : t.turn.entrySet()) {
+                System.out.print(ite.getKey() + ", ");
+            }
+            System.out.println("] are in your opponents word.");
         }
 
         System.out.println();
