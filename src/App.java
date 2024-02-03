@@ -31,6 +31,9 @@ public class App {
             print.Messages.report(knownIn, knownOut, knownTogether, unknown, Turns);                    //  PRINT a report of possible determinations
             print.Messages.results(knownTogether, unknown, Turns);                                      //  PRINT the results of previous plays and determinations
             Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent(), unknown));  //  TAKE a turn by making a guess
+
+            if(Turns.size() >= 2) analyze.Turns.forKnownTogether(Turns, knownTogether);
+
             Messages.reportNumber++;                                                                    //  INCREMENT the number of turns taken
         } while (Turns.getLast().response < 5);                                                         //  While the most recent response is less than 5
 
