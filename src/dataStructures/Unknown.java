@@ -3,12 +3,14 @@ package dataStructures;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Unknown {
     public static LinkedHashMap<Character, Integer> letters = new LinkedHashMap<>();
     public char[] unsortedLettersFromMap;  //  To create char[] sortedLetters, a temporary array is declared and only initialized once the map has been populated with letter occurrences read in from all words
     public char[] sortedLetters;  //  DOWNSTREAM DB query for words unable to get key from map by index.  Creating this sorted array to accommodate that
+    public Object[] elements;  //  Needed for keySetToArray
 
     //  Ternary operator evaluates IF a key in the Character map already exists.  If yes, increment the value, if no, add key with value = 1
     //  https://stackoverflow.com/questions/81346/most-efficient-way-to-increment-a-map-value-in-java
@@ -43,5 +45,11 @@ public class Unknown {
             i++;
         }
         sortedLetters = unsortedLettersFromMap;
+    }
+
+    public void keySetToArray() {
+        Set<Character> letterKeys = letters.keySet();
+        elements = letterKeys.toArray();
+        System.out.println();
     }
 }

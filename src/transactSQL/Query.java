@@ -18,17 +18,17 @@ public class Query extends DatabaseConnection{
     /*
     https://stackoverflow.com/questions/77309450/sql-query-to-return-only-the-most-exclusive-pattern-matches-for-varchar-data-t
     */
-    public static String getWords(int numWords, int first, int second, int third, int fourth, int fifth, Unknown unknown) throws SQLException {
+    public static String getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
 
         ResultSet resultSet = transactSQL.Query.select(
 "SELECT TOP (" + numWords + ") Word " +
           "FROM Words_tbl YT " +
           "CROSS JOIN (VALUES('" +
-          unknown.sortedLetters[first] + "'),('" +
-                unknown.sortedLetters[second] + "'),('" +
-                unknown.sortedLetters[third] + "'),('" +
-                unknown.sortedLetters[fourth] + "'),('" +
-                unknown.sortedLetters[fifth] + "'))L(Letter) " +
+          first + "'),('" +
+          second + "'),('" +
+          third + "'),('" +
+          fourth + "'),('" +
+          fifth + "'))L(Letter) " +
           "GROUP BY YT.Word " +
           "ORDER BY COUNT(CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN 1 END) DESC");
 
