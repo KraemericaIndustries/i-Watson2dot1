@@ -50,6 +50,6 @@ public class Unknown {
     public void keySetToArray() {
         Set<Character> letterKeys = letters.keySet();
         elements = letterKeys.toArray();
-        System.out.println();
+//        System.out.println();
     }
 }

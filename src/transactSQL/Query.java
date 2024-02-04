@@ -1,7 +1,5 @@
 package transactSQL;
 
-import dataStructures.Unknown;
-
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -18,7 +16,7 @@ public class Query extends DatabaseConnection{
     /*
     https://stackoverflow.com/questions/77309450/sql-query-to-return-only-the-most-exclusive-pattern-matches-for-varchar-data-t
     */
-    public static String getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
+    public static void getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
 
         ResultSet resultSet = transactSQL.Query.select(
 "SELECT TOP (" + numWords + ") Word " +
@@ -33,22 +31,26 @@ public class Query extends DatabaseConnection{
           "ORDER BY COUNT(CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN 1 END) DESC");
 
         while(resultSet.next()) {
-            return (resultSet.getString(1));
+            System.out.println(resultSet.getString(1));
         }
-        return null;
+        System.out.println();
     }
 
 
-    public static String getNumWordInDB() throws SQLException {
+    public static void getNumWordInDB() throws SQLException {
 
         int numWords = 0;
 
         ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");
 
         while(resultSet.next()) {
-            numWords = ((Number) resultSet.getObject(1)).intValue();
+            System.out.print(((Number) resultSet.getObject(1)).intValue());
         }
-        return String.valueOf(numWords);
+
+//        resultSet.next();
+//        System.out.print(((Number) resultSet.getObject(1)).intValue());
+//        }
+//        return String.valueOf(numWords);
     }
 
     //  wordsFromDB() ToDo: This method needs to DELETE the "test.txt" file from the filesystem prior to each run.  A non-hardcoded absolute path to the file would be preferable

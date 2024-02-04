@@ -43,7 +43,7 @@ public class Messages {
         System.out.println("Known IN: " + knownIn.letters);
         System.out.println("Known OUT: " + knownOut.letters);
         System.out.println("Known TOGETHER: " + knownTogether.letters);
-        System.out.println("Unknown: " + unknown.letters);
+        System.out.println("Unknown: " + Unknown.letters);
 
         //  PRINT all previous guesses...
         //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
@@ -57,8 +57,9 @@ public class Messages {
         }
 
         System.out.println();
-        System.out.println("There are " + transactSQL.Connect.watson("getNumWordsInDB", 1, 'T', 'O', 'K', 'E', 'N') + " words remaining in the database.");
-
+        System.out.print("There are ");
+        transactSQL.Connect.watson("getNumWordsInDB", 1, 'T', 'O', 'K', 'E', 'N');
+        System.out.println(" words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
     }
@@ -71,23 +72,27 @@ public class Messages {
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size());
         System.out.println();
 
-        System.out.println();
+//        System.out.println();
         System.out.println("ADVICE:");
-        if(Turns.size() == 0) {
+        if(Turns.isEmpty()) {
             System.out.println(" - Make the first guess possible using the 5 most common letters possible");
             unknown.keySetToArray();
-            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4]));  //  CONNECT to DB (to get guesses)
+            System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
+            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4]);
         } else if (Turns.size() == 1) {
             System.out.println(" - With only " + Turns.size() + " previous play, very little can be learned.");
             System.out.println(" - I suggest making the first guess possible using the 2nd through 6th most common letters...");
             unknown.keySetToArray();
-            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4], (char)unknown.elements[5]));  //  CONNECT to DB (to get guesses)
+            System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
+            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4], (char)unknown.elements[5]);
         } else if(Turns.size() == 2) {
             System.out.println(" - Try to determine if "+ knownTogether.letters + " are both IN, or both OUT");
             knownTogether.keySetToArray();
             unknown.keySetToArray();
             System.out.println(" - I suggest trying to make a determination on the letter " + knownTogether.elements[0]);
-            System.out.println(" - Searching the database, I suggest guessing: " + transactSQL.Connect.watson("getWords", 2, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[6]));  //  CONNECT to DB (to get guesses)
+            System.out.println(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
+            transactSQL.Connect.watson("getWords", 2, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[6]);
+            System.out.println(" ~ Whichever contains the MOST COMMON LETTERS (as seen above)");
         }
 
         //  ToDo: IMPLEMENT the getWords() method

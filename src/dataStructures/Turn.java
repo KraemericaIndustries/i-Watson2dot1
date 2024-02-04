@@ -30,82 +30,82 @@ public class Turn {
 
             switch(guess.charAt(i)) {
                 case 'A':
-                    turn.put('A', unknown.letters.get('A'));
+                    turn.put('A', Unknown.letters.get('A'));
                     break;
                 case 'B':
-                    turn.put('B', unknown.letters.get('B'));
+                    turn.put('B', Unknown.letters.get('B'));
                     break;
                 case 'C':
-                    turn.put('C', unknown.letters.get('C'));
+                    turn.put('C', Unknown.letters.get('C'));
                     break;
                 case 'D':
-                    turn.put('D', unknown.letters.get('D'));
+                    turn.put('D', Unknown.letters.get('D'));
                     break;
                 case 'E':
-                    turn.put('E', unknown.letters.get('E'));
+                    turn.put('E', Unknown.letters.get('E'));
                     break;
                 case 'F':
-                    turn.put('F', unknown.letters.get('F'));
+                    turn.put('F', Unknown.letters.get('F'));
                     break;
                 case 'G':
-                    turn.put('G', unknown.letters.get('G'));
+                    turn.put('G', Unknown.letters.get('G'));
                     break;
                 case 'H':
-                    turn.put('H', unknown.letters.get('H'));
+                    turn.put('H', Unknown.letters.get('H'));
                     break;
                 case 'I':
-                    turn.put('I', unknown.letters.get('I'));
+                    turn.put('I', Unknown.letters.get('I'));
                     break;
                 case 'J':
-                    turn.put('J', unknown.letters.get('J'));
+                    turn.put('J', Unknown.letters.get('J'));
                     break;
                 case 'K':
-                    turn.put('K', unknown.letters.get('K'));
+                    turn.put('K', Unknown.letters.get('K'));
                     break;
                 case 'L':
-                    turn.put('L', unknown.letters.get('L'));
+                    turn.put('L', Unknown.letters.get('L'));
                     break;
                 case 'M':
-                    turn.put('M', unknown.letters.get('M'));
+                    turn.put('M', Unknown.letters.get('M'));
                     break;
                 case 'N':
-                    turn.put('N', unknown.letters.get('N'));
+                    turn.put('N', Unknown.letters.get('N'));
                     break;
                 case 'O':
-                    turn.put('O', unknown.letters.get('O'));
+                    turn.put('O', Unknown.letters.get('O'));
                     break;
                 case 'P':
-                    turn.put('P', unknown.letters.get('P'));
+                    turn.put('P', Unknown.letters.get('P'));
                     break;
                 case 'Q':
-                    turn.put('Q', unknown.letters.get('Q'));
+                    turn.put('Q', Unknown.letters.get('Q'));
                     break;
                 case 'R':
-                    turn.put('R', unknown.letters.get('R'));
+                    turn.put('R', Unknown.letters.get('R'));
                     break;
                 case 'S':
-                    turn.put('S', unknown.letters.get('S'));
+                    turn.put('S', Unknown.letters.get('S'));
                     break;
                 case 'T':
-                    turn.put('T', unknown.letters.get('T'));
+                    turn.put('T', Unknown.letters.get('T'));
                     break;
                 case 'U':
-                    turn.put('U', unknown.letters.get('U'));
+                    turn.put('U', Unknown.letters.get('U'));
                     break;
                 case 'V':
-                    turn.put('V', unknown.letters.get('V'));
+                    turn.put('V', Unknown.letters.get('V'));
                     break;
                 case 'W':
-                    turn.put('W', unknown.letters.get('W'));
+                    turn.put('W', Unknown.letters.get('W'));
                     break;
                 case 'X':
-                    turn.put('X', unknown.letters.get('X'));
+                    turn.put('X', Unknown.letters.get('X'));
                     break;
                 case 'Y':
-                    turn.put('Y', unknown.letters.get('Y'));
+                    turn.put('Y', Unknown.letters.get('Y'));
                     break;
                 case 'Z':
-                    turn.put('Z', unknown.letters.get('Z'));
+                    turn.put('Z', Unknown.letters.get('Z'));
                     break;
                 default:
                     break;

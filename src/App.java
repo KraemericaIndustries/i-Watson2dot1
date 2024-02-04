@@ -22,7 +22,7 @@ public class App {
         //  SETUP: Load tables...
         transactSQL.Insert.loadKnownWords(unknown);
         unknown.sort();
-        unknown.loadSortedLetters(unknown.letters);
+        unknown.loadSortedLetters(Unknown.letters);
 
         //  PLAY the game...
         print.Messages.play();
