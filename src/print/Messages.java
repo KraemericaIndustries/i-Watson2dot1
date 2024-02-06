@@ -39,6 +39,8 @@ public class Messages {
     public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns ) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
+        if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns);
+
         //  PRINT the LinkedHashMaps...
         System.out.println("Known IN: " + knownIn.letters);
         System.out.println("Known OUT: " + knownOut.letters);
