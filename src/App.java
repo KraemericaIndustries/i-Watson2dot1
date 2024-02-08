@@ -8,13 +8,13 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        //  SETUP:
+        //  SETUP...
         print.Messages.welcome();
         transactSQL.DatabaseConnection.getProperties();
         transactSQL.Create.watsonDB();
 
         //  SETUP: Create LetterGroup objects to facilitate play...
-        Unknown unknown = new Unknown();
+        Unknown unknown = new Unknown();  //  Is this even necessary?
         LetterGroup knownIn = new LetterGroup();
         LetterGroup knownOut = new LetterGroup();
         LetterGroup knownTogether = new LetterGroup();
@@ -31,7 +31,7 @@ public class App {
         do {
             print.Messages.report(knownIn, knownOut, knownTogether, unknown, Turns);                    //  PRINT a report of possible determinations
             print.Messages.results(knownTogether, unknown, Turns);                                      //  PRINT the results of previous plays and determinations
-            Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent(), unknown));  //  TAKE a turn by making a guess
+            Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent()));           //  TAKE a turn by making a guess
 
             if(Turns.size() >= 2) AllTurns.forKnownTogether(Turns, knownTogether);
 

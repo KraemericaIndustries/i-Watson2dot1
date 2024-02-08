@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class Unknown {
 
-    public LinkedHashMap<Character, Integer> lettersNotStatic = new LinkedHashMap<>();
     public static LinkedHashMap<Character, Integer> letters = new LinkedHashMap<>();
     public char[] unsortedLettersFromMap;  //  To create char[] sortedLetters, a temporary array is declared and only initialized once the map has been populated with letter occurrences read in from all words
     public char[] sortedLetters;  //  DOWNSTREAM DB query for words unable to get key from map by index.  Creating this sorted array to accommodate that

@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Query extends DatabaseConnection{
-
     static File file = new File("test.txt");
 
     //  QUERY the DB for numWords with the first through fifth MOST COMMON letters, to use as a guess...

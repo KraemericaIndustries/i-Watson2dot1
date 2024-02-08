@@ -73,8 +73,6 @@ public class Messages {
         System.out.println("ANALYSIS:");
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size());
         System.out.println();
-
-//        System.out.println();
         System.out.println("ADVICE:");
         if(Turns.isEmpty()) {
             System.out.println(" - Make the first guess possible using the 5 most common letters possible");
@@ -96,8 +94,6 @@ public class Messages {
             transactSQL.Connect.watson("getWords", 2, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[6]);
             System.out.println(" ~ Whichever contains the MOST COMMON LETTERS (as seen above)");
         }
-
-        //  ToDo: IMPLEMENT the getWords() method
 //  SAMPLE recursive sql select...
 
         System.out.println("***********************************************************************************************************************************************************************");

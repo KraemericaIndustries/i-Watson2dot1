@@ -11,7 +11,6 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Insert extends DatabaseConnection{
-//    static int[] letterCounts = new int[26];
     static int counter;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields

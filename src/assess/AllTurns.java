@@ -23,7 +23,6 @@ public class AllTurns {
         for(Character c : turn1Keys) {
             if(Turns.get(0).turn.containsKey(c) && Turns.get(1).turn.containsKey(c)) knownTogether.letters.remove(c);
         }
-        System.out.println("kT: " + knownTogether.letters);
     }
 
     public static void makeDeterminations(LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn, LetterGroup knownOut, Unknown unknown) {
@@ -34,9 +33,9 @@ public class AllTurns {
         int combination = 1;
 
         //  Take the FIRST turn in 'Turns'...
-        for(int i = 0; i < Turns.size() - 1; i++) {      //  (Up until the SECOND LAST Turn in 'Turns)
+        for(int i = 0; i < Turns.size() - 1; i++) {      //  (Up until the SECOND LAST Turn in 'Turns')
             //  Take the SECOND turn in 'Turns'...
-            for(int j = i + 1; j < Turns.size(); j++) {  //  (Up until the LAST Turn in 'Turns)
+            for(int j = i + 1; j < Turns.size(); j++) {  //  (Up until the LAST Turn in 'Turns')
                 System.out.println("Combination #" + combination + ".  Now comparing:");
                 //  PRETTY-PRINT LinkedHashMap (without values)...
                 System.out.print("[");
@@ -71,7 +70,7 @@ public class AllTurns {
                     for(Character c : turn2Keys) {
                         letterChangedTo.letters.remove(c);
                     }
-                    System.out.println(letterChangedTo.letters + " was changed to MEOW" + letterChangedFrom.letters + " in these two turns");
+                    System.out.println(letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
 
                     if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
                         System.out.println("With 1 letter changed, and the responses varying by 1, " + letterChangedFrom.letters + " is KNOWN-IN, and " + letterChangedTo.letters + " is KNOWN OUT.  Take appropriate action.");
@@ -81,10 +80,10 @@ public class AllTurns {
                         knownIn.letters.putAll(letterChangedFrom.letters);
                         knownOut.letters.putAll(letterChangedTo.letters);
 
-                        //  ToDo: ALL letters in knownTogether may be COPIED to knownOut
+                        //  ALL letters in knownTogether may be COPIED to knownOut...
                         knownOut.letters.putAll(knownTogether.letters);
 
-                        //  ToDo: ALL letters in KnownOut to be removed from unknown AND ALL TURNS & the database...
+                        //  ALL letters in KnownOut to be removed from 'Unknown' & ALL 'TURNS' & the database...
                         Set<Character> knownOutKeys = knownOut.letters.keySet();
 
                         for(Character c: knownOutKeys) {
@@ -101,8 +100,7 @@ public class AllTurns {
                             }
                         }
 
-
-                        //  ToDo: ALL letters in knownIn to be removed from unknown AND ALL TURNS while decrementing updatedResponse
+                        //  ALL letters in knownIn to be removed from unknown AND ALL TURNS while decrementing updatedResponse...
                         Set<Character> knownInKeys = knownIn.letters.keySet();
 
                         for(Character c: knownInKeys) {
@@ -114,24 +112,13 @@ public class AllTurns {
                                     t.updatedResponse--;
                                 }
                             }
-
                         }
-
-
-
-                        //  ToDo: Update ALL turns with changes (above)
-                            //  ToDo:  DELETE every word containing knownOUT from the DB
-                            //  ToDo:  delete the contents of knownTogether
+                        //  CLEAR 'knownTogether'...
                         knownTogether.letters.clear();
 
                     } else {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
                     }
-
-
-
-
-
                 } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == -1) {
 
                     letterChangedFrom.letters.putAll(Turns.get(j).turn);
@@ -147,7 +134,7 @@ public class AllTurns {
                     for(Character c : turn1Keys) {
                         letterChangedTo.letters.remove(c);
                     }
-                    System.out.println(letterChangedTo.letters + " was changed to BEEP" + letterChangedFrom.letters + " in these two turns");
+                    System.out.println(letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
                 }
             }
         }

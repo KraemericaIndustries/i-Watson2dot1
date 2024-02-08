@@ -10,7 +10,7 @@ public class Turn {
     public int updatedResponse;
     public LinkedHashMap<Character, Integer> turn = new LinkedHashMap<>();
 
-    public Turn(String guess, int response, Unknown unknown) {
+    public Turn(String guess, int response) {
 
         turn.clear();
 
@@ -18,11 +18,11 @@ public class Turn {
         this.response = response;
         this.updatedResponse = response;
 
-        parseGuessToCollection(guess, unknown);
+        parseGuessToCollection(guess);
 //        System.out.println("Turn Constructor original parse: " + turn);  DEBUG
         sortTurn(turn);
     }
-    public void parseGuessToCollection(String guess, Unknown unknown) {
+    public void parseGuessToCollection(String guess) {
 
         guess = guess.toUpperCase();
 

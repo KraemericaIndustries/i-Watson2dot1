@@ -26,7 +26,7 @@ public class DatabaseConnection {
         url = props.getProperty("url");
         user = props.getProperty("user");
         password = props.getProperty("password");
-//  DEBUG:
+        //  DEBUG:
         System.out.println(" > Successfully read the following values: ");
         System.out.println(" > Database url: " + url);
         System.out.println(" > Username: " + user);
