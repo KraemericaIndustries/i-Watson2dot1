@@ -3,7 +3,9 @@ package assess;
 import dataStructures.LetterGroup;
 import dataStructures.Turn;
 import dataStructures.Unknown;
+import transactSQL.Delete;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
@@ -63,11 +65,11 @@ public class AllTurns {
                     Set<Character> turn2Keys = Turns.get(i).turn.keySet();
 
                     for(Character c : turn1Keys) {
-                        if(letterChangedFrom.letters.containsKey(c)) letterChangedFrom.letters.remove(c);
+                        letterChangedFrom.letters.remove(c);
                     }
 
                     for(Character c : turn2Keys) {
-                        if(letterChangedTo.letters.containsKey(c)) letterChangedTo.letters.remove(c);
+                        letterChangedTo.letters.remove(c);
                     }
                     System.out.println(letterChangedTo.letters + " was changed to MEOW" + letterChangedFrom.letters + " in these two turns");
 
@@ -82,16 +84,21 @@ public class AllTurns {
                         //  ToDo: ALL letters in knownTogether may be COPIED to knownOut
                         knownOut.letters.putAll(knownTogether.letters);
 
-                        //  ToDo: ALL letters in KnownOut to be removed from unknown AND ALL TURNS...
+                        //  ToDo: ALL letters in KnownOut to be removed from unknown AND ALL TURNS & the database...
                         Set<Character> knownOutKeys = knownOut.letters.keySet();
 
                         for(Character c: knownOutKeys) {
-                            if(Unknown.letters.containsKey(c)) Unknown.letters.remove(c);
+                            Unknown.letters.remove(c);
 
                             for(Turn t : Turns) {
-                                if(t.turn.containsKey(c)) t.turn.remove(c);
+                                t.turn.remove(c);
                             }
 
+                            try {
+                                Delete.words(c);
+                            } catch (SQLException e) {
+                                throw new RuntimeException(e);
+                            }
                         }
 
 
@@ -99,7 +106,7 @@ public class AllTurns {
                         Set<Character> knownInKeys = knownIn.letters.keySet();
 
                         for(Character c: knownInKeys) {
-                            if(Unknown.letters.containsKey(c)) Unknown.letters.remove(c);
+                            Unknown.letters.remove(c);
 
                             for(Turn t : Turns) {
                                 if(t.turn.containsKey(c)) {
@@ -134,11 +141,11 @@ public class AllTurns {
                     Set<Character> turn2Keys = Turns.get(i).turn.keySet();
 
                     for(Character c : turn2Keys) {
-                        if(letterChangedFrom.letters.containsKey(c)) letterChangedFrom.letters.remove(c);
+                        letterChangedFrom.letters.remove(c);
                     }
 
                     for(Character c : turn1Keys) {
-                        if(letterChangedTo.letters.containsKey(c)) letterChangedTo.letters.remove(c);
+                        letterChangedTo.letters.remove(c);
                     }
                     System.out.println(letterChangedTo.letters + " was changed to BEEP" + letterChangedFrom.letters + " in these two turns");
                 }
