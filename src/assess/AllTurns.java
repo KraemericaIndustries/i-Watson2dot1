@@ -31,16 +31,18 @@ public class AllTurns {
         boolean determinationMade = false;
         int combination = 1;
 
-        for(int i = 0; i < Turns.size() - 1; i++) {
-            for(int j = i + 1; j < Turns.size(); j++) {
+        //  Take the FIRST turn in 'Turns'...
+        for(int i = 0; i < Turns.size() - 1; i++) {      //  (Up until the SECOND LAST Turn in 'Turns)
+            //  Take the SECOND turn in 'Turns'...
+            for(int j = i + 1; j < Turns.size(); j++) {  //  (Up until the LAST Turn in 'Turns)
                 System.out.println("Combination #" + combination + ".  Now comparing:");
-
+                //  PRETTY-PRINT LinkedHashMap (without values)...
                 System.out.print("[");
                 for (Map.Entry<Character, Integer> ite : Turns.get(i).turn.entrySet()) {
                     System.out.print(ite.getKey() + ", ");
                 }
                 System.out.println("] = " + Turns.get(i).updatedResponse);
-
+                //  PRETTY-PRINT LinkedHashMap (without values)...
                 System.out.print("[");
                 for (Map.Entry<Character, Integer> ite : Turns.get(j).turn.entrySet()) {
                     System.out.print(ite.getKey() + ", ");
@@ -48,14 +50,10 @@ public class AllTurns {
                 System.out.println("] = " + Turns.get(j).updatedResponse);
                 combination++;
 
-
-
-
-
-
-
+                //  IF responses from compared turns are EQUAL...
                 if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {
                     forKnownTogether(Turns, knownTogether);
+                //  ELSE-IF responses from compared turns are +1...
                 } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == 1) {
 
                     letterChangedFrom.letters.putAll(Turns.get(i).turn);
@@ -75,22 +73,49 @@ public class AllTurns {
 
                     if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
                         System.out.println("With 1 letter changed, and the responses varying by 1, " + letterChangedFrom.letters + " is KNOWN-IN, and " + letterChangedTo.letters + " is KNOWN OUT.  Take appropriate action.");
+
                         determinationMade = true;
+
                         knownIn.letters.putAll(letterChangedFrom.letters);
                         knownOut.letters.putAll(letterChangedTo.letters);
+
                         //  ToDo: ALL letters in knownTogether may be COPIED to knownOut
                         knownOut.letters.putAll(knownTogether.letters);
-                        //  ToDo: ALL letters in knownIn, KnownOut to be removed from unknown SOMEHOW
 
-                        Set<Character> knownTogetherKeys = knownTogether.letters.keySet();
+                        //  ToDo: ALL letters in KnownOut to be removed from unknown AND ALL TURNS...
+                        Set<Character> knownOutKeys = knownOut.letters.keySet();
 
-                        for(Character c: knownTogetherKeys) {
+                        for(Character c: knownOutKeys) {
                             if(Unknown.letters.containsKey(c)) Unknown.letters.remove(c);
+
+                            for(Turn t : Turns) {
+                                if(t.turn.containsKey(c)) t.turn.remove(c);
+                            }
+
                         }
 
+
+                        //  ToDo: ALL letters in knownIn to be removed from unknown AND ALL TURNS while decrementing updatedResponse
+                        Set<Character> knownInKeys = knownIn.letters.keySet();
+
+                        for(Character c: knownInKeys) {
+                            if(Unknown.letters.containsKey(c)) Unknown.letters.remove(c);
+
+                            for(Turn t : Turns) {
+                                if(t.turn.containsKey(c)) {
+                                    t.turn.remove(c);
+                                    t.updatedResponse--;
+                                }
+                            }
+
+                        }
+
+
+
                         //  ToDo: Update ALL turns with changes (above)
-                            //  ToDo:  remove knownTogether from every Turn
+                            //  ToDo:  DELETE every word containing knownOUT from the DB
                             //  ToDo:  delete the contents of knownTogether
+                        knownTogether.letters.clear();
 
                     } else {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
