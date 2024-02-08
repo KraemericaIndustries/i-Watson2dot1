@@ -78,9 +78,19 @@ public class AllTurns {
                         determinationMade = true;
                         knownIn.letters.putAll(letterChangedFrom.letters);
                         knownOut.letters.putAll(letterChangedTo.letters);
-                        //  ToDo: ALL letters in knownTogether may be moved to knownOut
+                        //  ToDo: ALL letters in knownTogether may be COPIED to knownOut
+                        knownOut.letters.putAll(knownTogether.letters);
                         //  ToDo: ALL letters in knownIn, KnownOut to be removed from unknown SOMEHOW
+
+                        Set<Character> knownTogetherKeys = knownTogether.letters.keySet();
+
+                        for(Character c: knownTogetherKeys) {
+                            if(Unknown.letters.containsKey(c)) Unknown.letters.remove(c);
+                        }
+
                         //  ToDo: Update ALL turns with changes (above)
+                            //  ToDo:  remove knownTogether from every Turn
+                            //  ToDo:  delete the contents of knownTogether
 
                     } else {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
