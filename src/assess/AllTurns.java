@@ -23,6 +23,10 @@ public class AllTurns {
         for(Character c : turn1Keys) {
             if(Turns.get(0).turn.containsKey(c) && Turns.get(1).turn.containsKey(c)) knownTogether.letters.remove(c);
         }
+
+
+
+        System.out.println("WOOF!");
     }
 
     public static void makeDeterminations(LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn, LetterGroup knownOut, Unknown unknown) {
@@ -30,26 +34,18 @@ public class AllTurns {
         LetterGroup letterChangedFrom = new LetterGroup();
         LetterGroup letterChangedTo = new LetterGroup();
         boolean determinationMade = false;
-        int combination = 1;
+        int comparisonNumber = 1;
 
         //  Take the FIRST turn in 'Turns'...
         for(int i = 0; i < Turns.size() - 1; i++) {      //  (Up until the SECOND LAST Turn in 'Turns')
             //  Take the SECOND turn in 'Turns'...
             for(int j = i + 1; j < Turns.size(); j++) {  //  (Up until the LAST Turn in 'Turns')
-                System.out.println("Combination #" + combination + ".  Now comparing:");
-                //  PRETTY-PRINT LinkedHashMap (without values)...
-                System.out.print("[");
-                for (Map.Entry<Character, Integer> ite : Turns.get(i).turn.entrySet()) {
-                    System.out.print(ite.getKey() + ", ");
-                }
-                System.out.println("] = " + Turns.get(i).updatedResponse);
-                //  PRETTY-PRINT LinkedHashMap (without values)...
-                System.out.print("[");
-                for (Map.Entry<Character, Integer> ite : Turns.get(j).turn.entrySet()) {
-                    System.out.print(ite.getKey() + ", ");
-                }
-                System.out.println("] = " + Turns.get(j).updatedResponse);
-                combination++;
+                System.out.println("Comparison #" + comparisonNumber + ".  Now comparing:");
+                prettyPrintLinkedHashMap(Turns, i);
+//                System.out.println("] = " + Turns.get(i).updatedResponse);
+                prettyPrintLinkedHashMap(Turns, j);
+//                System.out.println("] = " + Turns.get(j).updatedResponse);
+                comparisonNumber++;
 
                 //  IF responses from compared turns are EQUAL...
                 if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {
@@ -57,20 +53,7 @@ public class AllTurns {
                 //  ELSE-IF responses from compared turns are +1...
                 } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == 1) {
 
-                    letterChangedFrom.letters.putAll(Turns.get(i).turn);
-                    letterChangedTo.letters.putAll(Turns.get(j).turn);
-
-                    Set<Character> turn1Keys = Turns.get(j).turn.keySet();
-                    Set<Character> turn2Keys = Turns.get(i).turn.keySet();
-
-                    for(Character c : turn1Keys) {
-                        letterChangedFrom.letters.remove(c);
-                    }
-
-                    for(Character c : turn2Keys) {
-                        letterChangedTo.letters.remove(c);
-                    }
-                    System.out.println(letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
+                    identifyChangedLetters(Turns, letterChangedFrom, i, letterChangedTo, j);
 
                     if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
                         System.out.println("With 1 letter changed, and the responses varying by 1, " + letterChangedFrom.letters + " is KNOWN-IN, and " + letterChangedTo.letters + " is KNOWN OUT.  Take appropriate action.");
@@ -120,24 +103,43 @@ public class AllTurns {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
                     }
                 } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == -1) {
-
-                    letterChangedFrom.letters.putAll(Turns.get(j).turn);
-                    letterChangedTo.letters.putAll(Turns.get(i).turn);
-
-                    Set<Character> turn1Keys = Turns.get(j).turn.keySet();
-                    Set<Character> turn2Keys = Turns.get(i).turn.keySet();
-
-                    for(Character c : turn2Keys) {
-                        letterChangedFrom.letters.remove(c);
-                    }
-
-                    for(Character c : turn1Keys) {
-                        letterChangedTo.letters.remove(c);
-                    }
-                    System.out.println(letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
+                    identifyChangedLetters(Turns, letterChangedFrom, i, letterChangedTo, j);
                 }
             }
         }
         System.out.println();
+    }
+
+    private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i) {
+
+        StringBuilder sb = new StringBuilder();
+
+        sb.append("[");
+
+        for (Map.Entry<Character, Integer> ite : Turns.get(i).turn.entrySet()) {
+            sb.append(ite.getKey()).append(", ");
+        }
+
+        sb.setLength(sb.length() - 2);
+        sb.append("]");
+
+        System.out.println(sb + " = " + Turns.get(i).updatedResponse);
+    }
+
+    private static void identifyChangedLetters(LinkedList<Turn> Turns, LetterGroup letterChangedFrom, int i, LetterGroup letterChangedTo, int j) {
+        letterChangedFrom.letters.putAll(Turns.get(i).turn);
+        letterChangedTo.letters.putAll(Turns.get(j).turn);
+
+        Set<Character> turn1Keys = Turns.get(j).turn.keySet();
+        Set<Character> turn2Keys = Turns.get(i).turn.keySet();
+
+        for(Character c : turn1Keys) {
+            letterChangedFrom.letters.remove(c);
+        }
+
+        for(Character c : turn2Keys) {
+            letterChangedTo.letters.remove(c);
+        }
+        System.out.println(letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
     }
 }

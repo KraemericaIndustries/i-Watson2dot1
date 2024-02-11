@@ -48,15 +48,7 @@ public class Messages {
         System.out.println("Unknown: " + Unknown.letters);
 
         //  PRINT all previous guesses...
-        //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
-        System.out.println("Previous Guesses: ");
-        for(Turn t : Turns) {
-            System.out.print(t.guess + " = " + t.response + ".  " + t.updatedResponse + " of [");
-            for (Map.Entry<Character, Integer> ite : t.turn.entrySet()) {
-                System.out.print(ite.getKey() + ", ");
-            }
-            System.out.println("] are in your opponents word.");
-        }
+        prettyPrintPreviousGuesses(Turns);
 
         System.out.println();
         System.out.print("There are ");
@@ -64,6 +56,23 @@ public class Messages {
         System.out.println(" words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************");
         System.out.println();
+    }
+
+    private static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
+        //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
+        System.out.println("Previous Guesses: ");
+
+        for(Turn t : Turns) {
+            StringBuilder test = new StringBuilder();
+            test.append(t.guess).append(" = ").append(t.response).append(".  We now know ").append(t.updatedResponse).append(" of [");
+            for (Map.Entry<Character, Integer> ite : t.turn.entrySet()) {
+                test.append(ite.getKey()).append(", ");
+            }
+
+            test.setLength(test.length() - 2);
+            test.append("] are in your opponents word.");
+            System.out.println(test);
+        }
     }
 
     //  PRINT the result(s) of a given turn...
