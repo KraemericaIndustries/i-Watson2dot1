@@ -32,9 +32,7 @@ public class Query extends DatabaseConnection{
         while(resultSet.next()) {
             System.out.println(resultSet.getString(1));
         }
-        System.out.println();
     }
-
 
     public static void getNumWordInDB() throws SQLException {
 

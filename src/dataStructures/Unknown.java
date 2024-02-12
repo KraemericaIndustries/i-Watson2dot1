@@ -21,6 +21,7 @@ public class Unknown {
             letters.put(word.charAt(i), count + 1);
         }
     }
+
     //  SORT the letter-frequency key-value map by value (so we know which letters are the most frequent, in descending order)...
     public void sort() {
         LinkedHashMap<Character, Integer> sortedMap = letters.entrySet()
@@ -47,7 +48,6 @@ public class Unknown {
         }
         sortedLetters = unsortedLettersFromMap;
     }
-
     public void keySetToArray() {
         Set<Character> letterKeys = letters.keySet();
         elements = letterKeys.toArray();

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
 
-@SuppressWarnings("ALL")
 public class Create extends DatabaseConnection{
 
     //  CREATE to watson DB...

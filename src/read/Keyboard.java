@@ -32,7 +32,6 @@ public class Keyboard {
             System.out.print("What was the response?: ");
             Scanner input= new Scanner(System.in);
             response = input.nextInt();
-            System.out.println();
 
             if (response > 5 || response < 0) {  //  Discard responses that are NOT 0 through 5
                 System.out.println("HEY!  DUMMY!  Your response is " + response + ", but it MUST be 0, 1, 2, 3, 4, or 5!  Try again, moron.");
