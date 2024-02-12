@@ -118,6 +118,9 @@ public class AllTurns {
     }
     private static void identifyChangedLetters(LinkedList<Turn> Turns, LetterGroup letterChangedFrom, int i, LetterGroup letterChangedTo, int j) {
 
+        letterChangedFrom.letters.clear();
+        letterChangedTo.letters.clear();
+
         letterChangedFrom.letters.putAll(Turns.get(i).turn);
         letterChangedTo.letters.putAll(Turns.get(j).turn);
 
@@ -137,9 +140,6 @@ public class AllTurns {
         if((letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) && Turns.get(j).updatedResponse == Turns.get(i).updatedResponse) {
             System.out.println("We now know that " + letterChangedTo.letters + " and " + letterChangedFrom.letters + " are either both IN, or both OUT (but cannot be sure which is the case)");
         }
-
-        letterChangedFrom.letters.clear();
-        letterChangedTo.letters.clear();
 
         System.out.println();  //  Print a space after each turn in 'Turns is compared
     }
