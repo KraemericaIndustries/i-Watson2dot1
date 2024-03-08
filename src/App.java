@@ -14,14 +14,14 @@ public class App {
         transactSQL.Create.watsonDB();
 
         //  SETUP: Create LetterGroup objects to facilitate play...
-        Unknown unknown = new Unknown();  //  Is this even necessary?
+        Unknown unknown = new Unknown();  //  Is this even necessary? -> Sorting Unknown is done via a stream, requiring an instance of the class
         LetterGroup knownIn = new LetterGroup();
         LetterGroup knownOut = new LetterGroup();
         LetterGroup knownTogether = new LetterGroup();
         LinkedList<Turn> Turns = new LinkedList<>();
 
         //  SETUP: Load tables...
-        transactSQL.Insert.loadKnownWords(unknown);
+        transactSQL.Insert.loadKnownWords();
         unknown.sort();
         unknown.loadSortedLetters(Unknown.letters);
 
@@ -29,11 +29,11 @@ public class App {
         print.Messages.play();
 
         do {
-            print.Messages.report(knownIn, knownOut, knownTogether, Turns);           //  PRINT a report of possible determinations
+            print.Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);           //  PRINT a report of possible determinations
             print.Messages.results(knownTogether, unknown, Turns);                             //  PRINT the results of previous plays and determinations
             Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent()));  //  TAKE a turn by making a guess
 
-            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut);
+            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
             Messages.reportNumber++;                                                           //  INCREMENT the number of turns taken
         } while (Turns.getLast().response < 5);                                                //  While the most recent response is less than 5
