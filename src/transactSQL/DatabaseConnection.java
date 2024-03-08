@@ -31,7 +31,6 @@ public class DatabaseConnection {
         System.out.println(" > Database url: " + url);
         System.out.println(" > Username: " + user);
         System.out.println(" > Password: " + password);
-        System.out.println(" > Success!");
-        System.out.println();
+        System.out.println(" > Success!\n");
     }
 }

@@ -174,9 +174,6 @@ giant
 girth
 goads
 goals
-guard
-guide
-guild
 grade
 grand
 grail
@@ -187,6 +184,10 @@ grave
 graze
 great
 grind
+guard
+guest
+guide
+guild
 habit
 hairy
 handy

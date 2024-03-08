@@ -23,39 +23,35 @@ public class Messages {
                 Will you be able to identify your opponent's word?
                 I'm going to help - by suggesting your most strategic plays possible!
                 First - let me get myself set up...""");
-        System.out.println("***********************************************************************************************************************************************************************");
-        System.out.println();
+        System.out.println("***********************************************************************************************************************************************************************\n");
     }
 
     //  START the game...
     public static void play() {
         System.out.println("*****************************************************************  THE GAME  ******************************************************************************************");
         System.out.println("Let's play!!!");
-        System.out.println("***********************************************************************************************************************************************************************");
-        System.out.println();
+        System.out.println("***********************************************************************************************************************************************************************\n");
     }
 
     //  PRINT a report...
-    public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns ) {
+    public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, LinkedList<Turn> Turns ) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
-        if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
+        if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut);
 
         //  PRINT the LinkedHashMaps...
         System.out.println("Known IN: " + knownIn.letters);
         System.out.println("Known OUT: " + knownOut.letters);
         System.out.println("Known TOGETHER: " + knownTogether.letters);
-        System.out.println("Unknown: " + Unknown.letters);
+        System.out.println("Unknown: " + Unknown.letters + "\n");
 
         //  PRINT all previous guesses...
         prettyPrintPreviousGuesses(Turns);
 
-        System.out.println();
         System.out.print("There are ");
         transactSQL.Connect.watson("getNumWordsInDB", 1, 'T', 'O', 'K', 'E', 'N');
         System.out.println(" words remaining in the database.");
-        System.out.println("***********************************************************************************************************************************************************************");
-        System.out.println();
+        System.out.println("***********************************************************************************************************************************************************************\n");
     }
 
     private static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
@@ -71,7 +67,7 @@ public class Messages {
 
             test.setLength(test.length() - 2);
             test.append("] are in your opponents word.");
-            System.out.println(test);
+            System.out.println(test + "\n");
         }
     }
 
@@ -80,8 +76,7 @@ public class Messages {
 
         System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
-        System.out.println(" - Previous guesses for which there is data available: " + Turns.size());
-        System.out.println();
+        System.out.println(" - Previous guesses for which there is data available: " + Turns.size() + "\n");
         System.out.println("ADVICE:");
         if(Turns.isEmpty()) {
             System.out.println(" - Make the first guess possible using the 5 most common letters possible");
@@ -104,7 +99,6 @@ public class Messages {
             System.out.println(" ~ Whichever contains the MOST COMMON LETTERS (as seen above)");
         }
 //  SAMPLE recursive sql select...
-
         System.out.println("***********************************************************************************************************************************************************************");
     }
 //  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...

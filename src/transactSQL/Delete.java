@@ -9,12 +9,29 @@ import static transactSQL.DatabaseConnection.*;
 
 public class Delete {
 
-    public static void words(char c) throws SQLException {
+    public static void wordsWith(char c) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println(" > Connection established!");
             try {
                 statement.executeUpdate("delete from Words_tbl where word like '%" + c + "%'");
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void wordsWithout(char c) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+            System.out.println(" > Connection established!");
+            try {
+                statement.executeUpdate("delete from Words_tbl where word not like '%" + c + "%'");
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
             }
