@@ -129,6 +129,7 @@ public class AllTurns {
         }
         //  CLEAR 'knownTogether'...
 //        knownTogether.letters.clear();
+        transactSQL.Query.wordsFromDB();
     }
 
     private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i) {
