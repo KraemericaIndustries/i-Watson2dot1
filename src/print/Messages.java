@@ -1,107 +1,8 @@
-package print;
-
-import dataStructures.*;
-
-import java.util.LinkedList;
-import java.util.Map;
-
-public class Messages {
-
-    public static int reportNumber = 1;
-
-    //  Introduce the game, and how it is played...
-    public static void welcome() {
-
-        System.out.println("*****************************************************************  WELCOME  *******************************************************************************************");
-        System.out.println("""
-                Welcome to the Word Guessing Game Helper!
-
-                Your opponent will  choose a familiar 5 letter word, with each letter appearing ONLY ONCE. (Valid: 'GLYPH'.  Invalid: 'DROOP')
-                See if you can guess the word!  Each time you make a guess, your opponent will respond with a number.
-                The number represents the number of letters in your guess that appear in the word chosen by your opponent.
-                Example:  If the opponent chooses 'LOSER' and you guess 'POSER' the response would be 4 ('O' makes 1, 'S' makes 2, 'E' makes 3, and 'R' makes 4.)
-                Will you be able to identify your opponent's word?
-                I'm going to help - by suggesting your most strategic plays possible!
-                First - let me get myself set up...""");
-        System.out.println("***********************************************************************************************************************************************************************\n");
-    }
-
-    //  START the game...
-    public static void play() {
-        System.out.println("*****************************************************************  THE GAME  ******************************************************************************************");
-        System.out.println("Let's play!!!");
-        System.out.println("***********************************************************************************************************************************************************************\n");
-    }
-
-    //  PRINT a report...
-    public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, LinkedList<Turn> Turns, Unknown unknown) {
-        System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
-
-        if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
-
-        //  PRINT the LinkedHashMaps...
-        System.out.println("Known IN: " + knownIn.letters);
-        System.out.println("Known OUT: " + knownOut.letters);
-        System.out.println("Known TOGETHER: " + knownTogether.letters);
-        System.out.println("Unknown: " + Unknown.letters + "\n");
-
-        //  PRINT all previous guesses...
-        prettyPrintPreviousGuesses(Turns);
-
-        System.out.print("There are ");
-        transactSQL.Connect.watson("getNumWordsInDB", 1, 'T', 'O', 'K', 'E', 'N');
-        System.out.println(" words remaining in the database.");
-        System.out.println("***********************************************************************************************************************************************************************\n");
-    }
-
-    private static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
-        //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
-        System.out.println("Previous Guesses: ");
-
-        for(Turn t : Turns) {
-            StringBuilder test = new StringBuilder();
-            test.append(t.guess).append(" = ").append(t.response).append(".  We now know ").append(t.updatedResponse).append(" of [");
-            for (Map.Entry<Character, Integer> ite : t.turn.entrySet()) {
-                test.append(ite.getKey()).append(", ");
-            }
-
-            test.setLength(test.length() - 2);
-            test.append("] are in your opponents word.");
-            System.out.println(test + "\n");
-        }
-    }
-
-    //  PRINT the result(s) of a given turn...
-    public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
-
-        System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
-        System.out.println("ANALYSIS:");
-        System.out.println(" - Previous guesses for which there is data available: " + Turns.size() + "\n");
-        System.out.println("ADVICE:");
-        if(Turns.isEmpty()) {
-            System.out.println(" - Make the first guess possible using the 5 most common letters possible");
-            unknown.keySetToArray();
-            System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4]);
-        } else if (Turns.size() == 1) {
-            System.out.println(" - With only " + Turns.size() + " previous play, very little can be learned.");
-            System.out.println(" - I suggest making the first guess possible using the 2nd through 6th most common letters...");
-            unknown.keySetToArray();
-            System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4], (char)unknown.elements[5]);
-        } else if(Turns.size() == 2) {
-            System.out.println(" - Try to determine if "+ knownTogether.letters + " are both IN, or both OUT");
-            knownTogether.keySetToArray();
-            unknown.keySetToArray();
-            System.out.println(" - I suggest trying to make a determination on the letter " + knownTogether.elements[0]);
-            System.out.println(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-            transactSQL.Connect.watson("getWords", 2, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[6]);
-            System.out.println(" ~ Whichever contains the MOST COMMON LETTERS (as seen above)");
-        }
-//  SAMPLE recursive sql select...
-        System.out.println("***********************************************************************************************************************************************************************");
-    }
-//  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...
+//package print;
+//
+//public class Messages {
+//
+////  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...
 //
 //    public static void endGame(String guess, int counter) throws SQLException {
 //
@@ -182,12 +83,7 @@ public class Messages {
 //
 //        System.out.println("Ya got me!  I'm stumped (this time)!  But I'm adding your word to my database, so the next time I run I KNOW YOUR WORD!  What was your word?:");
 //
-//
-//
 //        guess = Turn.enterGuess();
-//
-//
-//
 //
 //        try {
 //            Files.write(Paths.get("C:/Users/bkraemer/OneDrive - Topcon/Development/Java/IntelliJ/i-Watson2dot0/FiveLetterWords.txt"), ("\n" + guess).getBytes(), StandardOpenOption.APPEND);
@@ -196,4 +92,4 @@ public class Messages {
 //        }
 //        System.out.println(" > Added " + guess + " to the data file used to generate the watson database.");
 //    }
-}
+//}

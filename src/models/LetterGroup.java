@@ -1,4 +1,4 @@
-package dataStructures;
+package models;
 
 import java.util.LinkedHashMap;
 import java.util.Set;

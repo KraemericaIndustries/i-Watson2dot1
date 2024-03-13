@@ -1,4 +1,4 @@
-package transactSQL;
+package controllers;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,7 +15,7 @@ public class DatabaseConnection {
     static ResultSet resultSet;
 
     //  READ the watson DB url and credentials from the configuration file...
-    public static void getProperties() {
+    public static void getDatabaseServerProperties() {
         System.out.println("Reading the watson.properties file...");
         java.util.Properties props = new java.util.Properties();
         try {

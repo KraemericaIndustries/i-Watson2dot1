@@ -1,9 +1,8 @@
-package assess;
+package controllers;
 
-import dataStructures.LetterGroup;
-import dataStructures.Turn;
-import dataStructures.Unknown;
-import transactSQL.Delete;
+import models.LetterGroup;
+import models.Turn;
+import models.Unknown;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -129,8 +128,8 @@ public class AllTurns {
         }
         //  CLEAR 'knownTogether'...
 //        knownTogether.letters.clear();
-        transactSQL.Query.wordsFromDB();
-        transactSQL.Insert.reloadKnownWords();
+        Query.wordsFromDB();
+        Insert.reloadKnownWords();
         unknown.sort();
 
     }

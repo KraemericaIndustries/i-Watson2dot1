@@ -1,6 +1,6 @@
-package read;
+package controllers;
 
-import print.Messages;
+import views.Report;
 
 import java.util.Scanner;
 
@@ -12,7 +12,7 @@ public class Keyboard {
         String guess;
 
         do {
-            System.out.print("Turn # " + (Messages.reportNumber) + ".  Guess a 5 letter word: ");
+            System.out.print("Turn # " + (Report.reportNumber) + ".  Guess a 5 letter word: ");
             Scanner input= new Scanner(System.in);
             guess = input.nextLine();
             guess = guess.toUpperCase();  //  Regardless of the case in the InputStream typed at the keyboard, convert the String contents of 'guess' variable to UPPERCASE

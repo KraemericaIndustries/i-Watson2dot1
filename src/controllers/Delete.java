@@ -1,11 +1,11 @@
-package transactSQL;
+package controllers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static transactSQL.DatabaseConnection.*;
+import static controllers.DatabaseConnection.*;
 
 public class Delete {
 

@@ -1,13 +1,13 @@
-package transactSQL;
+package controllers;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
 
-public class Create extends DatabaseConnection{
+public class Create extends DatabaseConnection {
 
     //  CREATE to watson DB...
-    public static void watsonDB() throws Exception {
+    public static void createWatsonDB() throws Exception {
         System.out.println("Preparing to create the watson database...");
         //  RESTART the mssqlserver service (to assure there is no other process accessing the DB)
         System.out.println("Restarting the MSSQLSERVER Service (to ensure individual access to the database)...");

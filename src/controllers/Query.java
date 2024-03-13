@@ -1,4 +1,4 @@
-package transactSQL;
+package controllers;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -8,7 +8,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Query extends DatabaseConnection{
+public class Query extends DatabaseConnection {
     static File file = new File("test.txt");
 
     //  QUERY the DB for numWords with the first through fifth MOST COMMON letters, to use as a guess...
@@ -17,7 +17,7 @@ public class Query extends DatabaseConnection{
     */
     public static void getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
 
-        ResultSet resultSet = transactSQL.Query.select(
+        ResultSet resultSet = Query.select(
 "SELECT TOP (" + numWords + ") Word " +
           "FROM Words_tbl YT " +
           "CROSS JOIN (VALUES('" +
@@ -38,7 +38,7 @@ public class Query extends DatabaseConnection{
 
         int numWords = 0;
 
-        ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");
+        ResultSet resultSet = Query.select("select count (*) from Words_tbl");
 
         while(resultSet.next()) {
             System.out.print(((Number) resultSet.getObject(1)).intValue());

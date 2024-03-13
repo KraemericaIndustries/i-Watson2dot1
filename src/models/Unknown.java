@@ -1,4 +1,4 @@
-package dataStructures;
+package models;
 
 import java.util.Comparator;
 import java.util.LinkedHashMap;

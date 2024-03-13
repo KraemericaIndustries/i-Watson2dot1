@@ -1,6 +1,7 @@
-package transactSQL;
+package controllers;
 
-import dataStructures.Unknown;
+import controllers.DatabaseConnection;
+import models.Unknown;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
 
-public class Insert extends DatabaseConnection{
+public class Insert extends DatabaseConnection {
     static int counter;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields

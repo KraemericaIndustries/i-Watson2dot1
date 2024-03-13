@@ -1,11 +1,11 @@
-package transactSQL;
+package controllers;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import static transactSQL.DatabaseConnection.*;
+import static controllers.DatabaseConnection.*;
 
 public class Connect {
 
@@ -15,10 +15,10 @@ public class Connect {
 
             switch(reason) {
                 case "getWords":
-                    transactSQL.Query.getWords(numWords, first, second, third, fourth, fifth);
+                    Query.getWords(numWords, first, second, third, fourth, fifth);
                     break;
                 case "getNumWordsInDB":
-                    transactSQL.Query.getNumWordInDB();
+                    Query.getNumWordInDB();
                     break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
