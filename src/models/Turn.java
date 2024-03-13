@@ -1,5 +1,4 @@
 package models;
-import models.Unknown;
 
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -13,8 +12,6 @@ public class Turn {
     public LinkedHashMap<Character, Integer> turn = new LinkedHashMap<>();
 
     public Turn(String guess, int response) {
-
-        turn.clear();
 
         this.guess = guess.toUpperCase();
         this.response = response;

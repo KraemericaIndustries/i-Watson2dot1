@@ -36,8 +36,6 @@ public class Query extends DatabaseConnection {
 
     public static void getNumWordInDB() throws SQLException {
 
-        int numWords = 0;
-
         ResultSet resultSet = Query.select("select count (*) from Words_tbl");
 
         while(resultSet.next()) {

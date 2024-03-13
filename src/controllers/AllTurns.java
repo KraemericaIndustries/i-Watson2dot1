@@ -57,7 +57,7 @@ public class AllTurns {
                     if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
                         System.out.println("Scenario: updatedResponse(i) - updatedResponse(j) = 1:");
                         System.out.println("With 1 letter changed, and the responses varying by 1, " + letterChangedFrom.letters + " is KNOWN IN, and " + letterChangedTo.letters + " is KNOWN OUT.  Updating all data sources...");
-                        updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
+                        updateAllDataSources(Turns, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
                         System.out.println();
                     } else {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
@@ -70,7 +70,7 @@ public class AllTurns {
                     if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
                         System.out.println("Scenario: updatedResponse(i) - updatedResponse(j) = -1:");
                         System.out.println("With 1 letter changed, and the responses varying by 1, " + letterChangedFrom.letters + " is KNOWN IN, and " + letterChangedTo.letters + " is KNOWN OUT.  Updating all data sources...");
-                        updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
+                        updateAllDataSources(Turns, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
                         System.out.println();
                     } else {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
@@ -82,7 +82,7 @@ public class AllTurns {
         }
     }
 
-    private static void updateAllDataSources(LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn, LetterGroup knownOut, LetterGroup letterChangedFrom, LetterGroup letterChangedTo, Unknown unknown) {
+    private static void updateAllDataSources(LinkedList<Turn> Turns, LetterGroup knownIn, LetterGroup knownOut, LetterGroup letterChangedFrom, LetterGroup letterChangedTo, Unknown unknown) {
         knownIn.letters.putAll(letterChangedFrom.letters);
         knownOut.letters.putAll(letterChangedTo.letters);
 

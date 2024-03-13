@@ -1,6 +1,5 @@
 package controllers;
 
-import controllers.DatabaseConnection;
 import models.Unknown;
 
 import java.io.File;
