@@ -17,7 +17,7 @@ public class Report {
     public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, LinkedList<Turn> Turns, Unknown unknown) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
-        if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
+        if(Turns.size() >= 2) AllTurns.compareAllTurns(Turns, knownTogether, knownIn, knownOut, unknown);
 
         printLetterGroups(knownIn, knownOut, knownTogether);
 

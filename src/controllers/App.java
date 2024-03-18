@@ -40,11 +40,11 @@ public class App {
         do {
             Report.report(knownIn, knownOut, knownTogether, Turns, unknown);           //  PRINT a report of possible determinations
             Result.results(knownTogether, unknown, Turns);                             //  PRINT the results of previous plays and determinations
-            Turns.add(new Turn(Keyboard.guess(), Keyboard.responseFromOpponent()));  //  TAKE a turn by making a guess
+            Turns.add(new Turn(Keyboard.guess(), Keyboard.responseFromOpponent()));    //  TAKE a turn by making a guess
 
-            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
+            if(Turns.size() >= 2) AllTurns.compareAllTurns(Turns, knownTogether, knownIn, knownOut, unknown);
 
-            Report.reportNumber++;                                                           //  INCREMENT the number of turns taken
+            Report.reportNumber++;                                                             //  INCREMENT the number of turns taken
         } while (Turns.getLast().response < 5);                                                //  While the most recent response is less than 5
 
         //  **END GAME***
