@@ -39,7 +39,7 @@ public class App {
 
         do {
             Report.report(knownIn, knownOut, knownTogether, Turns, unknown);           //  PRINT a report of possible determinations
-            Result.results(knownTogether, unknown, Turns);                             //  PRINT the results of previous plays and determinations
+            Result.results(knownIn, knownOut, knownTogether, unknown, Turns);                             //  PRINT the results of previous plays and determinations
             Turns.add(new Turn(Keyboard.guess(), Keyboard.responseFromOpponent()));    //  TAKE a turn by making a guess
 
             if(Turns.size() >= 2) AllTurns.compareAllTurns(Turns, knownTogether, knownIn, knownOut, unknown);

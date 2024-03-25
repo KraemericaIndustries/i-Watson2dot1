@@ -51,7 +51,9 @@ public class Report {
 
             test.setLength(test.length() - 2);
             test.append("] are in your opponents word.");
-            System.out.println(test + "\n");
+//            System.out.println(test + "\n");
+            System.out.println(test);
         }
+        System.out.println();
     }
 }

@@ -3,6 +3,7 @@ package controllers;
 import models.LetterGroup;
 import models.Turn;
 import models.Unknown;
+import views.Result;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -34,7 +35,7 @@ public class AllTurns {
                 System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
                 prettyPrintLinkedHashMap(Turns, i);
                 prettyPrintLinkedHashMap(Turns, j);
-                identifyChangedLetters(Turns, letterChangedFrom, i, letterChangedTo, j);
+                identifyChangedLetters(Turns, letterChangedFrom, j, letterChangedTo, i);
                 comparisonNumber++;
 
                 //  IF responses from compared turns are EQUAL...
@@ -43,9 +44,14 @@ public class AllTurns {
                     //  AND IF Only 1 letter has changed between turns...
                     if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
                         System.out.println("Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
-                        System.out.println("We now know that " + letterChangedTo.letters + " and " + letterChangedFrom.letters + " are either both IN, or both OUT (but cannot be sure which is the case)");
+                        System.out.println("We now know that " + letterChangedTo.letters + " and " + letterChangedFrom.letters + " are either both IN, or both OUT (but cannot be sure which is the case)\n");
                         updateKnownTogether(Turns, knownTogether, i, j);
-                        System.out.println();
+
+                        char[] keys = Result.keySetToArray(knownTogether.letters);
+
+                        for(char c : keys) Unknown.letters.remove(c);
+
+
                     } else {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
                     }
