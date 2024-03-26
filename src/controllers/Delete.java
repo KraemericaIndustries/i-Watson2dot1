@@ -11,6 +11,8 @@ public class Delete {
 
     public static void wordsWith(char c) throws SQLException {
 
+        System.out.println("+++ Delete.wordsWith +++");
+
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words containing '" + c + "' from the database...");
             try {
@@ -24,9 +26,12 @@ public class Delete {
                 e.printStackTrace();
             }
         }
+        System.out.println("--- Delete.wordsWith ---");
     }
 
     public static void wordsWithout(char c) throws SQLException {
+
+        System.out.println(" Delete.wordsWithout ");
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words NOT containing '" + c + "' from the database...");
@@ -41,5 +46,6 @@ public class Delete {
                 e.printStackTrace();
             }
         }
+        System.out.println("--- Delete.wordsWithout ---");
     }
 }

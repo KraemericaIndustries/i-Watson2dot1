@@ -11,6 +11,8 @@ public class Connect {
 
     public static void watson(String reason, int numWords, char first, char second, char third, char fourth, char fifth) {
 
+        System.out.println("+++ Connect.watson +++");
+
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
             switch(reason) {
@@ -26,5 +28,6 @@ public class Connect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("--- Connect.watson ---");
     }
 }

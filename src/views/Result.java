@@ -38,7 +38,7 @@ public class Result {
     }
 
     public static void case0000() {
-        System.out.println("Scenario: 0000");  //  Absolutely NO previous data
+        System.out.println("+++ Result.case0000 +++");  //  Absolutely NO previous data
 
         char[] unknown = keySetToArray(Unknown.letters);
 
@@ -49,9 +49,11 @@ public class Result {
         System.out.print(unknown[4] + "] as possible.  I suggest:\n");
 
         Connect.watson("getWords", 1, unknown[0], unknown[1], unknown[2], unknown[3], unknown[4]);
+
+        System.out.println("--- Result.case ---");
     }
     private static void case0001(LinkedList<Turn> Turns) {  //  Previous turns have values, all else not
-        System.out.println("Scenario: 0001");
+        System.out.println("+++ Result.case0001 +++");
 
         int lastTurn = Turns.size() - 1;
 
@@ -63,18 +65,24 @@ public class Result {
         else if (Turns.get(lastTurn).turn.size() == 4) Connect.watson("getWords", 1, lastTurnChars[0], lastTurnChars[1], lastTurnChars[2], unknown[0], unknown[1]);
         else if (Turns.get(lastTurn).turn.size() == 3) Connect.watson("getWords", 1, lastTurnChars[0], lastTurnChars[1], unknown[0], unknown[1], unknown[2]);
         else if (Turns.get(lastTurn).turn.size() == 2) Connect.watson("getWords", 1, lastTurnChars[0], unknown[0], unknown[1], unknown[2], unknown[3]);
+
+        System.out.println("--- Result.case0001 ---");
     }
     private static void case0010(LetterGroup knownTogether) {
-        System.out.println("Scenario: 0010");  //  knownTogether has values, all else not
+
+        System.out.println(" Result.case0010 ");  //  knownTogether has values, all else not
 
         char[] unknown = keySetToArray(Unknown.letters);
         char[] knownTogetherChars = keySetToArray(knownTogether.letters);
 
         //  Make a guess with the 2nd MOST FREQUENT from knownTogether (to try and make a determination on the 1st)
         Connect.watson("getWords", 1, knownTogetherChars[1], unknown[0], unknown[1], unknown[2], unknown[3]);
+
+        System.out.println("--- Result.case0010 ---");
     }
     private static void case0011(LetterGroup knownTogether, LinkedList<Turn> Turns) {
-        System.out.println("Scenario: 0011");  //  knownTogether, Previous turns has data, all else not
+
+        System.out.println("+++ Result.case0011 +++");  //  knownTogether, Previous turns has data, all else not
 
         int lastTurn = Turns.size() - 1;
 
@@ -86,9 +94,12 @@ public class Result {
         if      (Turns.get(lastTurn).turn.size() == 5) Connect.watson("getWords", 1, knownTogetherChars[1], lastTurnChars[0], lastTurnChars[1], lastTurnChars[2], unknown[0]);
         else if (Turns.get(lastTurn).turn.size() == 4) Connect.watson("getWords", 1, knownTogetherChars[1], lastTurnChars[0], lastTurnChars[1], unknown[0], unknown[1]);
         else if (Turns.get(lastTurn).turn.size() == 3) Connect.watson("getWords", 1, knownTogetherChars[1], lastTurnChars[0], unknown[0], unknown[1], unknown[2]);
+
+        System.out.println("--- Result.case0011 ---");
     }
     private static void case0100(LetterGroup knownOut) {
-        System.out.println("Scenario: 0100");  //  knownOut has data, all else not
+
+        System.out.println("+++ Result.case0100 +++");  //  knownOut has data, all else not
 
         char[] unknown = keySetToArray(Unknown.letters);
         char[] knownOutChars = keySetToArray(knownOut.letters);
@@ -98,9 +109,12 @@ public class Result {
         else if (knownOut.letters.size() == 3) Connect.watson("getWords", 1, knownOutChars[0], knownOutChars[1], knownOutChars[2], unknown[0], unknown[1]);
         else if (knownOut.letters.size() == 2) Connect.watson("getWords", 1, knownOutChars[0], knownOutChars[1], unknown[0], unknown[1], unknown[2]);
         else if (knownOut.letters.size() == 1) Connect.watson("getWords", 1, knownOutChars[0], unknown[0], unknown[1], unknown[2], unknown[3]);
+
+        System.out.println("--- Result.case0100 ---");
     }
     private static void case0101(LetterGroup knownOut, LinkedList<Turn> Turns) {
-        System.out.println("Scenario: 0101");  //  knownOut, Previous turns has data, all else not
+
+        System.out.println("+++ Result.case0101 +++");  //  knownOut, Previous turns has data, all else not
 
         int lastTurn = Turns.size() - 1;
 
@@ -113,9 +127,12 @@ public class Result {
         else if (Turns.get(lastTurn).turn.size() == 3)                                 Connect.watson("getWords", 1, knownOutChars[0], lastTurnChars[0], lastTurnChars[1], unknown[0], unknown[1]);
         else if (Turns.get(lastTurn).turn.size() == 2)                                 Connect.watson("getWords", 1, knownOutChars[0], lastTurnChars[0], unknown[0], unknown[1], unknown[2]);
         else if (knownOut.letters.size() == 1)                                         Connect.watson("getWords", 1, knownOutChars[0], unknown[0], unknown[1], unknown[2], unknown[3]);
+
+        System.out.println("--- Result.case0101 ---");
     }
     private static void case0110(LetterGroup knownOut, LetterGroup knownTogether) {
-        System.out.println("Scenario: 0110");  //  knownOut, knownTogether has data, all else not
+
+        System.out.println("+++ Result.case0110 +++");  //  knownOut, knownTogether has data, all else not
 
         char[] knownOutChars = keySetToArray(knownOut.letters);
         char[] knownTogetherChars = keySetToArray(knownTogether.letters);
@@ -125,9 +142,11 @@ public class Result {
         else if (knownTogether.letters.size() == 3) Connect.watson("getWords", 1, knownTogetherChars[1], knownOutChars[0], knownOutChars[1], knownOutChars[2], knownOutChars[3]);
         else if (knownTogether.letters.size() == 2) Connect.watson("getWords", 1, knownTogetherChars[1], knownOutChars[0], knownOutChars[1], knownOutChars[2], knownOutChars[3]);
 
+        System.out.println("--- Result.case0110 ---");
     }
     private static void case0111() {
-        System.out.println("Scenario: 0111");  //  knownIn is EMPTY
+        System.out.println("+++ Result.case0111 +++");  //  knownIn is EMPTY
+        System.out.println("--- Result.case0111 ---");
     }
     private static void case1000(LetterGroup knownIn) {
         System.out.println("Scenario: 1000");  //  knownIn has data, all else not
@@ -140,27 +159,37 @@ public class Result {
         else if (knownIn.letters.size() == 3) Connect.watson("getWords", 1, knownInChars[0], knownInChars[1], knownInChars[2], unknown[0], unknown[1]);
         else if (knownIn.letters.size() == 2) Connect.watson("getWords", 1, knownInChars[0], knownInChars[1], unknown[0], unknown[1], unknown[2]);
         else if (knownIn.letters.size() == 1) Connect.watson("getWords", 1, knownInChars[0], unknown[0], unknown[1], unknown[2], unknown[3]);
+
+        System.out.println("--- Result.case1000 ---");
     }
     private static void case1001() {
-        System.out.println("Scenario: 1001");  //  knownIn, Previous turns has data, all else not
+        System.out.println("+++ Result.case1001 +++");  //  knownIn, Previous turns has data, all else not
+        System.out.println("--- Result.case1001 ---");
     }
     private static void case1010() {
-        System.out.println("Scenario: 1010");  //  knownIn, knownTogether has data, all else not
+        System.out.println("+++ Result.case1010 +++");  //  knownIn, knownTogether has data, all else not
+        System.out.println("--- Result.case1010 ---");
     }
     private static void case1011() {
-        System.out.println("Scenario: 1011");  //  knownOut is EMPTY, all else not
+
+        System.out.println("+++ Result.case1011 +++");  //  knownOut is EMPTY, all else not
+        System.out.println("--- Result.case1011 ---");
     }
     private static void case1100() {
-        System.out.println("Scenario: 1100");  //  knownIn, knownOut has data, all else not
+        System.out.println("+++ Result.case1100 +++");  //  knownIn, knownOut has data, all else not
+        System.out.println("--- Result.case1100 ---");
     }
     private static void case1101() {
-        System.out.println("Scenario: 1101");  //  knownTogether is EMPTY
+        System.out.println("+++ Result.case1101 +++");  //  knownTogether is EMPTY
+        System.out.println("--- Result.case1101 ---");
     }
     private static void case1110() {
-        System.out.println("Scenario: 1110");  //  Previous turns is EMPTY
+        System.out.println("+++ Result.case1110 +++");  //  Previous turns is EMPTY
+        System.out.println("--- Result.case1110 ---");
     }
     private static void case1111() {
-        System.out.println("Scenario: 1111");  //  Data in ALL
+        System.out.println("+++ Result.case1111 +++");  //  Data in ALL
+        System.out.println("--- Result.case1111 ---");
     }
 
     public static char[] keySetToArray(LinkedHashMap<Character, Integer> map) {

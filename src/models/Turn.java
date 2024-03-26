@@ -112,7 +112,7 @@ public class Turn {
         }
     }
     public static void sortTurn(LinkedHashMap<Character, Integer> turn) {
-//        System.out.println("sortTurn() original:             " + turn);  DEBUG
+//        System.out.println("+++ Turn.sortTurn +++");
         LinkedHashMap<Character, Integer> sortedTurn = turn.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -126,5 +126,6 @@ public class Turn {
 //        System.out.println("sortTurn() result:               " + turn);  DEBUG
         sortedTurn.clear();
         System.out.println();
+//        System.out.println("--- Turn.sortTurn ---");
     }
 }

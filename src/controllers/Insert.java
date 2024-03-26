@@ -17,6 +17,9 @@ public class Insert extends DatabaseConnection {
 
     //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
     public static void loadKnownWords() {
+
+        System.out.println("+++ Insert.loadKnownWords +++");
+
         System.out.println("Loading known words into the 'watson' database...");
         try {
             File file = new File("FiveLetterWords.txt");
@@ -64,9 +67,13 @@ public class Insert extends DatabaseConnection {
 //        System.out.println(" > Seeding letter counts into the 'watson' database was Successful");
 //        System.out.println(" > 'watson' database populated!");
 //        System.out.println();
+        System.out.println("--- Insert.loadKnownWords ---");
     }
 
     public static void reloadKnownWords() {
+
+        System.out.println(" Insert.reloadKnownWords ");
+
         System.out.println("Reloading known words into the 'watson' database...");
         Unknown.letters.clear();
         try {
@@ -115,6 +122,6 @@ public class Insert extends DatabaseConnection {
 //        System.out.println(" > Seeding letter counts into the 'watson' database was Successful");
 //        System.out.println(" > 'watson' database populated!");
 //        System.out.println();
+        System.out.println("--- Insert.reloadKnownWords ---");
     }
-
 }

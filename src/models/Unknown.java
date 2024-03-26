@@ -48,9 +48,4 @@ public class Unknown {
         }
         sortedLetters = unsortedLettersFromMap;
     }
-    public void keySetToArray() {
-        Set<Character> letterKeys = letters.keySet();
-        elements = letterKeys.toArray();
-//        System.out.println();
-    }
 }

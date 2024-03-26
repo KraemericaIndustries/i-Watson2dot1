@@ -26,6 +26,8 @@ public class AllTurns {
 
     public static void compareAllTurns(LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn, LetterGroup knownOut, Unknown unknown) {
 
+        System.out.println("+++ AllTurns.compareAllTurns +++");
+
         LetterGroup letterChangedFrom = new LetterGroup();
         LetterGroup letterChangedTo = new LetterGroup();
         int comparisonNumber = 1;
@@ -35,7 +37,7 @@ public class AllTurns {
                 System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
                 prettyPrintLinkedHashMap(Turns, i);
                 prettyPrintLinkedHashMap(Turns, j);
-                identifyChangedLetters(Turns, letterChangedFrom, j, letterChangedTo, i);
+                identifyChangedLetters(Turns, letterChangedFrom, i, letterChangedTo, j);
                 comparisonNumber++;
 
                 //  IF responses from compared turns are EQUAL...
@@ -47,9 +49,9 @@ public class AllTurns {
                         System.out.println("We now know that " + letterChangedTo.letters + " and " + letterChangedFrom.letters + " are either both IN, or both OUT (but cannot be sure which is the case)\n");
                         updateKnownTogether(Turns, knownTogether, i, j);
 
-                        char[] keys = Result.keySetToArray(knownTogether.letters);
-
-                        for(char c : keys) Unknown.letters.remove(c);
+//                        char[] keys = Result.keySetToArray(knownTogether.letters);
+//
+//                        for(char c : keys) Unknown.letters.remove(c);
 
 
                     } else {
@@ -85,6 +87,7 @@ public class AllTurns {
             letterChangedFrom.letters.clear();
             letterChangedTo.letters.clear();
         }
+        System.out.println("--- AllTurns.compareAllTurns ---");
     }
 
     private static void updateAllDataSources(LinkedList<Turn> Turns, LetterGroup knownIn, LetterGroup knownOut, LetterGroup letterChangedFrom, LetterGroup letterChangedTo, Unknown unknown, LetterGroup knownTogether) {
@@ -143,6 +146,8 @@ public class AllTurns {
 
     private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i) {
 
+        System.out.println("+++ AllTurns.prettyPrintLinkedHashMap +++");
+
         StringBuilder sb = new StringBuilder();
 
         sb.append("[");
@@ -155,8 +160,11 @@ public class AllTurns {
         sb.append("]");
 
         System.out.println(sb + " = " + Turns.get(i).updatedResponse);
+        System.out.println("--- AllTurns.prettyPrintLinkedHashMap ---");
     }
     private static void identifyChangedLetters(LinkedList<Turn> Turns, LetterGroup letterChangedFrom, int i, LetterGroup letterChangedTo, int j) {
+
+        System.out.println("+++ AllTurns.identifyChangedLetters +++");
 
         letterChangedFrom.letters.clear();
         letterChangedTo.letters.clear();
@@ -175,6 +183,6 @@ public class AllTurns {
             letterChangedTo.letters.remove(c);
         }
         System.out.println(letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
-//        System.out.println();  //  Print a space after each turn in 'Turns is compared
+        System.out.println("--- AllTurns.identifyChangedLetters ---");
     }
 }

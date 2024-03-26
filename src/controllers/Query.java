@@ -17,6 +17,8 @@ public class Query extends DatabaseConnection {
     */
     public static void getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
 
+        System.out.println("+++ Query.getWords +++");
+
         ResultSet resultSet = Query.select(
 "SELECT TOP (" + numWords + ") Word " +
           "FROM Words_tbl YT " +
@@ -32,9 +34,12 @@ public class Query extends DatabaseConnection {
         while(resultSet.next()) {
             System.out.println(resultSet.getString(1));
         }
+        System.out.println("--- Query.getWords ---");
     }
 
     public static void getNumWordInDB() throws SQLException {
+
+        System.out.println("+++ Query.getNumWordInDB +++");
 
         ResultSet resultSet = Query.select("select count (*) from Words_tbl");
 
@@ -46,11 +51,15 @@ public class Query extends DatabaseConnection {
 //        System.out.print(((Number) resultSet.getObject(1)).intValue());
 //        }
 //        return String.valueOf(numWords);
+        System.out.println("--- Query.getNumWordInDB ---");
     }
 
     //  wordsFromDB() ToDo: This method needs to DELETE the "test.txt" file from the filesystem prior to each run.  A non-hardcoded absolute path to the file would be preferable
     //  wordsFromDB() ToDo: Refactor this method.  Resultset parameter to write.File.XYZ to improve structure
     public static void wordsFromDB() {
+
+        System.out.println("+++ Query.wordsFromDB +++");
+
         System.out.println("Retrieving all remaining words from the 'watson' database...");
         int counter = 0;
         try {
@@ -73,6 +82,7 @@ public class Query extends DatabaseConnection {
 //            e.printStackTrace();
         }
         System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
+        System.out.println("--- Query.wordsFromDB ---");
     }
 
     //  Generic method that takes a String{} of a sql query, and returns a result...
