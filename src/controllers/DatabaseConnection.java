@@ -17,7 +17,7 @@ public class DatabaseConnection {
     //  READ the watson DB url and credentials from the configuration file...
     public static void getDatabaseServerProperties() {
 
-        System.out.println("+++ DatabaseConnection.getDatabaseServerProperties +++");
+//        System.out.println("+++ DatabaseConnection.getDatabaseServerProperties +++");
 
         System.out.println("Reading the watson.properties file...");
         java.util.Properties props = new java.util.Properties();
@@ -36,6 +36,6 @@ public class DatabaseConnection {
         System.out.println(" > Password: " + password);
         System.out.println(" > Success!\n");
 
-        System.out.println("--- DatabaseConnection.getDatabaseServerProperties ---");
+//        System.out.println("--- DatabaseConnection.getDatabaseServerProperties ---");
     }
 }

@@ -9,7 +9,7 @@ public class Create extends DatabaseConnection {
     //  CREATE to watson DB...
     public static void createWatsonDB() throws Exception {
 
-        System.out.println("+++ Create.createWatsonDB +++");
+//        System.out.println("+++ Create.createWatsonDB +++");
 
         System.out.println("Preparing to create the watson database...");
         //  RESTART the mssqlserver service (to assure there is no other process accessing the DB)
@@ -47,6 +47,6 @@ public class Create extends DatabaseConnection {
         System.out.println();
 
         url = url + "DatabaseName=watson";
-        System.out.println("--- Create.createWatsonDB ---");
+//        System.out.println("--- Create.createWatsonDB ---");
     }
 }

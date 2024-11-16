@@ -3,7 +3,6 @@ package controllers;
 import models.LetterGroup;
 import models.Turn;
 import models.Unknown;
-import views.Result;
 
 import java.sql.SQLException;
 import java.util.LinkedList;
@@ -26,37 +25,33 @@ public class AllTurns {
 
     public static void compareAllTurns(LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn, LetterGroup knownOut, Unknown unknown) {
 
-        System.out.println("+++ AllTurns.compareAllTurns +++");
+        System.out.println("+++ AllTurns.compareAllTurns +++");  //  PRINT DEBUG message
 
-        LetterGroup letterChangedFrom = new LetterGroup();
-        LetterGroup letterChangedTo = new LetterGroup();
-        int comparisonNumber = 1;
+        LetterGroup letterChangedFrom = new LetterGroup();    //  DECLARE and INITIALIZE a LetterGroup for use in comparing turns
+        LetterGroup letterChangedTo = new LetterGroup();      //  DECLARE and INITIALIZE a second LetterGroup for use in comparing turns
+        int comparisonNumber = 1;                             //  DECLARE and INITIALIZE a comparisonNumber value
 
         for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
             for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
-                System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
-                prettyPrintLinkedHashMap(Turns, i);
-                prettyPrintLinkedHashMap(Turns, j);
-                identifyChangedLetters(Turns, letterChangedFrom, i, letterChangedTo, j);
-                comparisonNumber++;
 
-                //  IF responses from compared turns are EQUAL...
-                if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {
-                    System.out.println("Scenario: i.updatedResponse == j.updatedResponse");
-                    //  AND IF Only 1 letter has changed between turns...
-                    if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
+                System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");  //  PRINT a header
+                prettyPrintTurn(Turns, i);  //  PRINT the first of 2 turns to be compared
+                prettyPrintTurn(Turns, j);  //  PRINT the second of 2 turns to be compared
+                identifyChangedLetters(Turns, letterChangedFrom, i, letterChangedTo, j);  //  IDENTIFY the letters changed between the 2 turns
+                comparisonNumber++;  //  INCREMENT comparisonNumber
+
+                if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {                  //  IF responses from compared turns are EQUAL...
+                    System.out.println("+++ i.updatedResponse == j.updatedResponse +++");           //  PRINT DEBUG message
+                    if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {  //  IF Only 1 letter has changed between turns...
                         System.out.println("Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
                         System.out.println("We now know that " + letterChangedTo.letters + " and " + letterChangedFrom.letters + " are either both IN, or both OUT (but cannot be sure which is the case)\n");
                         updateKnownTogether(Turns, knownTogether, i, j);
-
-//                        char[] keys = Result.keySetToArray(knownTogether.letters);
-//
-//                        for(char c : keys) Unknown.letters.remove(c);
-
-
                     } else {
                         System.out.println("More than 1 letter changed between these 2 turns.  No conclusions may be drawn.");
                     }
+
+                    System.out.println("--- i.updatedResponse == j.updatedResponse ---");
+
 
                 //  ELSE-IF responses from compared turns are + 1...
                 } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == 1) {
@@ -144,9 +139,9 @@ public class AllTurns {
 
     }
 
-    private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i) {
+    private static void prettyPrintTurn(LinkedList<Turn> Turns, int i) {
 
-        System.out.println("+++ AllTurns.prettyPrintLinkedHashMap +++");
+//        System.out.println("+++ AllTurns.prettyPrintLinkedHashMap +++");
 
         StringBuilder sb = new StringBuilder();
 
@@ -160,27 +155,28 @@ public class AllTurns {
         sb.append("]");
 
         System.out.println(sb + " = " + Turns.get(i).updatedResponse);
-        System.out.println("--- AllTurns.prettyPrintLinkedHashMap ---");
+
+//        System.out.println("--- AllTurns.prettyPrintLinkedHashMap ---");
     }
     private static void identifyChangedLetters(LinkedList<Turn> Turns, LetterGroup letterChangedFrom, int i, LetterGroup letterChangedTo, int j) {
 
-        System.out.println("+++ AllTurns.identifyChangedLetters +++");
+        System.out.println("+++ AllTurns.identifyChangedLetters +++");  //  PRINT DEBUG message
 
-        letterChangedFrom.letters.clear();
-        letterChangedTo.letters.clear();
+        letterChangedFrom.letters.clear();  //  CLEAR LetterGroup LHMs used for comparison
+        letterChangedTo.letters.clear();    //  CLEAR LetterGroup LHMs used for comparison
 
-        letterChangedFrom.letters.putAll(Turns.get(i).turn);
-        letterChangedTo.letters.putAll(Turns.get(j).turn);
+        letterChangedFrom.letters.putAll(Turns.get(i).turn);  //  PUT ALL letters of turn under comparison
+        letterChangedTo.letters.putAll(Turns.get(j).turn);    //  PUT ALL letters of turn under comparison
 
-        Set<Character> turn1Keys = Turns.get(j).turn.keySet();
-        Set<Character> turn2Keys = Turns.get(i).turn.keySet();
+        Set<Character> turnJkeys = Turns.get(j).turn.keySet();  //  GENERATE a keyset
+        Set<Character> turnIkeys = Turns.get(i).turn.keySet();  //  GENERATE a keyset
 
-        for(Character c : turn1Keys) {
-            letterChangedFrom.letters.remove(c);
+        for(Character c : turnJkeys) {
+            letterChangedFrom.letters.remove(c);  //  REMOVE all keys from THE OTHER TURN from this one (leaving only the letter in this turn, not appearing in the other turn)
         }
 
-        for(Character c : turn2Keys) {
-            letterChangedTo.letters.remove(c);
+        for(Character c : turnIkeys) {
+            letterChangedTo.letters.remove(c);  //  REMOVE all keys from THE OTHER TURN from this one (leaving only the letter in this turn, not appearing in the other turn)
         }
         System.out.println(letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
         System.out.println("--- AllTurns.identifyChangedLetters ---");

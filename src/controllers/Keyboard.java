@@ -9,7 +9,7 @@ public class Keyboard {
     //  INPUT a guess...
     public static String guess() {
 
-        System.out.println("+++ Keyboard.guess +++");
+//        System.out.println("+++ Keyboard.guess +++");
 
         String guess;
 
@@ -22,14 +22,14 @@ public class Keyboard {
                 System.out.println("HEY!  DUMMY!  Your guess is " + guess.length() + " letters long!  Try again, moron.");
             }
         } while (guess.length() != 5);
-        System.out.println("--- Keyboard.guess ---");
+//        System.out.println("--- Keyboard.guess ---");
         return guess;
     }
 
     //  INPUT a response...
     public static int responseFromOpponent() {
 
-        System.out.println("+++ Keyboard.responseFromOpponent +++");
+//        System.out.println("+++ Keyboard.responseFromOpponent +++");
 
         int response;
 
@@ -42,7 +42,7 @@ public class Keyboard {
                 System.out.println("HEY!  DUMMY!  Your response is " + response + ", but it MUST be 0, 1, 2, 3, 4, or 5!  Try again, moron.");
             }
         } while (response > 5 || response < 0);
-        System.out.println("--- Keyboard.responseFromOpponent ---");
+//        System.out.println("--- Keyboard.responseFromOpponent ---");
         return response;
     }
 }
