@@ -82,22 +82,32 @@ public class Messages {
 
         //  STRATEGY #1
         if(!wordPairsThatDifferByOneLetter.isEmpty()) {
-            //  ToDo: SIMPLIFY UI to number word pairs and prompt user to make a selection
-            //  ToDo: UI should AUTOMATICALLY play both pairs
-            System.out.println("STRATEGY #1:  DETERMINE if the most frequently occurring UNKNOWN letter in the database is IN or OUT...");
-            System.out.println("I suggest playing the following words, on consecutive turns:");
-//                System.out.println("The first letter to consider is: " + unknown.sortedLetters[0]);  //  WORKING!!!
+            //  ToDo (Long-term): SIMPLIFY UI to number word pairs and prompt user to make a selection
+            //  ToDo (Long-term): UI should AUTOMATICALLY play both pairs
+            System.out.println("STRATEGY #1:  DETERMINE if the most frequently occurring UNKNOWN letter in the database is IN or OUT.  I suggest playing the following words, on consecutive turns:");
 
             int i = 1;  //  < Pretty print TreeMap index
 
-            for (Map.Entry<String, String> entry : wordPairsThatDifferByOneLetter.entrySet()) {  //  < ITERATE over wordPairsThatDifferByOneLetter
-                if(entry.getKey().contains("" + unknown.sortedLetters[0])) {  //  < HARD CODED selection:  https://stackoverflow.com/questions/56056419/how-can-i-convert-a-char-to-charsequence
-                    System.out.print("[" + entry.getKey() + ", " + entry.getValue() + "] | ");  //  < Pretty print pairs
+            char characterToCheck = unknown.sortedLetters[0];
+
+            for (Map.Entry<String, String> entry : wordPairsThatDifferByOneLetter.entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                // Check if the character is in the key but not in the value
+                if (key.indexOf(characterToCheck) != -1 && value.indexOf(characterToCheck) == -1) {
+                    System.out.print("[" + key + " -> " + value + "] | ");
                     i++;
+
+
+                    if(i % 16 == 0) {
+                        System.out.println();
+                    }
+
                 }
-                if(i % 17 == 0) {
-                    System.out.println();  //  < Add newlines where desired
-                }
+
+
+
             }
             System.out.println("\nThe more frequently appearing 'Unknown' letters, the better!  (Let's us make a determination on the most frequently occurring letters more quickly...)");
             System.out.println();
