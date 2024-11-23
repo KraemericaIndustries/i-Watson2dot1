@@ -1,7 +1,7 @@
 import assess.AllTurns;
 import dataStructures.*;
 import print.Messages;
-import transactSQL.Query;
+import transactSQL.Connect;
 
 import java.util.LinkedList;
 import java.util.TreeMap;
@@ -28,8 +28,8 @@ public class App {
         unknown.loadSortedLetters(Unknown.letters);
 
         //  STRATEGY #1: Attack all words that only differ by the most common letter possible...
-        TreeMap<String, String> allWordsFromDatabaseThatDifferByOneLetter = new TreeMap<String, String>();  //  CREATE a map for all words differing by 1 letter
-        Query.getAllWordsThatDifferByOneLetter(allWordsFromDatabaseThatDifferByOneLetter);
+        TreeMap<String, String> wordPairsThatDifferByOneLetter = new TreeMap<>();  //  CREATE a map for all words differing by 1 letter
+        Connect.watson("getAllWordsThatDifferByOneLetter", wordPairsThatDifferByOneLetter);
         System.out.println();
 
         //  PLAY the game...

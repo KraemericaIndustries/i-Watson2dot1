@@ -78,7 +78,7 @@ public class Query extends DatabaseConnection{
         System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
     }
 
-    public static TreeMap<String, String> getAllWordsThatDifferByOneLetter(TreeMap<String, String> map) throws SQLException {
+    public static void getWordPairsThatDifferByOneLetter(TreeMap<String, String> map) throws SQLException {
 
         //  This query returns a resultset for all words in Words_tbl where the first and second word differ by only 1 letter...
         String query = """
@@ -115,10 +115,10 @@ public class Query extends DatabaseConnection{
         ResultSet resultSet = transactSQL.Query.select(query);
 
         while(resultSet.next()) {
-            System.out.print(((Number) resultSet.getObject(1)).intValue());
+//            System.out.print(((Number) resultSet.getObject(1)).intValue());
             map.put((String) resultSet.getObject(1), (String) resultSet.getObject(2));
         }
-        return map;
+        System.out.println();
     }
 
     //  Generic method that takes a String{} of a sql query, and returns a result...

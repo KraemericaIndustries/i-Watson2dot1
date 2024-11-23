@@ -4,6 +4,7 @@ import dataStructures.*;
 
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class Messages {
 
@@ -49,7 +50,8 @@ public class Messages {
         prettyPrintPreviousGuesses(Turns);
 
         System.out.print("There are ");
-        transactSQL.Connect.watson("getNumWordsInDB", 1, 'T', 'O', 'K', 'E', 'N');
+        TreeMap<String, String> token = new TreeMap<>();  //  TOKEN map to prevent overloading
+        transactSQL.Connect.watson("getNumWordsInDB", token);
         System.out.println(" words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************\n");
     }
@@ -82,20 +84,20 @@ public class Messages {
             System.out.println(" - Make the first guess possible using the 5 most common letters possible");
             unknown.keySetToArray();
             System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4]);
+//            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4]);
         } else if (Turns.size() == 1) {
             System.out.println(" - With only " + Turns.size() + " previous play, very little can be learned.");
             System.out.println(" - I suggest making the first guess possible using the 2nd through 6th most common letters...");
             unknown.keySetToArray();
             System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4], (char)unknown.elements[5]);
+//            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4], (char)unknown.elements[5]);
         } else if(Turns.size() == 2) {
             System.out.println(" - Try to determine if "+ knownTogether.letters + " are both IN, or both OUT");
             knownTogether.keySetToArray();
             unknown.keySetToArray();
             System.out.println(" - I suggest trying to make a determination on the letter " + knownTogether.elements[0]);
             System.out.println(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-            transactSQL.Connect.watson("getWords", 2, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[6]);
+//            transactSQL.Connect.watson("getWords", 2, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[6]);
             System.out.println(" ~ Whichever contains the MOST COMMON LETTERS (as seen above)");
         }
 //  SAMPLE recursive sql select...
