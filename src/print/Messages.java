@@ -84,7 +84,6 @@ public class Messages {
         if(!wordPairsThatDifferByOneLetter.isEmpty()) {
             //  ToDo: SIMPLIFY UI to number word pairs and prompt user to make a selection
             //  ToDo: UI should AUTOMATICALLY play both pairs
-            //  ToDo: UPDATE hardcoded letter selection in enhanced-for-if to index[0] of unknown
             System.out.println("STRATEGY #1:  DETERMINE if the most frequently occurring UNKNOWN letter in the database is IN or OUT...");
             System.out.println("I suggest playing the following words, on consecutive turns:");
 //                System.out.println("The first letter to consider is: " + unknown.sortedLetters[0]);  //  WORKING!!!
@@ -92,7 +91,7 @@ public class Messages {
             int i = 1;  //  < Pretty print TreeMap index
 
             for (Map.Entry<String, String> entry : wordPairsThatDifferByOneLetter.entrySet()) {  //  < ITERATE over wordPairsThatDifferByOneLetter
-                if(entry.getKey().contains("A")) {  //  < HARD CODED selection
+                if(entry.getKey().contains("" + unknown.sortedLetters[0])) {  //  < HARD CODED selection:  https://stackoverflow.com/questions/56056419/how-can-i-convert-a-char-to-charsequence
                     System.out.print("[" + entry.getKey() + ", " + entry.getValue() + "] | ");  //  < Pretty print pairs
                     i++;
                 }
