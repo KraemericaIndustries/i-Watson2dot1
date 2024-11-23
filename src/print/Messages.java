@@ -74,32 +74,38 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
+    public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns, TreeMap<String, String> wordPairsThatDifferByOneLetter) {
 
         System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size() + "\n");
-        System.out.println("ADVICE:");
-        if(Turns.isEmpty()) {
-            System.out.println(" - Make the first guess possible using the 5 most common letters possible");
-            unknown.keySetToArray();
-            System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-//            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4]);
-        } else if (Turns.size() == 1) {
-            System.out.println(" - With only " + Turns.size() + " previous play, very little can be learned.");
-            System.out.println(" - I suggest making the first guess possible using the 2nd through 6th most common letters...");
-            unknown.keySetToArray();
-            System.out.print(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-//            transactSQL.Connect.watson("getWords", 1, (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[4], (char)unknown.elements[5]);
-        } else if(Turns.size() == 2) {
-            System.out.println(" - Try to determine if "+ knownTogether.letters + " are both IN, or both OUT");
-            knownTogether.keySetToArray();
-            unknown.keySetToArray();
-            System.out.println(" - I suggest trying to make a determination on the letter " + knownTogether.elements[0]);
-            System.out.println(" - Searching the database, I suggest guessing: ");  //  CONNECT to DB (to get guesses)
-//            transactSQL.Connect.watson("getWords", 2, (char)unknown.elements[0], (char)unknown.elements[1], (char)unknown.elements[2], (char)unknown.elements[3], (char)unknown.elements[6]);
-            System.out.println(" ~ Whichever contains the MOST COMMON LETTERS (as seen above)");
+
+        //  STRATEGY #1
+        if(!wordPairsThatDifferByOneLetter.isEmpty()) {
+            //  ToDo: SIMPLIFY UI to number word pairs and prompt user to make a selection
+            //  ToDo: UI should AUTOMATICALLY play both pairs
+            //  ToDo: UPDATE hardcoded letter selection in enhanced-for-if to index[0] of unknown
+            System.out.println("STRATEGY #1:  DETERMINE if the most frequently occurring UNKNOWN letter in the database is IN or OUT...");
+            System.out.println("I suggest playing the following words, on consecutive turns:");
+//                System.out.println("The first letter to consider is: " + unknown.sortedLetters[0]);  //  WORKING!!!
+
+            int i = 1;  //  < Pretty print TreeMap index
+
+            for (Map.Entry<String, String> entry : wordPairsThatDifferByOneLetter.entrySet()) {  //  < ITERATE over wordPairsThatDifferByOneLetter
+                if(entry.getKey().contains("A")) {  //  < HARD CODED selection
+                    System.out.print("[" + entry.getKey() + ", " + entry.getValue() + "] | ");  //  < Pretty print pairs
+                    i++;
+                }
+                if(i % 17 == 0) {
+                    System.out.println();  //  < Add newlines where desired
+                }
+            }
+            System.out.println("\nThe more frequently appearing 'Unknown' letters, the better!  (Let's us make a determination on the most frequently occurring letters more quickly...)");
+            System.out.println();
         }
+
+
+
 //  SAMPLE recursive sql select...
         System.out.println("***********************************************************************************************************************************************************************");
     }
