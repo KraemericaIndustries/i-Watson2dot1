@@ -66,11 +66,11 @@ public class AllTurns {
 
                 //  ELSE-IF responses from compared turns are + 1...
                 } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == -1) {
-                    System.out.println("updatedResponse(i) - updatedResponse(j) = -1");
+                    System.out.println("AllTurns.makeDeterminations: updatedResponse(i) - updatedResponse(j) = -1");
                     //  AND IF Only 1 letter has changed between turns...
                     if(letterChangedTo.letters.size()==1 && letterChangedFrom.letters.size()==1) {
                         System.out.println("Scenario: updatedResponse(i) - updatedResponse(j) = -1:");
-                        System.out.println("With 1 letter changed, and the responses varying by 1, " + letterChangedFrom.letters + " is KNOWN IN, and " + letterChangedTo.letters + " is KNOWN OUT.  Updating all data sources...");
+                        System.out.println("With 1 letter changed, and the responses varying by 1, " + letterChangedTo.letters + " is KNOWN IN, and " + letterChangedFrom.letters + " is KNOWN OUT.  Updating all data sources...");
                         updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
                         System.out.println();
                     } else {

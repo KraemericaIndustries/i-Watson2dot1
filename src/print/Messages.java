@@ -51,7 +51,7 @@ public class Messages {
 
         System.out.print("There are ");
         TreeMap<String, String> token = new TreeMap<>();  //  TOKEN map to prevent overloading
-        transactSQL.Connect.watson("getNumWordsInDB", token);
+//        transactSQL.Connect.watson("getNumWordsInDB", token);
         System.out.println(" words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************\n");
     }
@@ -74,44 +74,14 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns, TreeMap<String, String> wordPairsThatDifferByOneLetter) {
+    public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
 
         System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size() + "\n");
 
         //  STRATEGY #1
-        if(!wordPairsThatDifferByOneLetter.isEmpty()) {
-            //  ToDo (Long-term): SIMPLIFY UI to number word pairs and prompt user to make a selection
-            //  ToDo (Long-term): UI should AUTOMATICALLY play both pairs
-            System.out.println("STRATEGY #1:  DETERMINE if the most frequently occurring UNKNOWN letter in the database is IN or OUT.  I suggest playing the following words, on consecutive turns:");
 
-            int i = 1;  //  < Pretty print TreeMap index
-
-            char characterToCheck = unknown.sortedLetters[0];
-
-            for (Map.Entry<String, String> entry : wordPairsThatDifferByOneLetter.entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-
-                // Check if the character is in the key but not in the value
-                if (key.indexOf(characterToCheck) != -1 && value.indexOf(characterToCheck) == -1) {
-                    System.out.print("[" + key + " -> " + value + "] | ");
-                    i++;
-
-
-                    if(i % 16 == 0) {
-                        System.out.println();
-                    }
-
-                }
-
-
-
-            }
-            System.out.println("\nThe more frequently appearing 'Unknown' letters, the better!  (Let's us make a determination on the most frequently occurring letters more quickly...)");
-            System.out.println();
-        }
 
 
 

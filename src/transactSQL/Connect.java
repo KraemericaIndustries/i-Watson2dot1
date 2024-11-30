@@ -11,17 +11,19 @@ import static transactSQL.DatabaseConnection.*;
 public class Connect {
 
     //  Todo: The parameterization of letters NO LONGER MATTERS with the inception of STRATEGY #1.  STRIP IT OUT...
-    public static void watson(String reason, TreeMap<String, String> wordPairsThatDifferByOneLetter) {
+    public static void watson(String reason, int numWords, char first, char second, char third, char fourth, char fifth) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
             switch(reason) {
-                case "getAllWordsThatDifferByOneLetter":  //  STRATEGY #1
-                    //  ToDo: Resolve this:
-                    transactSQL.Query.getWordPairsThatDifferByOneLetter(wordPairsThatDifferByOneLetter);
-                    break;
                 case "getNumWordsInDB":
                     transactSQL.Query.getNumWordInDB();
+                    break;
+                case "createWordPairsTable":
+                    transactSQL.Select.createPairsTable();
+                    break;
+                case "getWords":
+                    transactSQL.Query.getWords(numWords, first, second, third, fourth, fifth);
                     break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");

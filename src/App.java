@@ -25,20 +25,19 @@ public class App {
 
         //  SETUP: Load tables...
         transactSQL.Insert.loadKnownWords();
+        //  ToDo: Implement word pairs table
+        //  transactSQL.Select.createPairsTable();
+        transactSQL.Connect.watson("createWordPairsTable", 0, 'T', 'O', 'K', 'E', 'N');
+
         unknown.sort();
         unknown.loadSortedLetters(Unknown.letters);
-
-        //  STRATEGY #1: Attack all words that only differ by the most common letter possible...
-        TreeMap<String, String> wordPairsThatDifferByOneLetter = new TreeMap<>();  //  CREATE a map for all words differing by 1 letter
-        Connect.watson("getAllWordsThatDifferByOneLetter", wordPairsThatDifferByOneLetter);
-        System.out.println();
 
         //  PLAY the game...
         print.Messages.play();
 
         do {
             print.Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);           //  PRINT a report of possible determinations
-            print.Messages.results(knownTogether, unknown, Turns, wordPairsThatDifferByOneLetter);                             //  PRINT the results of previous plays and determinations
+            print.Messages.results(knownTogether, unknown, Turns);                             //  PRINT the results of previous plays and determinations
 
             Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent()));  //  TAKE a turn by making a guess
 
