@@ -25,9 +25,8 @@ public class App {
 
         //  SETUP: Load tables...
         transactSQL.Insert.loadKnownWords();
-        //  ToDo: Implement word pairs table
-        //  transactSQL.Select.createPairsTable();
         transactSQL.Connect.watson("createWordPairsTable", 0, 'T', 'O', 'K', 'E', 'N');
+        transactSQL.Connect.watson("deleteDups", 0, 'T', 'O', 'K', 'E', 'N');
 
         unknown.sort();
         unknown.loadSortedLetters(Unknown.letters);
