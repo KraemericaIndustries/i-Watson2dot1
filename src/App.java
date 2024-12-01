@@ -23,11 +23,13 @@ public class App {
         LetterGroup knownTogether = new LetterGroup();
         LinkedList<Turn> Turns = new LinkedList<>();
 
-        //  SETUP: Load tables...
+        //  SETUP: Load database tables...
         transactSQL.Insert.loadKnownWords();
         transactSQL.Connect.watson("createWordPairsTable", 0, 'T', 'O', 'K', 'E', 'N');
         transactSQL.Connect.watson("deleteDups", 0, 'T', 'O', 'K', 'E', 'N');
+        transactSQL.Connect.watson("countWordPairs", 0, 'T', 'O', 'K', 'E', 'N');
 
+        //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
         unknown.sort();
         unknown.loadSortedLetters(Unknown.letters);
 

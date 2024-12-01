@@ -39,7 +39,7 @@ public class Insert extends DatabaseConnection{
             System.out.println("file not found");
 //			e.printStackTrace();
         }
-        System.out.println(" > Number of words successfully added to the Database: " + counter + "\n");
+        System.out.println(" > Number of words successfully added to the Database: " + counter);
 //  DEBUG:  Show letter counts:
 //		for(int j = 0; j <= letterCounts.length - 1; j++) {
 //			System.out.println("Letter count @ index " + j + ":" + letterCounts[j]);

@@ -1,9 +1,6 @@
 package transactSQL;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static transactSQL.DatabaseConnection.*;
 
@@ -12,8 +9,9 @@ public class Select {
     public static void createPairsTable() throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
-            System.out.println("Creating table of all word pairs in the database that differ by ONLY 1 LETTER...");
+        //  DEBUG: System.out.println("Creating table of all word pairs in the database that differ by ONLY 1 LETTER...");
             try {
+                //  This query was generated with assistance from Microsoft Copilot:
                 statement.executeUpdate("SELECT w1.word AS word1, w2.word AS word2 \n" +
                         "INTO WordPairs FROM Words_tbl w1, Words_tbl w2 \n" +
                         "WHERE w1.word <> w2.word \n" +
@@ -55,4 +53,15 @@ public class Select {
         }
     }
 
+    public static void countWordPairs() throws SQLException {
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+
+            ResultSet resultSet = transactSQL.Query.select("select count (*) from WordPairs");
+
+            while(resultSet.next()) {
+                System.out.println(" > Number of word pairs in the database that differ by only 1 letter: " + ((Number) resultSet.getObject(1)).intValue() + "\n");
+            }
+        }
+    }
 }

@@ -46,8 +46,9 @@ public class Delete {
     public static void deleteDupsFromPairsTable() throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
-            System.out.println("Deleting DUPLICATES from WordPairs table...");
+        //  DEBUG:  System.out.println("Deleting DUPLICATES from WordPairs table...");
             try {
+                //  This query was generated with assistance from Microsoft Copilot:
                 statement.executeUpdate("DELETE a FROM WordPairs a " +
                                             "JOIN WordPairs b ON a.word1 = b.word2 " +
                                             "AND a.word2 = b.word1 " +

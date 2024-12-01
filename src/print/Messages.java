@@ -51,7 +51,7 @@ public class Messages {
 
         System.out.print("There are ");
         TreeMap<String, String> token = new TreeMap<>();  //  TOKEN map to prevent overloading
-//        transactSQL.Connect.watson("getNumWordsInDB", token);
+        transactSQL.Connect.watson("getNumWordsInDB", 0, 'T', 'O', 'K', 'E', 'N');
         System.out.println(" words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************\n");
     }
