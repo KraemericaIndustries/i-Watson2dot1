@@ -53,4 +53,13 @@ public class Unknown {
         elements = letterKeys.toArray();
 //        System.out.println();
     }
+
+    //  This method was generated with assistance from Microsoft Copilot:
+    //    - Get an iterator for the entry set of the map
+    //    - Use the iterator to get the first entry
+    //    - Print the key of the first entry
+    public static void printFirstEntry() {
+        Map.Entry<Character, Integer> firstEntry = letters.entrySet().iterator().next();
+        System.out.println(firstEntry.getKey());
+    }
 }

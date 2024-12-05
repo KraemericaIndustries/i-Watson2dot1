@@ -81,7 +81,9 @@ public class Messages {
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size() + "\n");
 
         //  STRATEGY #1
-
+        System.out.println("SUGGESTION:");
+        System.out.print(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: ");
+        Unknown.printFirstEntry();
 
 
 

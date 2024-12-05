@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Turn {
+
     public String guess;
     public int response;
     public int updatedResponse;
