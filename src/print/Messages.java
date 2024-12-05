@@ -1,6 +1,7 @@
 package print;
 
 import dataStructures.*;
+import transactSQL.Connect;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -69,8 +70,9 @@ public class Messages {
 
             test.setLength(test.length() - 2);
             test.append("] are in your opponents word.");
-            System.out.println(test + "\n");
+            System.out.println(test);
         }
+        System.out.println();
     }
 
     //  PRINT the result(s) of a given turn...
@@ -80,10 +82,21 @@ public class Messages {
         System.out.println("ANALYSIS:");
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size() + "\n");
 
+        //  ToDO: Need control-flow HERE such that
+        //   IF(Unknown.letters = MT) {
+        //        do strategy1
+        //    } else {
+        //        select * from Words_tbl
+        //                where
+        //        word like '%A%' and
+        //        word like '%L%'
+        //    }
+
         //  STRATEGY #1
         System.out.println("SUGGESTION:");
-        System.out.print(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: ");
-        Unknown.printFirstEntry();
+        System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());
+        System.out.println("Consider taking a pair of consecutive turns making these guesses:");
+        Connect.watson(Unknown.printFirstEntry());
 
 
 

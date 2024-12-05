@@ -58,8 +58,8 @@ public class Unknown {
     //    - Get an iterator for the entry set of the map
     //    - Use the iterator to get the first entry
     //    - Print the key of the first entry
-    public static void printFirstEntry() {
+    public static char printFirstEntry() {
         Map.Entry<Character, Integer> firstEntry = letters.entrySet().iterator().next();
-        System.out.println(firstEntry.getKey());
+        return firstEntry.getKey();
     }
 }

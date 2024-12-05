@@ -10,7 +10,6 @@ import static transactSQL.DatabaseConnection.*;
 
 public class Connect {
 
-    //  Todo: The parameterization of letters NO LONGER MATTERS with the inception of STRATEGY #1.  STRIP IT OUT...
     public static void watson(String reason, int numWords, char first, char second, char third, char fourth, char fifth) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
@@ -34,6 +33,17 @@ public class Connect {
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void watson(char mostCommonLetter) {
+
+        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
+
+            transactSQL.Select.wordPairsDifferByLetter(mostCommonLetter);
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
