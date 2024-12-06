@@ -1,5 +1,8 @@
 package transactSQL;
 
+import dataStructures.LetterGroup;
+import dataStructures.Unknown;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -65,7 +68,7 @@ public class Delete {
         }
     }
 
-    public static void wordsWith(String s) throws SQLException {
+    public static void wordsWith(String s, Unknown unknown) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words containing '" + s + "' from the database...");
@@ -82,5 +85,9 @@ public class Delete {
                 e.printStackTrace();
             }
         }
+        Query.wordsFromDB();
+        Insert.reloadKnownWords();
+        unknown.sort();
+        System.out.println("Delete.wordsWith: END");
     }
 }

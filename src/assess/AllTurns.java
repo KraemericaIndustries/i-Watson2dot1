@@ -172,14 +172,14 @@ public class AllTurns {
 //        System.out.println();  //  Print a space after each turn in 'Turns is compared
     }
 
-    public static void responseOfZero(LinkedList<Turn> Turns, LetterGroup knownOut) {
+    public static void responseOfZero(LinkedList<Turn> Turns, LetterGroup knownOut, Unknown unknown) {
 
         for(Turn t : Turns) {
             if(t.response == 0) {
                 System.out.println(t.guess);
                 // DELETE every letter from the String (handle length programmatically) from the DB
                 try {
-                    Delete.wordsWith(t.guess);
+                    Delete.wordsWith(t.guess, unknown);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
