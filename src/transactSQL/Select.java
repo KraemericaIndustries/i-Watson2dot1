@@ -79,4 +79,20 @@ public class Select {
             }
         }
     }
+
+    public static void wordsContainingTwoLetters(char knownTogether1, char knownTogether2) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+
+            ResultSet resultSet = transactSQL.Query.select("select TOP (6) word1, word2\n" +
+                    "from WordPairs\n" +
+                    "where word1 like '%" + knownTogether1 + "%'\n" +
+                    "and word1 like '%" + knownTogether2 + "%'");
+
+            while(resultSet.next()) {
+                System.out.println(resultSet.getString(1) + ", " + resultSet.getString(2));
+            }
+        }
+    }
+
 }

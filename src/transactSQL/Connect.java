@@ -1,5 +1,7 @@
 package transactSQL;
 
+import dataStructures.LetterGroup;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -43,6 +45,19 @@ public class Connect {
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
             transactSQL.Select.wordPairsDifferByLetter(mostCommonLetter);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void watson(LetterGroup knownTogether) {
+
+        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
+
+            knownTogether.keySetToArray();
+
+            transactSQL.Select.wordsContainingTwoLetters((Character) knownTogether.elements[0], (Character) knownTogether.elements[1]);
 
         } catch (SQLException e) {
             e.printStackTrace();

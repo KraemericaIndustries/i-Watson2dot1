@@ -95,9 +95,17 @@ public class Messages {
         //    }
         //  STRATEGY #1
         System.out.println("SUGGESTION:");
-        System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());
-        System.out.println("Consider taking a pair of consecutive turns making these guesses:");
-        Connect.watson(Unknown.printFirstEntry());
+
+        if(Turns.size() <= 1) {
+            System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());
+            System.out.println("Consider taking a pair of consecutive turns making these guesses:");
+            Connect.watson(Unknown.printFirstEntry());
+        } else if(!knownTogether.letters.isEmpty()) {
+            System.out.println("Try to make a determination on letters known to be together.");
+            System.out.println("Consider a turn making any of these guesses:");
+            Connect.watson(knownTogether);
+
+        }
 
 
 
