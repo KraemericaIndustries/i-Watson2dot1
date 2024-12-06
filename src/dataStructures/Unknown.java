@@ -62,4 +62,10 @@ public class Unknown {
         Map.Entry<Character, Integer> firstEntry = letters.entrySet().iterator().next();
         return firstEntry.getKey();
     }
+
+    public static void removeFromUnknown(String s) {
+        for(int i = 0; i < s.length(); i++) {
+            Unknown.letters.remove(s.charAt(i));
+        }
+    }
 }

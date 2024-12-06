@@ -184,6 +184,7 @@ public class AllTurns {
                     throw new RuntimeException(e);
                 }
                 // DELETE every letter from the String from Unknown.letters
+                Unknown.removeFromUnknown(t.guess);
                 // ADD every letter from the String to KNOWN OUT
             }
         }
