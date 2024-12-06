@@ -68,6 +68,7 @@ public class Insert extends DatabaseConnection{
 
     public static void reloadKnownWords() {
         System.out.println("Reloading known words into the 'watson' database...");
+        counter = 0;
         Unknown.letters.clear();
         try {
             File file = new File("test.txt");
