@@ -39,6 +39,8 @@ public class Messages {
     public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, LinkedList<Turn> Turns, Unknown unknown) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
+        assess.AllTurns.responseOfZero(Turns);
+
         if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
         //  PRINT the LinkedHashMaps...
@@ -91,7 +93,6 @@ public class Messages {
         //        word like '%A%' and
         //        word like '%L%'
         //    }
-
         //  STRATEGY #1
         System.out.println("SUGGESTION:");
         System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());

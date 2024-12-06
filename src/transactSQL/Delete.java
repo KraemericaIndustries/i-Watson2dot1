@@ -64,4 +64,23 @@ public class Delete {
             }
         }
     }
+
+    public static void wordsWith(String s) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+            System.out.println("Deleting all words containing '" + s + "' from the database...");
+            try {
+                for(int i = 0; i < s.length(); i++) {
+                    statement.addBatch("delete from Words_tbl where word like '%" + s.charAt(i) + "%'");
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
