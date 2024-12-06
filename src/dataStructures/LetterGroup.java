@@ -24,4 +24,10 @@ public class LetterGroup {
         Set<Character> letterKeys = letters.keySet();
         elements = letterKeys.toArray();
     }
+
+    public void loadLettersFromString(String s) {
+        for(int i = 0; i < s.length(); i++) {
+            this.letters.put(s.charAt(i), 1);
+        }
+    }
 }

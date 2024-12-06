@@ -39,7 +39,7 @@ public class Messages {
     public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, LinkedList<Turn> Turns, Unknown unknown) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
-        assess.AllTurns.responseOfZero(Turns);
+        assess.AllTurns.responseOfZero(Turns, knownOut);
 
         if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 

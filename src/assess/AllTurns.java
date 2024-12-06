@@ -172,7 +172,7 @@ public class AllTurns {
 //        System.out.println();  //  Print a space after each turn in 'Turns is compared
     }
 
-    public static void responseOfZero(LinkedList<Turn> Turns) {
+    public static void responseOfZero(LinkedList<Turn> Turns, LetterGroup knownOut) {
 
         for(Turn t : Turns) {
             if(t.response == 0) {
@@ -186,6 +186,7 @@ public class AllTurns {
                 // DELETE every letter from the String from Unknown.letters
                 Unknown.removeFromUnknown(t.guess);
                 // ADD every letter from the String to KNOWN OUT
+                knownOut.loadLettersFromString(t.guess);
             }
         }
     }
