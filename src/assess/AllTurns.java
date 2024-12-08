@@ -4,6 +4,7 @@ import dataStructures.LetterGroup;
 import dataStructures.Turn;
 import dataStructures.Unknown;
 import transactSQL.Delete;
+import transactSQL.Select;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -183,6 +184,28 @@ public class AllTurns {
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+
+            //  REGENERATE WordPairs Table here!!!
+            try {
+                Delete.dropWordPairsTable();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            //  REGENERATE WordPairs Table here!!!
+            try {
+                Select.createPairsTable();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+            //  REGENERATE WordPairs Table here!!!
+            try {
+                Delete.deleteDupsFromPairsTable();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
             // DELETE every letter from the String from Unknown.letters
             Unknown.removeFromUnknown(turn.guess);
             // ADD every letter from the String to KNOWN OUT

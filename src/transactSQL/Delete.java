@@ -90,4 +90,21 @@ public class Delete {
         unknown.sort();
         System.out.println("Delete.wordsWith: END");
     }
+
+    public static void dropWordPairsTable() throws SQLException {
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+            //  DEBUG:  System.out.println("Deleting DUPLICATES from WordPairs table...");
+            try {
+                statement.executeUpdate("DROP TABLE IF EXISTS WordPairs");
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
