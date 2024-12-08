@@ -174,7 +174,7 @@ public class AllTurns {
 //        System.out.println();  //  Print a space after each turn in 'Turns' is compared
     }
 
-    public static void responseOfZero(Turn turn, LetterGroup knownOut, Unknown unknown, LinkedList<Turn> Turns) {
+    public static void responseOfZero(Turn turn, LetterGroup knownOut, Unknown unknown, LinkedList<Turn> Turns, LetterGroup knownTogether) {
 
         if(turn.response == 0) {
             System.out.println(turn.guess);
@@ -212,6 +212,7 @@ public class AllTurns {
             knownOut.loadLettersFromString(turn.guess);
             //  ToDo: Remove every occurrence of every letter from t.guess from all turns
             removeStringFromAllTurns(turn.guess, Turns);
+            knownTogether.letters.clear();
         }
     }
 

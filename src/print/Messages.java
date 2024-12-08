@@ -105,6 +105,9 @@ public class Messages {
             System.out.println("Consider a turn making any of these guesses:");
             Connect.watson(knownTogether);
 
+        } else {
+            System.out.println("Consider taking a pair of consecutive turns making these guesses:");
+            Connect.watson(Unknown.printFirstEntry());
         }
 
 

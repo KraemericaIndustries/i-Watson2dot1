@@ -39,7 +39,7 @@ public class App {
 
             Turn turn = new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent());
             if(!(turn.response == 0)) Turns.add(turn);
-            else AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
+            else AllTurns.responseOfZero(turn, knownOut, unknown, Turns, knownTogether);
 
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
