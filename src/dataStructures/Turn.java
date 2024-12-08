@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 public class Turn {
 
     public String guess;
+    public String updatedGuess;
     public int response;
     public int updatedResponse;
     public LinkedHashMap<Character, Integer> turn = new LinkedHashMap<>();
@@ -16,6 +17,7 @@ public class Turn {
         turn.clear();
 
         this.guess = guess.toUpperCase();
+        this.updatedGuess = guess;
         this.response = response;
         this.updatedResponse = response;
 

@@ -218,13 +218,12 @@ public class AllTurns {
                 sb.append(c);
             }
 
-            t.guess = sb.toString();
-            System.out.println(t.guess);
+            t.updatedGuess = sb.toString();
+            System.out.println(t.updatedGuess);
         }
 
         for(Turn t : Turns) {
-            t.parseGuessToCollection(t.guess);
-//            Turn.sortTurn(t);
+            t.parseGuessToCollection(t.updatedGuess);
         }
 
         System.out.println("AllTurns.removeStringFromAllTurns END");
