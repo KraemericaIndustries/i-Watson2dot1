@@ -6,9 +6,7 @@ import dataStructures.Unknown;
 import transactSQL.Delete;
 
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class AllTurns {
 
@@ -175,22 +173,60 @@ public class AllTurns {
 //        System.out.println();  //  Print a space after each turn in 'Turns' is compared
     }
 
-    public static void responseOfZero(LinkedList<Turn> Turns, LetterGroup knownOut, Unknown unknown) {
+    public static void responseOfZero(Turn turn, LetterGroup knownOut, Unknown unknown, LinkedList<Turn> Turns) {
+
+        if(turn.response == 0) {
+            System.out.println(turn.guess);
+            // DELETE every letter from the String (handle length programmatically) from the DB
+            try {
+                Delete.wordsWith(turn.guess, unknown);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+            // DELETE every letter from the String from Unknown.letters
+            Unknown.removeFromUnknown(turn.guess);
+            // ADD every letter from the String to KNOWN OUT
+            knownOut.loadLettersFromString(turn.guess);
+            //  ToDo: Remove every occurrence of every letter from t.guess from all turns
+            removeStringFromAllTurns(turn.guess, Turns);
+        }
+    }
+
+    public static void removeStringFromAllTurns(String guess, LinkedList<Turn> Turns) {
+
+        System.out.println("Invoking AllTurns.removeStringFromAllTurns...");
+
+        char[] guessArray = guess.toCharArray();
+
+        List<Character> guessList = new ArrayList<>();
+        for (char c : guessArray) {
+            guessList.add(c);
+        }
+
+        for (Turn t : Turns) {
+            char[] turnArray = t.guess.toCharArray();
+
+            List<Character> turnList = new ArrayList<>();
+            for (char c : turnArray) {
+                turnList.add(c);
+            }
+
+            turnList.removeAll(guessList);
+
+            StringBuilder sb = new StringBuilder();
+            for(Character c : turnList) {
+                sb.append(c);
+            }
+
+            t.guess = sb.toString();
+            System.out.println(t.guess);
+        }
 
         for(Turn t : Turns) {
-            if(t.response == 0) {
-                System.out.println(t.guess);
-                // DELETE every letter from the String (handle length programmatically) from the DB
-                try {
-                    Delete.wordsWith(t.guess, unknown);
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
-                // DELETE every letter from the String from Unknown.letters
-                Unknown.removeFromUnknown(t.guess);
-                // ADD every letter from the String to KNOWN OUT
-                knownOut.loadLettersFromString(t.guess);
-            }
+            t.parseGuessToCollection(t.guess);
+//            Turn.sortTurn(t);
         }
+
+        System.out.println("AllTurns.removeStringFromAllTurns END");
     }
 }

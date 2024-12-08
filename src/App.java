@@ -37,7 +37,9 @@ public class App {
             print.Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);           //  PRINT a report of possible determinations
             print.Messages.results(knownTogether, unknown, Turns);                             //  PRINT the results of previous plays and determinations
 
-            Turns.add(new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent()));  //  TAKE a turn by making a guess
+            Turn turn = new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent());
+            if(!(turn.response == 0)) Turns.add(turn);
+            else AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
 
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 

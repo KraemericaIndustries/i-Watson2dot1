@@ -26,6 +26,7 @@ public class Turn {
     public void parseGuessToCollection(String guess) {
 
         guess = guess.toUpperCase();
+        turn.clear();
 
         for(int i = 0; i < guess.length(); i++) {
 
