@@ -4,6 +4,8 @@ import dataStructures.LetterGroup;
 import dataStructures.Turn;
 import dataStructures.Unknown;
 import transactSQL.Delete;
+import transactSQL.Insert;
+import transactSQL.Query;
 import transactSQL.Select;
 
 import java.sql.SQLException;
@@ -24,6 +26,44 @@ public class AllTurns {
     }
 
     public static void makeDeterminations(LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn, LetterGroup knownOut, Unknown unknown) {
+
+        //  size = updatedResponse here...
+        for(Turn t : Turns) {
+            if(t.turn.size() == t.updatedResponse) {
+                knownIn.letters.putAll(t.turn);
+
+                // delete t.turn from db
+                StringBuilder sb = new StringBuilder();
+
+                Set<Character> keys = t.turn.keySet();
+
+                // printing the elements of LinkedHashMap
+                for (Character c : keys) {
+                    sb.append(c);
+                }
+
+                t.updatedGuess = sb.toString();
+
+                try {
+                    Delete.wordsWithout(t.updatedGuess, unknown, knownIn);
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
+
+                // rebuild db
+                Query.wordsFromDB();
+                Insert.reloadKnownWords();
+
+                // remove knownIn from unknown
+                removeKnownInFromUnknown(knownIn);
+
+                unknown.sort();
+
+                // rebuild wordpairs table
+                regenerateWordPairsTable();
+            }
+        }
+
 
         LetterGroup letterChangedFrom = new LetterGroup();
         LetterGroup letterChangedTo = new LetterGroup();
@@ -85,6 +125,15 @@ public class AllTurns {
         }
     }
 
+    private static void removeKnownInFromUnknown(LetterGroup knownIn) {
+        Object[] letters;
+        Set<Character> letterKeys = knownIn.letters.keySet();
+        letters = letterKeys.toArray();
+        for(Object c : letters) {
+            Unknown.letters.remove((Character)c);
+        }
+    }
+
     private static void updateAllDataSources(LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn, LetterGroup knownOut, LetterGroup letterChangedFrom, LetterGroup letterChangedTo, Unknown unknown) {
         knownIn.letters.putAll(letterChangedFrom.letters);
         knownOut.letters.putAll(letterChangedTo.letters);
@@ -131,8 +180,9 @@ public class AllTurns {
         }
         //  CLEAR 'knownTogether'...
 //        knownTogether.letters.clear();
-        transactSQL.Query.wordsFromDB();
-        transactSQL.Insert.reloadKnownWords();
+        Query.wordsFromDB();
+        Insert.reloadKnownWords();
+        removeKnownInFromUnknown(knownIn);
         unknown.sort();
 
     }
@@ -174,37 +224,18 @@ public class AllTurns {
 //        System.out.println();  //  Print a space after each turn in 'Turns' is compared
     }
 
-    public static void responseOfZero(Turn turn, LetterGroup knownOut, Unknown unknown, LinkedList<Turn> Turns, LetterGroup knownTogether) {
+    public static void responseOfZero(Turn turn, LetterGroup knownOut, Unknown unknown, LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn) {
 
         if(turn.response == 0) {
             System.out.println(turn.guess);
             // DELETE every letter from the String (handle length programmatically) from the DB
             try {
-                Delete.wordsWith(turn.guess, unknown);
+                Delete.wordsWith(turn.guess, unknown, knownIn);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
 
-            //  REGENERATE WordPairs Table here!!!
-            try {
-                Delete.dropWordPairsTable();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            //  REGENERATE WordPairs Table here!!!
-            try {
-                Select.createPairsTable();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            //  REGENERATE WordPairs Table here!!!
-            try {
-                Delete.deleteDupsFromPairsTable();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
+            regenerateWordPairsTable();
 
             // DELETE every letter from the String from Unknown.letters
             Unknown.removeFromUnknown(turn.guess);
@@ -213,6 +244,29 @@ public class AllTurns {
             //  ToDo: Remove every occurrence of every letter from t.guess from all turns
             removeStringFromAllTurns(turn.guess, Turns);
             knownTogether.letters.clear();
+        }
+    }
+
+    private static void regenerateWordPairsTable() {
+        //  REGENERATE WordPairs Table here!!!
+        try {
+            Delete.dropWordPairsTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        //  REGENERATE WordPairs Table here!!!
+        try {
+            Select.createPairsTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        //  REGENERATE WordPairs Table here!!!
+        try {
+            Delete.deleteDupsFromPairsTable();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

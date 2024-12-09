@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Set;
 
 import static transactSQL.DatabaseConnection.*;
 
@@ -68,7 +69,7 @@ public class Delete {
         }
     }
 
-    public static void wordsWith(String s, Unknown unknown) throws SQLException {
+    public static void wordsWith(String s, Unknown unknown, LetterGroup knownIn) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words containing '" + s + "' from the database...");
@@ -87,6 +88,31 @@ public class Delete {
         }
         Query.wordsFromDB();
         Insert.reloadKnownWords();
+        removeKnownInFromUnknown(knownIn);
+        unknown.sort();
+        System.out.println("Delete.wordsWith: END");
+    }
+
+    public static void wordsWithout(String s, Unknown unknown, LetterGroup knownIn) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+            System.out.println("Deleting all words NOT containing '" + s + "' from the database...");
+            try {
+                for(int i = 0; i < s.length(); i++) {
+                    statement.addBatch("delete from Words_tbl where word not like '%" + s.charAt(i) + "%'");
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        Query.wordsFromDB();
+        Insert.reloadKnownWords();
+        removeKnownInFromUnknown(knownIn);
         unknown.sort();
         System.out.println("Delete.wordsWith: END");
     }
@@ -105,6 +131,15 @@ public class Delete {
             } catch (SQLException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private static void removeKnownInFromUnknown(LetterGroup knownIn) {
+        Object[] letters;
+        Set<Character> letterKeys = knownIn.letters.keySet();
+        letters = letterKeys.toArray();
+        for(Object c : letters) {
+            Unknown.letters.remove((Character)c);
         }
     }
 }

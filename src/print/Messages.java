@@ -2,7 +2,9 @@ package print;
 
 import dataStructures.*;
 import transactSQL.Connect;
+import transactSQL.Select;
 
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -80,19 +82,16 @@ public class Messages {
     //  PRINT the result(s) of a given turn...
     public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
 
+        try {
+            int numWordPairs = Select.returnCountWordPairs();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
         System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
         System.out.println(" - Previous guesses for which there is data available: " + Turns.size() + "\n");
 
-        //  ToDO: Need control-flow HERE such that
-        //   IF(Unknown.letters = MT) {
-        //        do strategy1
-        //    } else {
-        //        select * from Words_tbl
-        //                where
-        //        word like '%A%' and
-        //        word like '%L%'
-        //    }
         //  STRATEGY #1
         System.out.println("SUGGESTION:");
 
