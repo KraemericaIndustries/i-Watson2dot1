@@ -14,7 +14,7 @@ import java.util.*;
 public class AllTurns {
 
     public static void updateKnownTogether(LinkedList<Turn> Turns, LetterGroup knownTogether, int i, int j) {
-//  ToDo THIS is where L is getting added to knownTogether
+
         knownTogether.letters.putAll(Turns.get(i).turn);
         knownTogether.letters.putAll(Turns.get(j).turn);
 
@@ -69,9 +69,9 @@ public class AllTurns {
             }
         }
 
-
         LetterGroup letterChangedFrom = new LetterGroup();
         LetterGroup letterChangedTo = new LetterGroup();
+
         int comparisonNumber = 1;
 
         for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
@@ -231,7 +231,6 @@ public class AllTurns {
             letterChangedTo.letters.remove(c);
         }
         System.out.println("    " + letterChangedTo.letters + " was changed to " + letterChangedFrom.letters + " in these two turns");
-//        System.out.println();  //  Print a space after each turn in 'Turns' is compared
     }
 
     public static void responseOfZero(Turn turn, LetterGroup knownOut, Unknown unknown, LinkedList<Turn> Turns, LetterGroup knownTogether, LetterGroup knownIn) {
@@ -251,28 +250,26 @@ public class AllTurns {
             Unknown.removeFromUnknown(turn.guess);
             // ADD every letter from the String to KNOWN OUT
             knownOut.loadLettersFromString(turn.guess);
-            //  ToDo: Remove every occurrence of every letter from t.guess from all turns
+
             removeStringFromAllTurns(turn.guess, Turns);
             knownTogether.letters.clear();
         }
     }
 
     private static void regenerateWordPairsTable() {
-        //  REGENERATE WordPairs Table here!!!
+        //  DROP the WordPairs table...
         try {
             Delete.dropWordPairsTable();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        //  REGENERATE WordPairs Table here!!!
+        //  REGENERATE the WordPairs table...
         try {
             Select.createPairsTable();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-        //  REGENERATE WordPairs Table here!!!
+        //  DELETE dups from the WordPairs table...
         try {
             Delete.deleteDupsFromPairsTable();
         } catch (SQLException e) {

@@ -6,7 +6,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.TreeMap;
 
 import static transactSQL.DatabaseConnection.*;
 
@@ -29,9 +28,6 @@ public class Connect {
                 case "deleteDups":
                     transactSQL.Delete.deleteDupsFromPairsTable();
                     break;
-//                case "countWordPairs":
-//                    transactSQL.Select.countWordPairs();
-//                    break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
             }

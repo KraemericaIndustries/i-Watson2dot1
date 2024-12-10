@@ -3,7 +3,6 @@ import dataStructures.*;
 import print.Messages;
 import java.util.LinkedList;
 
-
 public class App {
 
     public static void main(String[] args) throws Exception {
@@ -14,7 +13,7 @@ public class App {
         transactSQL.Create.watsonDB();
 
         //  SETUP: Create LetterGroup objects to facilitate play...
-        Unknown unknown = new Unknown();  //  Is this even necessary? -> Sorting Unknown is done via a stream, requiring an instance of the class
+        Unknown unknown = new Unknown();  //  -> Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
         LetterGroup knownIn = new LetterGroup();
         LetterGroup knownOut = new LetterGroup();
         LetterGroup knownTogether = new LetterGroup();
@@ -34,17 +33,21 @@ public class App {
         print.Messages.play();
 
         do {
-            print.Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);           //  PRINT a report of possible determinations
-            print.Messages.results(knownTogether, unknown, Turns);                             //  PRINT the results of previous plays and determinations
+            print.Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);  //  PRINT a report of possible determinations
+            print.Messages.results(knownTogether, Turns);                             //  PRINT the results of previous plays and determinations
 
+            //  Take a turn...
             Turn turn = new Turn(read.Keyboard.guess(), read.Keyboard.responseFromOpponent());
+
+            //  Take action, based on the response...
             if(!(turn.response == 0)) Turns.add(turn);
             else AllTurns.responseOfZero(turn, knownOut, unknown, Turns, knownTogether, knownIn);
 
+            //  ANALYZE all previous guesses (now that a new guess and response are available)...
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
-            Messages.reportNumber++;                                                           //  INCREMENT the number of turns taken
-        } while (Turns.getLast().response < 5);                                                //  While the most recent response is less than 5
+            Messages.reportNumber++;                                                  //  INCREMENT the number of turns taken
+        } while (Turns.getLast().response < 5);                                       //  While the most recent response is less than 5
 
         //  **END GAME***
 //        print.Messages.endGame(guess, numTurns);  //  Once the response to the previous guess is 5...

@@ -7,7 +7,6 @@ import transactSQL.Select;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Map;
-import java.util.TreeMap;
 
 public class Messages {
 
@@ -41,8 +40,6 @@ public class Messages {
     public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, LinkedList<Turn> Turns, Unknown unknown) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
-//        assess.AllTurns.responseOfZero(Turns, knownOut, unknown);
-
         if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
         //  PRINT the LinkedHashMaps...
@@ -55,7 +52,6 @@ public class Messages {
         prettyPrintPreviousGuesses(Turns);
 
         System.out.print("There are ");
-        TreeMap<String, String> token = new TreeMap<>();  //  TOKEN map to prevent overloading
         transactSQL.Connect.watson("getNumWordsInDB", 0, 'T', 'O', 'K', 'E', 'N');
         System.out.println(" words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************\n");
@@ -80,11 +76,10 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
+    public static void results(LetterGroup knownTogether, LinkedList<Turn> Turns) {
 
         int numWordPairs;
-        System.out.println("Test OK to here?");
-        System.out.println();
+
         try {
             numWordPairs = Select.countWordPairs();
         } catch (SQLException e) {
@@ -117,10 +112,6 @@ public class Messages {
             System.out.println("Consider taking a pair of consecutive turns making these guesses:");
             Connect.watson(Unknown.printFirstEntry());
         }
-
-
-
-//  SAMPLE recursive sql select...
         System.out.println("***********************************************************************************************************************************************************************");
     }
 //  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...
