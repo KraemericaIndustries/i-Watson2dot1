@@ -2,9 +2,7 @@ package print;
 
 import dataStructures.*;
 import transactSQL.Connect;
-import transactSQL.Select;
 
-import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.TreeMap;
@@ -82,11 +80,14 @@ public class Messages {
     //  PRINT the result(s) of a given turn...
     public static void results(LetterGroup knownTogether, Unknown unknown, LinkedList<Turn> Turns) {
 
-        try {
-            int numWordPairs = Select.returnCountWordPairs();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+//        int numWordPairs;
+//        System.out.println("Test OK to here?");
+//        System.out.println();
+//        try {
+//            numWordPairs = Select.returnCountWordPairs();
+//        } catch (SQLException e) {
+//            throw new RuntimeException(e);
+//        }
 
         System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");
@@ -95,6 +96,12 @@ public class Messages {
         //  STRATEGY #1
         System.out.println("SUGGESTION:");
 
+//        if(numWordPairs < 6) {
+//            try {
+//                Select.lastNumWordPairs();
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
         if(Turns.size() <= 1) {
             System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());
             System.out.println("Consider taking a pair of consecutive turns making these guesses:");

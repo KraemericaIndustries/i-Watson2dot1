@@ -113,5 +113,15 @@ public class Select {
             }
         }
     }
+    public static void lastNumWordPairs() throws SQLException {
 
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+
+            ResultSet resultSet = transactSQL.Query.select("select * from WordPairs");
+
+            while(resultSet.next()) {
+                System.out.println(resultSet.getString(1) + ", " + resultSet.getString(2));
+            }
+        }
+    }
 }

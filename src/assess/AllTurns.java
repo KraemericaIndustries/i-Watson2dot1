@@ -52,6 +52,11 @@ public class AllTurns {
 
                 // rebuild db
                 Query.wordsFromDB();
+                try {
+                    Delete.fromWordsTbl();
+                } catch (SQLException e) {
+                    throw new RuntimeException(e);
+                }
                 Insert.reloadKnownWords();
 
                 // remove knownIn from unknown
@@ -181,6 +186,11 @@ public class AllTurns {
         //  CLEAR 'knownTogether'...
 //        knownTogether.letters.clear();
         Query.wordsFromDB();
+        try {
+            Delete.fromWordsTbl();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         Insert.reloadKnownWords();
         removeKnownInFromUnknown(knownIn);
         unknown.sort();
