@@ -53,17 +53,24 @@ public class Select {
         }
     }
 
-    public static void countWordPairs() throws SQLException {
+    public static int countWordPairs() throws SQLException {
 
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+        int numPairs = 0;
 
-            ResultSet resultSet = transactSQL.Query.select("select count (*) from WordPairs");
+        ResultSet resultSet = transactSQL.Query.select("select count (*) from WordPairs");
 
-            while(resultSet.next()) {
-                System.out.println(" > Number of word pairs in the database that differ by only 1 letter: " + ((Number) resultSet.getObject(1)).intValue() + "\n");
-            }
+        while(resultSet.next()) {
+            numPairs = ((Number) resultSet.getObject(1)).intValue();
         }
+        return numPairs;
     }
+
+
+
+
+
+
+
 
     public static int returnCountWordPairs() throws SQLException {
 

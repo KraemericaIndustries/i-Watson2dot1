@@ -23,7 +23,7 @@ public class Turn {
 
         parseGuessToCollection(guess);
 //        System.out.println("Turn Constructor original parse: " + turn);  DEBUG
-        sortTurn(turn);
+//        sortTurn(turn);
     }
     public void parseGuessToCollection(String guess) {
 

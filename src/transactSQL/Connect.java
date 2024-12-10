@@ -29,9 +29,9 @@ public class Connect {
                 case "deleteDups":
                     transactSQL.Delete.deleteDupsFromPairsTable();
                     break;
-                case "countWordPairs":
-                    transactSQL.Select.countWordPairs();
-                    break;
+//                case "countWordPairs":
+//                    transactSQL.Select.countWordPairs();
+//                    break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
             }
