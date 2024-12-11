@@ -29,6 +29,9 @@ public class App {
         unknown.sort();
         unknown.loadSortedLetters(Unknown.letters);
 
+        //  SET condition to end game play...
+//        int rs = transactSQL.Connect.watson("returnNumWordsInDB", 0, 'T', 'O', 'K', 'E', 'N');
+
         //  PLAY the game...
         print.Messages.play();
 

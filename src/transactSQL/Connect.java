@@ -2,10 +2,7 @@ package transactSQL;
 
 import dataStructures.LetterGroup;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 import static transactSQL.DatabaseConnection.*;
 
@@ -27,6 +24,10 @@ public class Connect {
                     break;
                 case "deleteDups":
                     transactSQL.Delete.deleteDupsFromPairsTable();
+                    break;
+                case "countWordPairs":
+                    int num = transactSQL.Select.countWordPairs();
+                    System.out.println(" > There are " + num + " word pairs that differ by 1 letter in the database.");
                     break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");

@@ -65,32 +65,6 @@ public class Select {
         return numPairs;
     }
 
-
-
-
-
-
-
-
-    public static int returnCountWordPairs() throws SQLException {
-
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
-
-            ResultSet resultSet = transactSQL.Query.select("select count (*) from WordPairs");
-
-            int size = 0;
-            try {
-                resultSet.last();
-                size = resultSet.getRow();
-                resultSet.beforeFirst();
-            }
-            catch(Exception ex) {
-                return 0;
-            }
-            return size;
-        }
-    }
-
     public static void wordPairsDifferByLetter(char mostCommonLetter) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {

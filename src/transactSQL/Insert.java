@@ -11,7 +11,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Insert extends DatabaseConnection{
-    static int counter;
+    static int wordCount;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
 
@@ -28,18 +28,18 @@ public class Insert extends DatabaseConnection{
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                               //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database
-                    counter = counter + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
+                    wordCount = wordCount + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
                 } catch (SQLException e) {
 //					  e.printStackTrace();
                 }
-                System.out.print("Words added: " + counter + " " + animationChars[counter % 4] + '\r');  //  println
+                System.out.print("Words added: " + wordCount + " " + animationChars[wordCount % 4] + '\r');  //  println
             }
             input.close();
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
 //			e.printStackTrace();
         }
-        System.out.println(" > Number of words successfully added to the Database: " + counter);
+        System.out.println(" > Number of words successfully added to the Database: " + wordCount);
 //  DEBUG:  Show letter counts:
 //		for(int j = 0; j <= letterCounts.length - 1; j++) {
 //			System.out.println("Letter count @ index " + j + ":" + letterCounts[j]);
@@ -68,7 +68,7 @@ public class Insert extends DatabaseConnection{
 
     public static void reloadKnownWords() {
         System.out.println("Reloading known words into the 'watson' database...");
-        counter = 0;
+        wordCount = 0;
         Unknown.letters.clear();
         try {
             File file = new File("test.txt");
@@ -80,18 +80,18 @@ public class Insert extends DatabaseConnection{
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                               //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database
-                    counter = counter + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
+                    wordCount = wordCount + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
                 } catch (SQLException e) {
 //					  e.printStackTrace();
                 }
-                System.out.print("Words added: " + counter + " " + animationChars[counter % 4] + '\r');  //  println
+                System.out.print("Words added: " + wordCount + " " + animationChars[wordCount % 4] + '\r');  //  println
             }
             input.close();
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
 //			e.printStackTrace();
         }
-        System.out.println(" > Number of words successfully added to the Database: " + counter + "\n");
+        System.out.println(" > Number of words successfully added to the Database: " + wordCount + "\n");
 //  DEBUG:  Show letter counts:
 //		for(int j = 0; j <= letterCounts.length - 1; j++) {
 //			System.out.println("Letter count @ index " + j + ":" + letterCounts[j]);
