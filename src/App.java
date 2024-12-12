@@ -1,6 +1,8 @@
 import assess.AllTurns;
 import dataStructures.*;
 import print.Messages;
+import transactSQL.Insert;
+
 import java.util.LinkedList;
 
 public class App {
@@ -29,9 +31,6 @@ public class App {
         unknown.sort();
         unknown.loadSortedLetters(Unknown.letters);
 
-        //  SET condition to end game play...
-//        int rs = transactSQL.Connect.watson("returnNumWordsInDB", 0, 'T', 'O', 'K', 'E', 'N');
-
         //  PLAY the game...
         print.Messages.play();
 
@@ -50,9 +49,9 @@ public class App {
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
             Messages.reportNumber++;                                                  //  INCREMENT the number of turns taken
-        } while (Turns.getLast().response < 5);                                       //  While the most recent response is less than 5
+        } while (Insert.wordCount > 3);                                       //  While the most recent response is less than 5
 
         //  **END GAME***
-//        print.Messages.endGame(guess, numTurns);  //  Once the response to the previous guess is 5...
+        System.out.println("Game over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");
     }
 }

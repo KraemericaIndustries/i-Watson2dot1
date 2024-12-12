@@ -11,7 +11,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Insert extends DatabaseConnection{
-    static int wordCount;
+    public static int wordCount;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
 
@@ -40,6 +40,7 @@ public class Insert extends DatabaseConnection{
 //			e.printStackTrace();
         }
         System.out.println(" > Number of words successfully added to the Database: " + wordCount);
+
 //  DEBUG:  Show letter counts:
 //		for(int j = 0; j <= letterCounts.length - 1; j++) {
 //			System.out.println("Letter count @ index " + j + ":" + letterCounts[j]);
