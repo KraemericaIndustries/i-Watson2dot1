@@ -4,9 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Query extends DatabaseConnection{
     static File file = new File("test.txt");
@@ -15,24 +13,24 @@ public class Query extends DatabaseConnection{
     /*
     https://stackoverflow.com/questions/77309450/sql-query-to-return-only-the-most-exclusive-pattern-matches-for-varchar-data-t
     */
-    public static void getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
-
-        ResultSet resultSet = transactSQL.Query.select(
-"SELECT TOP (" + numWords + ") Word " +
-          "FROM Words_tbl YT " +
-          "CROSS JOIN (VALUES('" +
-          first + "'),('" +
-          second + "'),('" +
-          third + "'),('" +
-          fourth + "'),('" +
-          fifth + "'))L(Letter) " +
-          "GROUP BY YT.Word " +
-          "ORDER BY COUNT(CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN 1 END) DESC");
-
-        while(resultSet.next()) {
-            System.out.println(resultSet.getString(1));
-        }
-    }
+//    public static void getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
+//
+//        ResultSet resultSet = transactSQL.Query.select(
+//"SELECT TOP (" + numWords + ") Word " +
+//          "FROM Words_tbl YT " +
+//          "CROSS JOIN (VALUES('" +
+//          first + "'),('" +
+//          second + "'),('" +
+//          third + "'),('" +
+//          fourth + "'),('" +
+//          fifth + "'))L(Letter) " +
+//          "GROUP BY YT.Word " +
+//          "ORDER BY COUNT(CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN 1 END) DESC");
+//
+//        while(resultSet.next()) {
+//            System.out.println(resultSet.getString(1));
+//        }
+//    }
 
     public static void getNumWordInDB() throws SQLException {
 
@@ -80,5 +78,21 @@ public class Query extends DatabaseConnection{
             e.printStackTrace();
         }
         return resultSet;
+    }
+
+    public static void runStatement(String sqlQuery) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+            try {
+                statement.executeUpdate(sqlQuery);
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

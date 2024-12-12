@@ -37,7 +37,7 @@ public class Keyboard {
                 System.out.println("HEY!  DUMMY!  Your response is " + response + ", but it MUST be 0, 1, 2, 3, 4, or 5!  Try again, moron.");
             }
         } while (response > 5 || response < 0);
-
+        // ToDo: Add logic here to handle response = 5, RATES, TEARS, STARE
         return response;
     }
 }

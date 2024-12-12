@@ -52,7 +52,7 @@ public class Messages {
         prettyPrintPreviousGuesses(Turns);
 
         System.out.print("There are ");
-        transactSQL.Connect.watson("getNumWordsInDB", 0, 'T', 'O', 'K', 'E', 'N');
+        transactSQL.Connect.watson("getNumWordsInDB");
         System.out.println(" words remaining in the database.");
         System.out.println("***********************************************************************************************************************************************************************\n");
     }

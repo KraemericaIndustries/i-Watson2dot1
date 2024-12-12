@@ -264,11 +264,7 @@ public class AllTurns {
             throw new RuntimeException(e);
         }
         //  REGENERATE the WordPairs table...
-        try {
-            Select.createPairsTable();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        transactSQL.Connect.watson("createWordPairsTable");
         //  DELETE dups from the WordPairs table...
         try {
             Delete.deleteDupsFromPairsTable();

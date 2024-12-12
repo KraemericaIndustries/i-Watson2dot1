@@ -23,9 +23,9 @@ public class App {
 
         //  SETUP: Load database tables...
         transactSQL.Insert.loadKnownWords();
-        transactSQL.Connect.watson("createWordPairsTable", 0, 'T', 'O', 'K', 'E', 'N');
-        transactSQL.Connect.watson("deleteDups", 0, 'T', 'O', 'K', 'E', 'N');
-        transactSQL.Connect.watson("countWordPairs", 0, 'T', 'O', 'K', 'E', 'N');
+        transactSQL.Connect.watson("createWordPairsTable");
+        transactSQL.Connect.watson("deleteDups");
+        transactSQL.Connect.watson("countWordPairs");
 
         //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
         unknown.sort();
@@ -49,7 +49,7 @@ public class App {
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
             Messages.reportNumber++;                                                  //  INCREMENT the number of turns taken
-        } while (Insert.wordCount > 3);                                       //  While the most recent response is less than 5
+        } while (Insert.wordCount > 3);                                               //  While the most recent response is less than 5 (ToDo: RATES, STARE, TEARS remaining?... more logic needed to anticipate this.)
 
         //  **END GAME***
         System.out.println("Game over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");

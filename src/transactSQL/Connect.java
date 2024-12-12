@@ -8,7 +8,7 @@ import static transactSQL.DatabaseConnection.*;
 
 public class Connect {
 
-    public static void watson(String reason, int numWords, char first, char second, char third, char fourth, char fifth) {
+    public static void watson(String reason) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
@@ -17,11 +17,44 @@ public class Connect {
                     transactSQL.Query.getNumWordInDB();
                     break;
                 case "createWordPairsTable":
-                    transactSQL.Select.createPairsTable();
+                    //  This query was generated with assistance from Microsoft Copilot:
+                    String wordPairsTable = "SELECT w1.word AS word1, w2.word AS word2 \n" +
+                            "INTO WordPairs FROM Words_tbl w1, Words_tbl w2 \n" +
+                            "WHERE w1.word <> w2.word \n" +
+                            "AND ( \n" +
+                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1)) \n" +
+                            "OR \n" +
+                            "\t(SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1)) \n" +
+                            "OR \n" +
+                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1)) \n" +
+                            "OR \n" +
+                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1)) \n" +
+                            "OR \n" +
+                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
+                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\n" +
+                            ");";
+
+                    System.out.println("Creating a table of word pairs that only DIFFER by 1 letter...");
+                    transactSQL.Query.runStatement(wordPairsTable);
+                    System.out.println("Finished creating WordPairs table!");
                     break;
-                case "getWords":
-                    transactSQL.Query.getWords(numWords, first, second, third, fourth, fifth);
-                    break;
+//                case "getWords":
+//                    transactSQL.Query.getWords(numWords, first, second, third, fourth, fifth);
+//                    break;
                 case "deleteDups":
                     transactSQL.Delete.deleteDupsFromPairsTable();
                     break;

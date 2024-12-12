@@ -30,41 +30,16 @@ public class Insert extends DatabaseConnection{
                     Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database
                     wordCount = wordCount + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
                 } catch (SQLException e) {
-//					  e.printStackTrace();
+					  e.printStackTrace();
                 }
                 System.out.print("Words added: " + wordCount + " " + animationChars[wordCount % 4] + '\r');  //  println
             }
             input.close();
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
-//			e.printStackTrace();
+			e.printStackTrace();
         }
         System.out.println(" > Number of words successfully added to the Database: " + wordCount);
-
-//  DEBUG:  Show letter counts:
-//		for(int j = 0; j <= letterCounts.length - 1; j++) {
-//			System.out.println("Letter count @ index " + j + ":" + letterCounts[j]);
-//		}
-//        Matrix.seedFrequency(letterCounts);
-
-//        System.out.println("Seeding letter counts into the 'watson' database...");
-//        try {
-//            conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
-//            statement = conn.createStatement();                       //  Create a SQL statement object to send to the database
-//            //  WORKS!
-//
-//            for(int i = 0; i < letterCounts.length; i++) {
-//                statement.addBatch("insert into letterCounts_tbl values ('" + (char)(i+65) + "', " + letterCounts[i] + ");");
-//            }
-//
-//            statement.executeBatch();
-//
-//        } catch (SQLException e) {
-////					  e.printStackTrace();
-//        }
-//        System.out.println(" > Seeding letter counts into the 'watson' database was Successful");
-//        System.out.println(" > 'watson' database populated!");
-//        System.out.println();
     }
 
     public static void reloadKnownWords() {
@@ -83,40 +58,15 @@ public class Insert extends DatabaseConnection{
                     Statement statement = conn.createStatement();                                                     //  Create a SQL statement object to send to the database
                     wordCount = wordCount + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
                 } catch (SQLException e) {
-//					  e.printStackTrace();
+					  e.printStackTrace();
                 }
                 System.out.print("Words added: " + wordCount + " " + animationChars[wordCount % 4] + '\r');  //  println
             }
             input.close();
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
-//			e.printStackTrace();
+			e.printStackTrace();
         }
         System.out.println(" > Number of words successfully added to the Database: " + wordCount + "\n");
-//  DEBUG:  Show letter counts:
-//		for(int j = 0; j <= letterCounts.length - 1; j++) {
-//			System.out.println("Letter count @ index " + j + ":" + letterCounts[j]);
-//		}
-//        Matrix.seedFrequency(letterCounts);
-
-//        System.out.println("Seeding letter counts into the 'watson' database...");
-//        try {
-//            conn = DriverManager.getConnection(url, user, password);  //  Establish Connection Object
-//            statement = conn.createStatement();                       //  Create a SQL statement object to send to the database
-//            //  WORKS!
-//
-//            for(int i = 0; i < letterCounts.length; i++) {
-//                statement.addBatch("insert into letterCounts_tbl values ('" + (char)(i+65) + "', " + letterCounts[i] + ");");
-//            }
-//
-//            statement.executeBatch();
-//
-//        } catch (SQLException e) {
-////					  e.printStackTrace();
-//        }
-//        System.out.println(" > Seeding letter counts into the 'watson' database was Successful");
-//        System.out.println(" > 'watson' database populated!");
-//        System.out.println();
     }
-
 }
