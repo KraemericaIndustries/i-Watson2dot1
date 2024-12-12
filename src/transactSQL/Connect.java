@@ -56,7 +56,15 @@ public class Connect {
 //                    transactSQL.Query.getWords(numWords, first, second, third, fourth, fifth);
 //                    break;
                 case "deleteDups":
-                    transactSQL.Delete.deleteDupsFromPairsTable();
+
+                    String deleteDuplicates = "DELETE a FROM WordPairs a " +
+                            "JOIN WordPairs b ON a.word1 = b.word2 " +
+                            "AND a.word2 = b.word1 " +
+                            "WHERE a.word1 < a.word2;";
+
+                    System.out.println("Deleting duplicates from the WordPairs table...");
+                    transactSQL.Query.runStatement(deleteDuplicates);
+                    System.out.println("Finished deleting duplicates from the WordPairs table!");
                     break;
                 case "countWordPairs":
                     int num = transactSQL.Select.countWordPairs();

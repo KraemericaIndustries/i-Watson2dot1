@@ -3,10 +3,7 @@ package assess;
 import dataStructures.LetterGroup;
 import dataStructures.Turn;
 import dataStructures.Unknown;
-import transactSQL.Delete;
-import transactSQL.Insert;
-import transactSQL.Query;
-import transactSQL.Select;
+import transactSQL.*;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -266,11 +263,7 @@ public class AllTurns {
         //  REGENERATE the WordPairs table...
         transactSQL.Connect.watson("createWordPairsTable");
         //  DELETE dups from the WordPairs table...
-        try {
-            Delete.deleteDupsFromPairsTable();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Connect.watson("deleteDups");
     }
 
     public static void removeStringFromAllTurns(String guess, LinkedList<Turn> Turns) {

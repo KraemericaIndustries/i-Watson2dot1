@@ -47,28 +47,6 @@ public class Delete {
         }
     }
 
-    public static void deleteDupsFromPairsTable() throws SQLException {
-
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
-        //  DEBUG:  System.out.println("Deleting DUPLICATES from WordPairs table...");
-            try {
-                //  This query was generated with assistance from Microsoft Copilot:
-                statement.executeUpdate("DELETE a FROM WordPairs a " +
-                                            "JOIN WordPairs b ON a.word1 = b.word2 " +
-                                            "AND a.word2 = b.word1 " +
-                                            "WHERE a.word1 < a.word2;"
-                );
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-            try {
-                statement.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     public static void wordsWith(String s, Unknown unknown, LetterGroup knownIn) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
