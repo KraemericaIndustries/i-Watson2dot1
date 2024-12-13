@@ -32,15 +32,6 @@ public class Query extends DatabaseConnection{
 //        }
 //    }
 
-    public static void getNumWordInDB() throws SQLException {
-
-        ResultSet resultSet = transactSQL.Query.select("select count (*) from Words_tbl");
-
-        while(resultSet.next()) {
-            System.out.print(((Number) resultSet.getObject(1)).intValue());
-        }
-    }
-
     public static void wordsFromDB() {
         System.out.println("Retrieving all remaining words from the 'watson' database...");
         int counter = 0;

@@ -50,10 +50,7 @@ public class Messages {
 
         //  PRINT all previous guesses...
         prettyPrintPreviousGuesses(Turns);
-
-        System.out.print("There are ");
-        transactSQL.Connect.watson("getNumWordsInDB");
-        System.out.println(" words remaining in the database.");
+        System.out.print("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.\n");
         System.out.println("***********************************************************************************************************************************************************************\n");
     }
 

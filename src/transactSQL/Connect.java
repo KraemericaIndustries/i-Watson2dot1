@@ -14,8 +14,14 @@ public class Connect {
 
             switch(reason) {
                 case "getNumWordsInDB":
-                    transactSQL.Query.getNumWordInDB();
-                    break;
+                    ResultSet rs1 = Query.select("select count (*) from Words_tbl");
+
+                    int numWords = 0;
+                    while(rs1.next()) {
+                        numWords += ((Number) rs1.getObject(1)).intValue();
+                    }
+
+                    return numWords;
                 case "createWordPairsTable":
                     //  This query was generated with assistance from Microsoft Copilot:
                     String wordPairsTable = "SELECT w1.word AS word1, w2.word AS word2 \n" +
@@ -68,11 +74,11 @@ public class Connect {
                     break;
                 case "countWordPairs":
 
-                    ResultSet rs = Query.select("select count (*) from WordPairs");
+                    ResultSet rs2 = Query.select("select count (*) from WordPairs");
 
                     int numPairs = 0;
-                    while(rs.next()) {
-                        numPairs += ((Number) rs.getObject(1)).intValue();
+                    while(rs2.next()) {
+                        numPairs += ((Number) rs2.getObject(1)).intValue();
                     }
 
                     return numPairs;
