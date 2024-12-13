@@ -76,7 +76,16 @@ public class Connect {
                     }
 
                     return numPairs;
-
+                case "deleteFromWordsTable":
+                    System.out.println("Deleting all words from the Words_tbl table...");
+                    Query.runStatement("delete from Words_tbl");
+                    System.out.println("Finished deleting all words from the Words_tbl table!");
+                    break;
+                case "dropWordPairsTable":
+                    System.out.println("Dropping the WordPairs table (so it can be re-created)...");
+                    Query.runStatement("DROP TABLE IF EXISTS WordPairs");
+                    System.out.println("Finished dropping the WordPairs table!");
+                    break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
             }

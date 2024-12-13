@@ -65,11 +65,7 @@ public class Delete {
             }
         }
         Query.wordsFromDB();
-        try {
-            Delete.fromWordsTbl();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Connect.watson("deleteFromWordsTable");
         Insert.reloadKnownWords();
         removeKnownInFromUnknown(knownIn);
         unknown.sort();
@@ -94,32 +90,11 @@ public class Delete {
             }
         }
         Query.wordsFromDB();
-        try {
-            Delete.fromWordsTbl();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Connect.watson("deleteFromWordsTable");
         Insert.reloadKnownWords();
         removeKnownInFromUnknown(knownIn);
         unknown.sort();
         System.out.println("Delete.wordsWith: END");
-    }
-
-    public static void dropWordPairsTable() throws SQLException {
-
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
-            //  DEBUG:  System.out.println("Deleting DUPLICATES from WordPairs table...");
-            try {
-                statement.executeUpdate("DROP TABLE IF EXISTS WordPairs");
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-            try {
-                statement.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     private static void removeKnownInFromUnknown(LetterGroup knownIn) {
@@ -130,26 +105,4 @@ public class Delete {
             Unknown.letters.remove((Character)c);
         }
     }
-
-    public static void fromWordsTbl() throws SQLException {
-
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
-            System.out.println("Deleting all words from the Words_tbl table...");
-            try {
-                statement.addBatch("delete from Words_tbl");
-
-            } catch (SQLException ex) {
-                throw new RuntimeException(ex);
-            }
-            try {
-                statement.executeBatch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        System.out.println("fromWordsTbl()");
-    }
-
-
-
 }

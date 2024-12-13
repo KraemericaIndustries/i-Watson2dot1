@@ -49,11 +49,7 @@ public class AllTurns {
 
                 // rebuild db
                 Query.wordsFromDB();
-                try {
-                    Delete.fromWordsTbl();
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
-                }
+                Connect.watson("deleteFromWordsTable");
                 Insert.reloadKnownWords();
 
                 // remove knownIn from unknown
@@ -183,11 +179,7 @@ public class AllTurns {
         //  CLEAR 'knownTogether'...
 //        knownTogether.letters.clear();
         Query.wordsFromDB();
-        try {
-            Delete.fromWordsTbl();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Connect.watson("deleteFromWordsTable");
         Insert.reloadKnownWords();
         removeKnownInFromUnknown(knownIn);
         unknown.sort();
@@ -255,13 +247,9 @@ public class AllTurns {
 
     private static void regenerateWordPairsTable() {
         //  DROP the WordPairs table...
-        try {
-            Delete.dropWordPairsTable();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Connect.watson("dropWordPairsTable");
         //  REGENERATE the WordPairs table...
-        transactSQL.Connect.watson("createWordPairsTable");
+        Connect.watson("createWordPairsTable");
         //  DELETE dups from the WordPairs table...
         Connect.watson("deleteDups");
     }
