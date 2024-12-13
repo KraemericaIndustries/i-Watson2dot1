@@ -6,18 +6,6 @@ import static transactSQL.DatabaseConnection.*;
 
 public class Select {
 
-    public static int countWordPairs() throws SQLException {
-
-        int numPairs = 0;
-
-        ResultSet resultSet = transactSQL.Query.select("select count (*) from WordPairs");
-
-        while(resultSet.next()) {
-            numPairs = ((Number) resultSet.getObject(1)).intValue();
-        }
-        return numPairs;
-    }
-
     public static void wordPairsDifferByLetter(char mostCommonLetter) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {

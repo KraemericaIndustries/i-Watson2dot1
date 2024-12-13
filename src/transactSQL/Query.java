@@ -66,7 +66,7 @@ public class Query extends DatabaseConnection{
     }
 
     //  Generic method that takes a String{} of a sql query, and returns a result...
-    public static ResultSet select(String selectQuery) {
+    public static ResultSet select(String selectQuery) throws SQLException {
 
         ResultSet resultSet = null;
 

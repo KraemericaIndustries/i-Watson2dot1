@@ -78,13 +78,8 @@ public class Messages {
     //  PRINT the result(s) of a given turn...
     public static void results(LetterGroup knownTogether, LinkedList<Turn> Turns) {
 
-        int numWordPairs;
-
-        try {
-            numWordPairs = Select.countWordPairs();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        Object z = Connect.watson("countWordPairs");
+        int numWordPairs = (int) z;
 
         System.out.println("*****************************************************************  RESULT # " + reportNumber + " *****************************************************************************************");
         System.out.println("ANALYSIS:");

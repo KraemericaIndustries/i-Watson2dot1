@@ -1,6 +1,7 @@
 import assess.AllTurns;
 import dataStructures.*;
 import print.Messages;
+import transactSQL.Connect;
 import transactSQL.Insert;
 
 import java.util.LinkedList;
@@ -25,7 +26,8 @@ public class App {
         transactSQL.Insert.loadKnownWords();
         transactSQL.Connect.watson("createWordPairsTable");
         transactSQL.Connect.watson("deleteDups");
-        transactSQL.Connect.watson("countWordPairs");
+        Object b = transactSQL.Connect.watson("countWordPairs");
+        System.out.println(" > Number of word pairs that differ by only 1 letter: " + b);
 
         //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
         unknown.sort();

@@ -8,7 +8,7 @@ import static transactSQL.DatabaseConnection.*;
 
 public class Connect {
 
-    public static void watson(String reason) {
+    public static Object watson(String reason) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
@@ -67,15 +67,23 @@ public class Connect {
                     System.out.println("Finished deleting duplicates from the WordPairs table!");
                     break;
                 case "countWordPairs":
-                    int num = transactSQL.Select.countWordPairs();
-                    System.out.println(" > There are " + num + " word pairs that differ by 1 letter in the database.");
-                    break;
+
+                    ResultSet rs = Query.select("select count (*) from WordPairs");
+
+                    int numPairs = 0;
+                    while(rs.next()) {
+                        numPairs += ((Number) rs.getObject(1)).intValue();
+                    }
+
+                    return numPairs;
+
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     public static void watson(char mostCommonLetter) {
