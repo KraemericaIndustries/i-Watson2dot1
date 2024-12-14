@@ -92,6 +92,16 @@ public class Connect {
                     Query.runStatement("DROP TABLE IF EXISTS WordPairs");
                     System.out.println("Finished dropping the WordPairs table!");
                     break;
+                case "selectAllFromWordsTable":
+                    System.out.println("Selecting all remaining words from Words_tbl...");
+
+                    ResultSet rs3 = Query.select("select * from Words_tbl");
+
+                    while(rs3.next()) {
+                        System.out.println(rs3.getString(1));
+                    }
+
+                    break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
             }

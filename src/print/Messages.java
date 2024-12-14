@@ -54,24 +54,6 @@ public class Messages {
         System.out.println("***********************************************************************************************************************************************************************\n");
     }
 
-    private static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
-        //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
-        System.out.println("Previous Guesses: ");
-
-        for(Turn t : Turns) {
-            StringBuilder test = new StringBuilder();
-            test.append(t.guess).append(" = ").append(t.response).append(".  We now know ").append(t.updatedResponse).append(" of [");
-            for (Map.Entry<Character, Integer> ite : t.turn.entrySet()) {
-                test.append(ite.getKey()).append(", ");
-            }
-
-            test.setLength(test.length() - 2);
-            test.append("] are in your opponents word.");
-            System.out.println(test);
-        }
-        System.out.println();
-    }
-
     //  PRINT the result(s) of a given turn...
     public static void results(LetterGroup knownTogether, LinkedList<Turn> Turns) {
 
@@ -106,6 +88,25 @@ public class Messages {
         }
         System.out.println("***********************************************************************************************************************************************************************");
     }
+
+    private static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
+        //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
+        System.out.println("Previous Guesses: ");
+
+        for(Turn t : Turns) {
+            StringBuilder test = new StringBuilder();
+            test.append(t.guess).append(" = ").append(t.response).append(".  We now know ").append(t.updatedResponse).append(" of [");
+            for (Map.Entry<Character, Integer> ite : t.turn.entrySet()) {
+                test.append(ite.getKey()).append(", ");
+            }
+
+            test.setLength(test.length() - 2);
+            test.append("] are in your opponents word.");
+            System.out.println(test);
+        }
+        System.out.println();
+    }
+
 //  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...
 //
 //    public static void endGame(String guess, int counter) throws SQLException {

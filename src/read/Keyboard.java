@@ -40,4 +40,22 @@ public class Keyboard {
         // ToDo: Add logic here to handle response = 5, RATES, TEARS, STARE
         return response;
     }
+
+
+    //  VERIFY last guess is opponents word...
+    public static boolean verify(String lastGuess) {
+
+        boolean guessIsWord = false;
+        String yesOrNo;
+
+        do {
+            System.out.print("\nYour last guess was " + lastGuess + ".  Is " + lastGuess + " your opponents word? ");
+            Scanner input= new Scanner(System.in);
+            yesOrNo = input.nextLine();
+            yesOrNo = yesOrNo.toUpperCase();  //  Regardless of the case in the InputStream typed at the keyboard, convert the String contents of 'guess' variable to UPPERCASE
+        } while (!(yesOrNo.equals("Y")) && !(yesOrNo.equals("N")));
+
+        if(yesOrNo.equals("Y")) guessIsWord = true;
+        return guessIsWord;
+    }
 }
