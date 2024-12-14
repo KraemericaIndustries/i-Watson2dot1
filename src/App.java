@@ -18,6 +18,8 @@ public class App {
 
         //  SETUP: Create LetterGroup objects to facilitate play...
         Unknown unknown = new Unknown();  //  -> Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
+        // Todo: Change these (eventually) to LinkedLists<> (the counts no longer matter)
+        // Will require some jiggery-pokery regarding taking keys from Unknown{}, and adding keys to LinkedLists{}
         LetterGroup knownIn = new LetterGroup();
         LetterGroup knownOut = new LetterGroup();
         LetterGroup knownTogether = new LetterGroup();
@@ -79,6 +81,7 @@ public class App {
                 break;
             } else {
                 lastWords.remove(lastGuess);
+                Messages.reportNumber++;
                 System.out.println("Here are the last remaining words in the database:\n" + lastWords);
                 System.out.println("Make a guess from the choices, above.  ");
                 lastGuess = Keyboard.guess();
@@ -87,6 +90,6 @@ public class App {
 
         System.out.println("\nGame over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");
         System.out.println("Your opponents word was: " + lastGuess);
-        System.out.println("It took you  " + (Messages.reportNumber - 1) + " turns to determine your opponents word!");
+        System.out.println("It took you " + (Messages.reportNumber) + " turns to determine your opponents word!");
     }
 }
