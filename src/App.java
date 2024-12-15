@@ -4,6 +4,10 @@ import print.Messages;
 import read.Keyboard;
 import transactSQL.*;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 
@@ -38,7 +42,7 @@ public class App {
 
         //  PLAY the game...
         String lastGuess = null;
-        boolean guessIsWord;
+        boolean guessIsWord = false;
         Messages.play();
 
         do {
@@ -72,6 +76,10 @@ public class App {
         while(rs.next()) {
             lastWords.add(rs.getString(1));
         }
+
+
+        // DB delete here
+
         System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************");
         do {
             if(lastWords.isEmpty()) break;
@@ -88,8 +96,21 @@ public class App {
             }
         } while (!(lastWords.isEmpty()));
 
-        System.out.println("\nGame over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");
-        System.out.println("Your opponents word was: " + lastGuess);
-        System.out.println("It took you " + (Messages.reportNumber) + " turns to determine your opponents word!");
+        if(guessIsWord) {
+            System.out.println("\nGame over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");
+            System.out.println("Your opponents word was: " + lastGuess);
+            System.out.println("It took you " + (Messages.reportNumber) + " turns to determine your opponents word!");
+        } else {
+            System.out.println("Ya got me!  I'm stumped (this time)!  But I'm adding your word to my database, so the next time I run I KNOW YOUR WORD!  What was your word?:");
+
+            lastGuess = Keyboard.enterGuess();
+
+            try {
+                Files.write(Paths.get("C:/Users/Bob/IdeaProjects/i-Watson2dot1/FiveLetterWords.txt"), ("\n" + lastGuess).getBytes(), StandardOpenOption.APPEND);
+            }catch (IOException e) {
+                //exception handling left as an exercise for the reader
+            }
+            System.out.println(" > Added " + lastGuess + " to the data file used to generate the watson database.");
+        }
     }
 }
