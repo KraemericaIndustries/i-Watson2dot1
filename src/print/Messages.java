@@ -107,6 +107,12 @@ public class Messages {
         System.out.println();
     }
 
+    public static void victorySummary(String lastGuess) {
+        System.out.println("\nGame over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");
+        System.out.println("Your opponents word was: " + lastGuess);
+        System.out.println("It took you " + (Messages.reportNumber) + " turns to determine your opponents word!");
+    }
+
 //  ToDo: This is permitted to linger as a reference for future (re)implementation as needed...
 //
 //    public static void endGame(String guess, int counter) throws SQLException {

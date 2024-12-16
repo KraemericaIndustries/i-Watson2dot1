@@ -59,58 +59,72 @@ public class App {
                  AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
                 break;
             } else if(!(turn.response == 0)) {
-                Turns.add(turn);
-            } else AllTurns.responseOfZero(turn, knownOut, unknown, Turns, knownTogether, knownIn);
+                 lastGuess = turn.guess;
+                 Turns.add(turn);
+            } else {
+                 lastGuess = turn.guess;
+                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns, knownTogether, knownIn);
+             }
 
             //  ANALYZE all previous guesses (now that a new guess and response are available)...
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
             Messages.reportNumber++;
+
+            int numWordPairsRemaining = (Integer) Connect.watson("countWordPairs");
+            if (numWordPairsRemaining == 0) break;
+
         } while (Insert.wordCount > 3);
 
+
+
         //  Response is 5 BUT last guess is NOT opponents word!!!
-        LinkedList<String> lastWords = new LinkedList<>();
-
-        ResultSet rs = Query.select("select * from Words_tbl where word != '" + lastGuess + "'");
-
-        while(rs.next()) {
-            lastWords.add(rs.getString(1));
-        }
-
-
-        // DB delete here
-
-        System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************");
-        do {
-            if(lastWords.isEmpty()) break;
-
-            guessIsWord = Keyboard.verify(lastGuess);
-            if(guessIsWord) {
-                break;
-            } else {
-                lastWords.remove(lastGuess);
-                Messages.reportNumber++;
-                System.out.println("Here are the last remaining words in the database:\n" + lastWords);
-                System.out.println("Make a guess from the choices, above.  ");
-                lastGuess = Keyboard.guess();
-            }
-        } while (!(lastWords.isEmpty()));
+        guessIsWord = Keyboard.verify(lastGuess);
 
         if(guessIsWord) {
-            System.out.println("\nGame over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");
-            System.out.println("Your opponents word was: " + lastGuess);
-            System.out.println("It took you " + (Messages.reportNumber) + " turns to determine your opponents word!");
+            Messages.victorySummary(lastGuess);
         } else {
-            System.out.println("Ya got me!  I'm stumped (this time)!  But I'm adding your word to my database, so the next time I run I KNOW YOUR WORD!  What was your word?:");
 
-            lastGuess = Keyboard.enterGuess();
+            LinkedList<String> lastWords = new LinkedList<>();
 
-            try {
-                Files.write(Paths.get("C:/Users/Bob/IdeaProjects/i-Watson2dot1/FiveLetterWords.txt"), ("\n" + lastGuess).getBytes(), StandardOpenOption.APPEND);
-            }catch (IOException e) {
-                //exception handling left as an exercise for the reader
+            ResultSet rs = Query.select("select * from Words_tbl where word != '" + lastGuess + "'");
+
+            while(rs.next()) {
+                lastWords.add(rs.getString(1));
             }
-            System.out.println(" > Added " + lastGuess + " to the data file used to generate the watson database.");
+
+            Connect.watson("deleteFromWordsTable");
+
+            System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************");
+            do {
+                if(lastWords.isEmpty()) break;
+
+                guessIsWord = Keyboard.verify(lastGuess);
+                if(guessIsWord) {
+                    break;
+                } else {
+                    lastWords.remove(lastGuess);
+                    Messages.reportNumber++;
+                    System.out.println("Here are the last remaining words in the database:\n" + lastWords);
+                    System.out.println("Make a guess from the choices, above.  ");
+                    lastGuess = Keyboard.guess();
+                }
+            } while (!(lastWords.isEmpty()));
+
+            if(guessIsWord) {
+                Messages.victorySummary(lastGuess);
+            } else {
+                System.out.println("Ya got me!  I'm stumped (this time)!  But I'm adding your word to my database, so the next time I run I KNOW YOUR WORD!  What was your word?:");
+
+                lastGuess = Keyboard.enterGuess();
+
+                try {
+                    Files.write(Paths.get("C:/Users/Bob/IdeaProjects/i-Watson2dot1/FiveLetterWords.txt"), ("\n" + lastGuess).getBytes(), StandardOpenOption.APPEND);
+                }catch (IOException e) {
+                    //exception handling left as an exercise for the reader
+                }
+                System.out.println(" > Added " + lastGuess + " to the data file used to generate the watson database.");
+            }
         }
     }
 }
