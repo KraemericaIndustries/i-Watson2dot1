@@ -37,10 +37,8 @@ public class Keyboard {
                 System.out.println("HEY!  DUMMY!  Your response is " + response + ", but it MUST be 0, 1, 2, 3, 4, or 5!  Try again, moron.");
             }
         } while (response > 5 || response < 0);
-        // ToDo: Add logic here to handle response = 5, RATES, TEARS, STARE
         return response;
     }
-
 
     //  VERIFY last guess is opponents word...
     public static boolean verify(String lastGuess) {
@@ -59,7 +57,8 @@ public class Keyboard {
         return guessIsWord;
     }
 
-    public static String enterGuess() {
+    //  The opponents word is not in the database.  Enter it for inclusion during subsequent plays...
+    public static String enterUnknownWord() {
         //  System.out.println("Entering 'IO.Turn.enterInfo()' method...");  //  DEBUG
         Scanner input= new Scanner(System.in);
         String capture = input.nextLine();

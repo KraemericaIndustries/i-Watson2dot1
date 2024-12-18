@@ -9,6 +9,7 @@ public class Create extends DatabaseConnection{
     //  CREATE to watson DB...
     public static void watsonDB() throws Exception {
         System.out.println("Preparing to create the watson database...");
+
         //  RESTART the mssqlserver service (to assure there is no other process accessing the DB)
         System.out.println("Restarting the MSSQLSERVER Service (to ensure individual access to the database)...");
         ProcessBuilder builder = new ProcessBuilder("cmd.exe", "/c", "net stop mssqlserver && ping 127.0.0.1 -n 2 > nul && net start mssqlserver");

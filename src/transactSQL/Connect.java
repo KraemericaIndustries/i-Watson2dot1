@@ -1,13 +1,15 @@
 package transactSQL;
 
-import dataStructures.LetterGroup;
-
 import java.sql.*;
+import java.util.Set;
 
 import static transactSQL.DatabaseConnection.*;
 
+//  IDEALLY all database interactions are accomplished through a single class (this one)
+//  PARAMETERIZED database invocations are found in OVERLOADED methods in this class
 public class Connect {
 
+    //  The VAST MAJORITY of database invocations (primarily NOT requiring a return) are handled through this method - switching on the reason for the requested connection...
     public static Object watson(String reason) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
@@ -102,6 +104,16 @@ public class Connect {
                     }
 
                     break;
+                case "queryWordPairsByKnownTogether":
+                    System.out.println("Selecting all remaining words from Words_tbl...");
+
+                    ResultSet rs4 = Query.select("select * from Words_tbl");
+
+                    while(rs4.next()) {
+                        System.out.println(rs4.getString(1));
+                    }
+
+                    break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
             }
@@ -111,6 +123,7 @@ public class Connect {
         return null;
     }
 
+    //  QUERY the WordPairs table for any pairs that differ by the most commonly occurring letter in the database...
     public static void watson(char mostCommonLetter) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
@@ -122,13 +135,33 @@ public class Connect {
         }
     }
 
-    public static void watson(LetterGroup knownTogether) {
+    //  In the event letters are known to be together, make a determination by leveraging the WordPairs table...
+    public static void watson(Set<Character> knownTogether) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
-            knownTogether.keySetToArray();
+            StringBuilder sb = new StringBuilder();
 
-            transactSQL.Select.wordsContainingTwoLetters((Character) knownTogether.elements[0], (Character) knownTogether.elements[1]);
+            sb.append("SELECT TOP (5) Word " +
+                    "FROM Words_tbl YT " +
+                    "CROSS JOIN (VALUES('");
+            for(Character c : knownTogether) {
+                sb.append(c).append("'),('");
+            }
+            String query = sb.substring(0, sb.length() - 3) +  //  Strip the last 3 characters
+            ")L(Letter)" +
+            "GROUP BY YT.Word " +
+            "ORDER BY COUNT(" +
+            "CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN " +
+            "1 " +
+            "END) " +
+            "DESC";
+
+            ResultSet rs5 = Query.select(query);
+
+            while(rs5.next()) {
+                System.out.println(rs5.getString(1));
+            }
 
         } catch (SQLException e) {
             e.printStackTrace();

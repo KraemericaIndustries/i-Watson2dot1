@@ -5,8 +5,7 @@ import transactSQL.Connect;
 import transactSQL.Select;
 
 import java.sql.SQLException;
-import java.util.LinkedList;
-import java.util.Map;
+import java.util.*;
 
 public class Messages {
 
@@ -14,7 +13,7 @@ public class Messages {
 
     //  Introduce the game, and how it is played...
     public static void welcome() {
-
+        //  ToDo: Convert to string block:
         System.out.println("*****************************************************************  WELCOME  *******************************************************************************************");
         System.out.println("""
                 Welcome to the Word Guessing Game Helper!
@@ -31,21 +30,22 @@ public class Messages {
 
     //  START the game...
     public static void play() {
+        //  ToDo: Convert to string block:
         System.out.println("*****************************************************************  THE GAME  ******************************************************************************************");
         System.out.println("Let's play!!!");
         System.out.println("***********************************************************************************************************************************************************************\n");
     }
 
     //  PRINT a report...
-    public static void report(LetterGroup knownIn, LetterGroup knownOut, LetterGroup knownTogether, LinkedList<Turn> Turns, Unknown unknown) {
+    public static void report(Set<Character> knownIn, Set<Character> knownOut, Set<Character> knownTogether, LinkedList<Turn> Turns, Unknown unknown) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
-        if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
+    //  if(Turns.size() >= 2) assess.AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
 
-        //  PRINT the LinkedHashMaps...
-        System.out.println("Known IN: " + knownIn.letters);
-        System.out.println("Known OUT: " + knownOut.letters);
-        System.out.println("Known TOGETHER: " + knownTogether.letters);
+    //  PRINT the LinkedHashMaps...
+        System.out.println("Known IN: " + knownIn);
+        System.out.println("Known OUT: " + knownOut);
+        System.out.println("Known TOGETHER: " + knownTogether);
         System.out.println("Unknown: " + Unknown.letters + "\n");
 
         //  PRINT all previous guesses...
@@ -55,7 +55,7 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(LetterGroup knownTogether, LinkedList<Turn> Turns) {
+    public static void results(Set<Character> knownTogether, LinkedList<Turn> Turns) {
 
         Object z = Connect.watson("countWordPairs");
         int numWordPairs = (int) z;
@@ -77,7 +77,7 @@ public class Messages {
             System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());
             System.out.println("Consider taking a pair of consecutive turns making these guesses:");
             Connect.watson(Unknown.printFirstEntry());
-        } else if(!knownTogether.letters.isEmpty()) {
+        } else if(!knownTogether.isEmpty()) {
             System.out.println("Try to make a determination on letters known to be together.");
             System.out.println("Consider a turn making any of these guesses:");
             Connect.watson(knownTogether);
@@ -89,24 +89,24 @@ public class Messages {
         System.out.println("***********************************************************************************************************************************************************************");
     }
 
+    //  PRETTY-PRINT the original and updated previous turns taken...
     private static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
+
         //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
+        System.out.println("print.Messages.prettyPrintPreviousGuesses(): BEGIN");
+
         System.out.println("Previous Guesses: ");
 
         for(Turn t : Turns) {
             StringBuilder test = new StringBuilder();
-            test.append(t.guess).append(" = ").append(t.response).append(".  We now know ").append(t.updatedResponse).append(" of [");
-            for (Map.Entry<Character, Integer> ite : t.turn.entrySet()) {
-                test.append(ite.getKey()).append(", ");
-            }
-
-            test.setLength(test.length() - 2);
-            test.append("] are in your opponents word.");
+            test.append(t.guess).append(" = ").append(t.response).append(".  We now know ").append(t.updatedResponse).append(" of [").append(t.updatedGuess).append("] are in your opponents word.");
             System.out.println(test);
         }
         System.out.println();
+        System.out.println("print.Messages.prettyPrintPreviousGuesses(): END");
     }
 
+    //  SUCCESS!  The opponents word has been determined...
     public static void victorySummary(String lastGuess) {
         System.out.println("\nGame over man!!!  The opponents word was determined in " + (Messages.reportNumber - 1) + " turns!");
         System.out.println("Your opponents word was: " + lastGuess);
@@ -208,4 +208,5 @@ public class Messages {
 //        }
 //        System.out.println(" > Added " + guess + " to the data file used to generate the watson database.");
 //    }
+
 }

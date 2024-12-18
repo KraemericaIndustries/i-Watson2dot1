@@ -1,18 +1,20 @@
 package transactSQL;
 
-import dataStructures.LetterGroup;
 import dataStructures.Unknown;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 import static transactSQL.DatabaseConnection.*;
 
 public class Delete {
 
+    //  DELETE words containing a given letter from the database...
     public static void wordsWith(char c) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
@@ -30,6 +32,7 @@ public class Delete {
         }
     }
 
+    //  DELETE words NOT containing a given letter from the database...
     public static void wordsWithout(char c) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
@@ -47,7 +50,8 @@ public class Delete {
         }
     }
 
-    public static void wordsWith(String s, Unknown unknown, LetterGroup knownIn) throws SQLException {
+    //  DELETE all words containing EVERY LETTER in a String, and UPDATE ALL data sources...
+    public static void wordsWith(String s, Unknown unknown, Set<Character> knownIn) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words containing '" + s + "' from the database...");
@@ -72,7 +76,10 @@ public class Delete {
         System.out.println("Delete.wordsWith: END");
     }
 
-    public static void wordsWithout(String s, Unknown unknown, LetterGroup knownIn) throws SQLException {
+    //  DELETE letters in the provided String from the database.  Rebuild data sources...
+    public static void wordsWithout(String s, Unknown unknown, Set<Character> knownIn) throws SQLException {
+
+        System.out.println("transactSQL.Delete.wordsWithout(): BEGIN");
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words NOT containing '" + s + "' from the database...");
@@ -94,15 +101,15 @@ public class Delete {
         Insert.reloadKnownWords();
         removeKnownInFromUnknown(knownIn);
         unknown.sort();
-        System.out.println("Delete.wordsWith: END");
+
+        System.out.println("transactSQL.Delete.wordsWithout(): END");
     }
 
-    private static void removeKnownInFromUnknown(LetterGroup knownIn) {
-        Object[] letters;
-        Set<Character> letterKeys = knownIn.letters.keySet();
-        letters = letterKeys.toArray();
-        for(Object c : letters) {
-            Unknown.letters.remove((Character)c);
+    //  Following each REBUILD of the database, all letters KNOWN IN must be REMOVED from the list of UNKNOWN letters
+    private static void removeKnownInFromUnknown(Set<Character> knownIn) {
+
+        for(Character c : knownIn) {
+            Unknown.letters.remove(c);
         }
     }
 }

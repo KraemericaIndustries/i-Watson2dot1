@@ -9,7 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.ResultSet;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Set;
 
 public class App {
 
@@ -20,13 +22,13 @@ public class App {
         DatabaseConnection.getProperties();
         Create.watsonDB();
 
-        //  SETUP: Create LetterGroup objects to facilitate play...
-        Unknown unknown = new Unknown();  //  -> Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
-        // Todo: Change these (eventually) to LinkedLists<> (the counts no longer matter)
-        // Will require some jiggery-pokery regarding taking keys from Unknown{}, and adding keys to LinkedLists{}
-        LetterGroup knownIn = new LetterGroup();
-        LetterGroup knownOut = new LetterGroup();
-        LetterGroup knownTogether = new LetterGroup();
+        //  SETUP: Create datastore objects to facilitate play...
+        Unknown unknown = new Unknown();  //  <- Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
+//        LinkedList<Character> knownIn = new LinkedList<>();
+        Set<Character> knownIn = new HashSet<>();
+//        LinkedList<Character> knownOut = new LinkedList<>();
+        Set<Character> knownOut = new HashSet<>();
+        Set<Character> knownTogether = new HashSet<>();
         LinkedList<Turn> Turns = new LinkedList<>();
 
         //  SETUP: Load database tables...
@@ -49,8 +51,7 @@ public class App {
             Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);  //  PRINT a report of possible determinations
             Messages.results(knownTogether, Turns);                             //  PRINT the results of previous plays and determinations
 
-            //  Take a turn...
-            Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());
+            Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
 
             //  Take action, based on the response...
              if(turn.response == 5) {
@@ -66,8 +67,7 @@ public class App {
                  AllTurns.responseOfZero(turn, knownOut, unknown, Turns, knownTogether, knownIn);
              }
 
-            //  ANALYZE all previous guesses (now that a new guess and response are available)...
-            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
+            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)
 
             Messages.reportNumber++;
 
@@ -75,8 +75,6 @@ public class App {
             if (numWordPairsRemaining == 0) break;
 
         } while (Insert.wordCount > 3);
-
-
 
         //  Response is 5 BUT last guess is NOT opponents word!!!
         guessIsWord = Keyboard.verify(lastGuess);
@@ -116,7 +114,7 @@ public class App {
             } else {
                 System.out.println("Ya got me!  I'm stumped (this time)!  But I'm adding your word to my database, so the next time I run I KNOW YOUR WORD!  What was your word?:");
 
-                lastGuess = Keyboard.enterGuess();
+                lastGuess = Keyboard.enterUnknownWord();
 
                 try {
                     Files.write(Paths.get("C:/Users/Bob/IdeaProjects/i-Watson2dot1/FiveLetterWords.txt"), ("\n" + lastGuess).getBytes(), StandardOpenOption.APPEND);

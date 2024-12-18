@@ -12,6 +12,7 @@ import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Insert extends DatabaseConnection{
+
     public static int wordCount;
     static String line;
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
@@ -43,6 +44,7 @@ public class Insert extends DatabaseConnection{
         System.out.println(" > Number of words successfully added to the Database: " + wordCount);
     }
 
+    //  RE-LOAD the database with words previously exported to the test.txt file...
     public static void reloadKnownWords() {
         System.out.println("Reloading known words into the 'watson' database...");
         wordCount = 0;

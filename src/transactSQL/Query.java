@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.sql.*;
 
 public class Query extends DatabaseConnection{
-    static File file = new File("test.txt");
 
     //  QUERY the DB for numWords with the first through fifth MOST COMMON letters, to use as a guess...
     /*
@@ -32,7 +31,11 @@ public class Query extends DatabaseConnection{
 //        }
 //    }
 
+    //  QUERY remaining words in the database out to a file (so that remaining letter counts may be re-generated upon re-entry)...
     public static void wordsFromDB() {
+
+        File file = new File("test.txt");
+
         System.out.println("Retrieving all remaining words from the 'watson' database...");
         int counter = 0;
         try {
@@ -56,7 +59,7 @@ public class Query extends DatabaseConnection{
         System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
     }
 
-    //  Generic method that takes a String{} of a sql query, and returns a result...
+    //  Generic method that takes a String{} of a sql query, and returns a ResultSet handled following invocation...
     public static ResultSet select(String selectQuery) throws SQLException {
 
         ResultSet resultSet = null;
@@ -71,6 +74,7 @@ public class Query extends DatabaseConnection{
         return resultSet;
     }
 
+    //  Generic method that accepts a SQL query as a parameter...
     public static void runStatement(String sqlQuery) throws SQLException {
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
