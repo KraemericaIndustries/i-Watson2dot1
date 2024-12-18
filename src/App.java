@@ -97,15 +97,17 @@ public class App {
             do {
                 if(lastWords.isEmpty()) break;
 
-                guessIsWord = Keyboard.verify(lastGuess);
+//                guessIsWord = Keyboard.verify(lastGuess);
                 if(guessIsWord) {
                     break;
                 } else {
-                    lastWords.remove(lastGuess);
+
                     Messages.reportNumber++;
                     System.out.println("Here are the last remaining words in the database:\n" + lastWords);
                     System.out.println("Make a guess from the choices, above.  ");
                     lastGuess = Keyboard.guess();
+                    guessIsWord = Keyboard.verify(lastGuess);
+                    lastWords.remove(lastGuess);
                 }
             } while (!(lastWords.isEmpty()));
 
