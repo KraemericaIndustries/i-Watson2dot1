@@ -15,8 +15,24 @@ public class AllTurns {
         System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
 
         if(!knownTogether.isEmpty()) {
+
+            boolean knownTogetherInKnownIn = false;
+
+            for (Character c : knownTogether) {
+                if(knownIn.contains(c)) {
+                    knownTogetherInKnownIn = true;
+                }
+            }
+
+            if(knownTogetherInKnownIn) {
+                knownIn.addAll(knownTogether);
+                AllTurns.updateDataSources(Turns, knownIn, unknown);
+                knownTogether.clear();
+            }
+
             //  CHECK remaining letters of most recent turn against letters knownTogether.  IF the updatedResponse < knownTogether.size, knownTogether is KNOWN OUT...
-            checkLastTurnAgainstKnownTogether(Turns, knownTogether, unknown);
+            checkLastTurnAgainstKnownTogether(Turns, knownTogether, unknown, knownIn);
+            //ToDo include check here for if nIN.contains(kT), then all kT is IN + update all data sources
         }
 
         //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
@@ -29,6 +45,9 @@ public class AllTurns {
 
     //  COMPARE each updated turn against each other...
     private static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Set<Character> knownTogether, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
+
+
+        removeDeterminedLettersFromAllTurns(Turns, knownIn, knownOut);
 
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): BEGIN");
 
@@ -68,7 +87,7 @@ public class AllTurns {
                     if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {              //  AND IF Only 1 letter has changed between turns...
                         System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1:");
                         System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedFrom + " is KNOWN IN, and " + letterChangedTo + " is KNOWN OUT.  Updating all data sources...\n");
-                        updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
+                        updateDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
                     } else {
                         System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                     }
@@ -77,7 +96,7 @@ public class AllTurns {
                     if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {               //  AND IF Only 1 letter has changed between turns...
                         System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = -1:");
                         System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedTo + " is KNOWN IN, and " + letterChangedFrom + " is KNOWN OUT.  Updating all data sources...\n");
-                        updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
+                        updateDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
                     } else {
                         System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                     }
@@ -87,6 +106,25 @@ public class AllTurns {
             letterChangedTo.clear();
         }
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): END");
+    }
+
+    private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut) {
+        for(Character c : knownIn) {  //  walks knownIn
+            for(Turn t : Turns) {  // walks a turn
+                if(t.turn.contains(c)) {
+                    t.turn.remove(c);
+                    t.updatedResponse -= 1;
+                }
+                t.parseCollectionToString();
+            }
+        }
+
+        for(Character c : knownOut) {  //  walks knownIn
+            for(Turn t : Turns) {  // walks a turn
+                t.turn.remove(c);
+                t.parseCollectionToString();
+            }
+        }
     }
 
     //  FOR any turn where size = updatedResponse, ALL letters in the updatedGuess are KNOWN IN
@@ -143,9 +181,12 @@ public class AllTurns {
     }
 
     //  Once a DETERMINATION on two letters has been made, UPDATE all data sources accordingly...
-    private static void updateAllDataSources(LinkedList<Turn> Turns, Set<Character> knownTogether, Set<Character> knownIn, Set<Character> knownOut, ArrayList<Character> letterChangedFrom, ArrayList<Character> letterChangedTo, Unknown unknown) {
+    //  ToDo FIX PARAMETER HELL!!! I can't use this when checking if(knownTogether.contains(knownIn)) due to absent letterChanged params
+    //  I will overload updateAllDataSources (for now) but this may be a candidate to be torn down
+    //  Refactor updateAllDataSources to updateDataSources, and overload updateDataSources for if(knownTogether.contains(knownIn))
+    private static void updateDataSources(LinkedList<Turn> Turns, Set<Character> knownTogether, Set<Character> knownIn, Set<Character> knownOut, ArrayList<Character> letterChangedFrom, ArrayList<Character> letterChangedTo, Unknown unknown) {
 
-        System.out.println("assess.AllTurns.updateAllDataSources(): BEGIN");
+        System.out.println("assess.AllTurns.updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown): BEGIN");
 
         knownIn.addAll(letterChangedFrom);
         knownOut.addAll(letterChangedTo);
@@ -161,10 +202,11 @@ public class AllTurns {
 
             for(Turn t : Turns) {
                 t.turn.remove(c);
+                t.parseCollectionToString();
             }
 
             try {
-                Delete.wordsWith(c);
+                Delete.wordsWith(String.valueOf(c), unknown, knownOut);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -180,11 +222,12 @@ public class AllTurns {
                 if(t.turn.contains(c)) {
                     t.turn.remove(c);
                     t.updatedResponse--;
+                    t.parseCollectionToString();
                 }
             }
 
             try {
-                Delete.wordsWithout(c);
+                Delete.wordsWithout(String.valueOf(c), unknown, knownIn);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -197,7 +240,40 @@ public class AllTurns {
         Insert.reloadKnownWords();
         removeKnownInFromUnknown(knownIn);
         unknown.sort();
+        regenerateWordPairsTable();
+        System.out.println("assess.AllTurns.updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown): END");
+    }
 
+    public static void updateDataSources(LinkedList<Turn> Turns, Set<Character> knownIn, Unknown unknown) {
+
+        System.out.println("assess.AllTurns.updateDataSources(): BEGIN");
+
+        for(Character c: knownIn) {
+            Unknown.letters.remove(c);
+
+            for(Turn t : Turns) {
+                if(t.turn.contains(c)) {
+                    t.turn.remove(c);
+                    t.updatedResponse--;
+                    t.parseCollectionToString();
+                }
+            }
+
+            try {
+                Delete.wordsWithout(String.valueOf(c), unknown, knownIn);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+
+        }
+        //  CLEAR 'knownTogether'...
+//        knownTogether.letters.clear();
+        Query.wordsFromDB();
+        Connect.watson("deleteFromWordsTable");
+        Insert.reloadKnownWords();
+        removeKnownInFromUnknown(knownIn);
+        unknown.sort();
+        regenerateWordPairsTable();
         System.out.println("assess.AllTurns.updateAllDataSources(): END");
     }
 
@@ -326,7 +402,7 @@ public class AllTurns {
     }
 
     //  CHECK remaining letters of most recent turn against letters knownTogether.  IF the updatedResponse < knownTogether.size, knownTogether is KNOWN OUT...
-    private static void checkLastTurnAgainstKnownTogether(LinkedList<Turn> turns, Set<Character> knownTogether, Unknown unknown) {
+    private static void checkLastTurnAgainstKnownTogether(LinkedList<Turn> turns, Set<Character> knownTogether, Unknown unknown, Set<Character> knownIn) {
 
         System.out.println("assess.AllTurns.checkLastTurnAgainstKnownTogether(): BEGIN");
 
@@ -335,7 +411,7 @@ public class AllTurns {
 
                 try {
                     for (Character c: knownTogether) {
-                        Delete.wordsWith(c);
+                        Delete.wordsWith(String.valueOf(c), unknown, knownIn);
                     }
                     //                    Delete.wordsWith();
                 } catch (SQLException e) {

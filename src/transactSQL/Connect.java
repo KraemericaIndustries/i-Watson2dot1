@@ -1,6 +1,10 @@
 package transactSQL;
 
+import dataStructures.Unknown;
+
 import java.sql.*;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 import static transactSQL.DatabaseConnection.*;
@@ -161,6 +165,57 @@ public class Connect {
 
             while(rs5.next()) {
                 System.out.println(rs5.getString(1));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*
+    Using this reference:
+    https://www.geeksforgeeks.org/how-to-iterate-linkedhashmap-in-java/
+    Pull the TOP FIVE letters remaining in the database that are UNKNOWN
+    The Unknown object passed by a parameter is backed by a LinkedHashMap which is ALREADY SORTED!
+    */
+    public static void watson(Unknown unknown) throws SQLException {
+
+        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
+
+            Character[] fiveMostCommonLetters = new Character[5];  //  DECLARE an array to hold the desired number (5) of keys from the LinkedHashMap
+
+            Set<Map.Entry<Character, Integer>> entrySet = Unknown.letters.entrySet();  // Get a set of all the entries (key - value pairs) contained in the LinkedHashMap
+
+            Iterator<Map.Entry<Character, Integer>> it = entrySet.iterator();  // Obtain an Iterator for the entries Set
+
+            // Iterate through LinkedHashMap entries
+            int i = 0;  //  Set an index to break out of the 'while=hasNext' loop once the desired number of keys is retrieved
+
+            while (it.hasNext()) {
+                fiveMostCommonLetters[i] = it.next().getKey();
+                i++;
+                if(i == 5) break;
+            }
+
+            String query = "SELECT TOP (5) word1, word2 " +
+                    "FROM WordPairs YT " +
+                    "CROSS JOIN (VALUES('" +
+                    fiveMostCommonLetters[0] + "'),('" +
+                    fiveMostCommonLetters[1] + "'),('" +
+                    fiveMostCommonLetters[2] + "'),('" +
+                    fiveMostCommonLetters[3] + "'),('" +
+                    fiveMostCommonLetters[4] + "'))L(Letter) " +
+                    "GROUP BY YT.word1, word2 " +
+                    "ORDER BY COUNT(" +
+                        "CASE WHEN YT.word1 LIKE '%' + L.Letter + '%' THEN " +
+                            "1 " +
+                        "END) " +
+                    "DESC";
+
+            ResultSet rs6 = Query.select(query);
+
+            while(rs6.next()) {
+                System.out.println(rs6.getString(1) + ", " + rs6.getString(2));
             }
 
         } catch (SQLException e) {

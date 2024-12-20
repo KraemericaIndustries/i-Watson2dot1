@@ -1,5 +1,6 @@
 package print;
 
+import assess.AllTurns;
 import dataStructures.*;
 import transactSQL.Connect;
 import transactSQL.Select;
@@ -50,12 +51,18 @@ public class Messages {
 
         //  PRINT all previous guesses...
         prettyPrintPreviousGuesses(Turns);
-        System.out.print("There are " + transactSQL.Connect.watson("getNumWordsInDB") + " words remaining in the database.\n");
+
+        //  GET counts from database table to furnish report, and drive logic...
+        int numWords = (int) Connect.watson("getNumWordsInDB");
+        int numWordPairs = (int) Connect.watson("countWordPairs");
+
+        System.out.print("There are " + numWords + " words remaining in the database.\n");
+        System.out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
         System.out.println("***********************************************************************************************************************************************************************\n");
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(Set<Character> knownTogether, LinkedList<Turn> Turns) {
+    public static void results(Set<Character> knownTogether, LinkedList<Turn> Turns, Unknown unknown) throws SQLException {
 
         Object z = Connect.watson("countWordPairs");
         int numWordPairs = (int) z;
@@ -68,20 +75,24 @@ public class Messages {
         System.out.println("SUGGESTION:");
 
         if(!knownTogether.isEmpty()) {
+            System.out.println("Condition: !knownTogether.isEmpty()");
             System.out.println("Try to make a determination on letters known to be together.");
             System.out.println("Consider a turn making any of these guesses:");
-            Connect.watson(knownTogether);
+            Connect.watson(unknown);
         } else if(numWordPairs < 6) {
+            System.out.println("Condition: numWordPairs < 6");
             try {
                 Select.lastNumWordPairs();
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
         } else if(Turns.size() <= 1) {
+            System.out.println("Condition: Turns.size() <= 1");
             System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());
             System.out.println("Consider taking a pair of consecutive turns making these guesses:");
-            Connect.watson(Unknown.printFirstEntry());
+            Connect.watson(unknown);
         } else {
+            System.out.println("Condition: else");
             System.out.println("Consider taking a pair of consecutive turns making these guesses:");
             Connect.watson(Unknown.printFirstEntry());
         }

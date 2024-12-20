@@ -35,8 +35,6 @@ public class App {
         Insert.loadKnownWords();
         Connect.watson("createWordPairsTable");
         Connect.watson("deleteDups");
-        Object b = Connect.watson("countWordPairs");
-        System.out.println(" > Number of word pairs that differ by only 1 letter: " + b);
 
         //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
         unknown.sort();
@@ -49,7 +47,7 @@ public class App {
 
         do {
             Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);  //  PRINT a report of possible determinations
-            Messages.results(knownTogether, Turns);                             //  PRINT the results of previous plays and determinations
+            Messages.results(knownTogether, Turns, unknown);                             //  PRINT the results of previous plays and determinations
 
             Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
 
