@@ -78,7 +78,7 @@ public class Messages {
             System.out.println("Condition: !knownTogether.isEmpty()");
             System.out.println("Try to make a determination on letters known to be together.");
             System.out.println("Consider a turn making any of these guesses:");
-            Connect.watson(unknown);
+            Connect.watson(knownTogether);
         } else if(numWordPairs < 6) {
             System.out.println("Condition: numWordPairs < 6");
             try {
