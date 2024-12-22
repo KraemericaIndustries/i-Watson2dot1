@@ -1,5 +1,6 @@
 package assess;
 
+import dataStructures.Pairs;
 import dataStructures.Turn;
 import dataStructures.Unknown;
 import transactSQL.*;
@@ -10,41 +11,46 @@ import java.util.*;
 public class AllTurns {
 
     //  MAKE all possible determinations on ALL previous turns taken...
-    public static void makeDeterminations(LinkedList<Turn> Turns, Set<Character> knownTogether, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
+    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
 
         System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
 
-        if(!knownTogether.isEmpty()) {
-
-            boolean knownTogetherInKnownIn = false;
-
-            for (Character c : knownTogether) {
-                if(knownIn.contains(c)) {
-                    knownTogetherInKnownIn = true;
-                }
-            }
-
-            if(knownTogetherInKnownIn) {
-                knownIn.addAll(knownTogether);
-                AllTurns.updateDataSources(Turns, knownIn, unknown);
-                knownTogether.clear();
-            }
-
-            //  CHECK remaining letters of most recent turn against letters knownTogether.  IF the updatedResponse < knownTogether.size, knownTogether is KNOWN OUT...
-            checkLastTurnAgainstKnownTogether(Turns, knownTogether, unknown, knownIn);
-            //ToDo include check here for if nIN.contains(kT), then all kT is IN + update all data sources
+        //  Checks if any one knownTogether pair is knownIn, if yes, the other must be knownIn (because we only process turns where the response varies by 1)
+        if(!pairs.knownTogether.isEmpty()) {
+            pairs.checkPairsForKnownIn(knownIn, unknown);
+            pairs.checkPairsForKnownOut(knownOut, unknown);
+            updateAllTurns(Turns, knownIn, knownOut);
         }
 
         //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
         checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
 
         //  COMPARE each (updated) turn against each other...
-        compareAllTurnsAgainstEachOther(Turns, knownTogether, knownIn, knownOut, unknown);
+        compareAllTurnsAgainstEachOther(Turns, pairs, knownIn, knownOut, unknown);
         System.out.println("assess.AllTurns.makeDeterminations: END");
     }
 
+    private static void updateAllTurns(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut) {
+        for (Turn t : Turns) {  //  FOR every turn in Turns
+            for (Character c : knownIn) {  //  FOR every character in knownIn
+                if(t.turn.contains(c)) {  //  IF the turn contains the character
+                    t.turn.remove(c);  //  REMOVE the character from the turn
+                    t.updatedResponse -= 1;  //  DECREMENT the updatedResponse
+                }
+            }
+            t.parseCollectionToString();  //  PARSE the collection back to a String
+        }
+
+        for (Turn t : Turns) {  //  FOR every turn in Turns
+            for (Character c : knownOut) {  //  FOR every character in knownIn
+                t.turn.remove(c);  //  REMOVE the character from the turn
+            }
+            t.parseCollectionToString();  //  PARSE the collection back to a String
+        }
+    }
+
     //  COMPARE each updated turn against each other...
-    private static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Set<Character> knownTogether, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
+    private static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
 
 
         removeDeterminedLettersFromAllTurns(Turns, knownIn, knownOut);
@@ -82,8 +88,13 @@ public class AllTurns {
                         if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {  //  AND IF Only 1 letter has changed between turns...
                             System.out.println("    Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
                             System.out.println("    We now know that " + letterChangedTo + " and " + letterChangedFrom + " are either both IN, or both OUT (but cannot be sure which is the case).\n");
-                            knownTogether.addAll(letterChangedFrom);
-                            knownTogether.addAll(letterChangedTo);
+//                            knownTogether.addAll(letterChangedFrom);
+//                            knownTogether.addAll(letterChangedTo);
+
+                            pairs.knownTogether.add(new HashSet<>(Arrays.asList(letterChangedFrom.get(0), letterChangedTo.get(0))));
+                            System.out.println();
+
+
                         } else {
                             System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                         }
@@ -92,7 +103,7 @@ public class AllTurns {
                         if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {              //  AND IF Only 1 letter has changed between turns...
                             System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1:");
                             System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedFrom + " is KNOWN IN, and " + letterChangedTo + " is KNOWN OUT.  Updating all data sources...\n");
-                            updateDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
+                            updateDataSources(Turns, pairs, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
                         } else {
                             System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                         }
@@ -101,7 +112,7 @@ public class AllTurns {
                         if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {               //  AND IF Only 1 letter has changed between turns...
                             System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = -1:");
                             System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedTo + " is KNOWN IN, and " + letterChangedFrom + " is KNOWN OUT.  Updating all data sources...\n");
-                            updateDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
+                            updateDataSources(Turns, pairs, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
                         } else {
                             System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                         }
@@ -190,7 +201,7 @@ public class AllTurns {
     //  ToDo FIX PARAMETER HELL!!! I can't use this when checking if(knownTogether.contains(knownIn)) due to absent letterChanged params
     //  I will overload updateAllDataSources (for now) but this may be a candidate to be torn down
     //  Refactor updateAllDataSources to updateDataSources, and overload updateDataSources for if(knownTogether.contains(knownIn))
-    private static void updateDataSources(LinkedList<Turn> Turns, Set<Character> knownTogether, Set<Character> knownIn, Set<Character> knownOut, ArrayList<Character> letterChangedFrom, ArrayList<Character> letterChangedTo, Unknown unknown) {
+    private static void updateDataSources(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, ArrayList<Character> letterChangedFrom, ArrayList<Character> letterChangedTo, Unknown unknown) {
 
         System.out.println("assess.AllTurns.updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown): BEGIN");
 
@@ -327,7 +338,7 @@ public class AllTurns {
     }
 
     //  ANY guess with a response of zero is KNOWN OUT.  Remove all letters in the guess from ALL data sources...
-    public static void responseOfZero(Turn turn, Set<Character> knownOut, Unknown unknown, LinkedList<Turn> Turns, Set<Character> knownTogether, Set<Character> knownIn) {
+    public static void responseOfZero(Turn turn, Set<Character> knownOut, Unknown unknown, LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn) {
 
         System.out.println("assess.AllTurns.responseOfZero(): BEGIN");
 
@@ -348,14 +359,13 @@ public class AllTurns {
 //            knownOut.loadLettersFromString(turn.guess);
 
             removeStringFromAllTurns(turn.guess, Turns);
-            knownTogether.clear();
         }
 
         System.out.println("assess.AllTurns.responseOfZero(): END");
     }
 
     //  REGENERATE the WordPairs table as previously unknown letters are determined to be KNOWN OUT...
-    private static void regenerateWordPairsTable() {
+    public static void regenerateWordPairsTable() {
 
         System.out.println("assess.AllTurns.regenerateWordPairsTable(): BEGIN");
 
@@ -426,19 +436,7 @@ public class AllTurns {
                     throw new RuntimeException(e);
                 }
 
-                Query.wordsFromDB();
-                Connect.watson("deleteFromWordsTable");
-                Insert.reloadKnownWords();
 
-                // remove knownTogether(set) from unknown(linkedHashMap)
-                for (Character c : knownTogether) {
-                    Unknown.letters.remove(c);
-                }
-
-                unknown.sort();
-
-                // rebuild wordpairs table
-                regenerateWordPairsTable();
 
                 StringBuilder sb = new StringBuilder();
                 for(Character c : knownTogether) {

@@ -1,9 +1,11 @@
 package transactSQL;
 
+import dataStructures.Pairs;
 import dataStructures.Unknown;
 
 import java.sql.*;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Set;
 
@@ -140,8 +142,9 @@ public class Connect {
     }
 
     //  In the event letters are known to be together, make a determination by leveraging the WordPairs table...
-    public static void watson(Set<Character> knownTogether) {
+    public static ResultSet watson(Set<Character> knownTogether) {
 
+        ResultSet rs5 = null;
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
             StringBuilder sb = new StringBuilder();
@@ -149,27 +152,28 @@ public class Connect {
             sb.append("SELECT TOP (5) Word " +
                     "FROM Words_tbl YT " +
                     "CROSS JOIN (VALUES('");
-            for(Character c : knownTogether) {
+            for (Character c : knownTogether) {
                 sb.append(c).append("'),('");
             }
             String query = sb.substring(0, sb.length() - 3) +  //  Strip the last 3 characters
-            ")L(Letter)" +
-            "GROUP BY YT.Word " +
-            "ORDER BY COUNT(" +
-            "CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN " +
-            "1 " +
-            "END) " +
-            "DESC";
+                    ")L(Letter)" +
+                    "GROUP BY YT.Word " +
+                    "ORDER BY COUNT(" +
+                    "CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN " +
+                    "1 " +
+                    "END) " +
+                    "DESC";
 
-            ResultSet rs5 = Query.select(query);
+            rs5 = Query.select(query);
 
-            while(rs5.next()) {
+            while (rs5.next()) {
                 System.out.println(rs5.getString(1));
             }
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return rs5;
     }
 
     /*
@@ -221,5 +225,22 @@ public class Connect {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void watson(Pairs pairs) throws SQLException {
+
+        LinkedList<ResultSet> rsList= new LinkedList<>();
+
+        for (Set<Character> s : pairs.knownTogether) {
+            System.out.println();
+            System.out.println();
+
+            rsList.add(Connect.watson(s));
+        }
+
+        for (ResultSet rs : rsList) {
+            System.out.println(rs.getString(1) + ", " + rs.getString(2));
+        }
+
     }
 }

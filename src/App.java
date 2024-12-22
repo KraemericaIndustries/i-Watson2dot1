@@ -24,11 +24,12 @@ public class App {
 
         //  SETUP: Create datastore objects to facilitate play...
         Unknown unknown = new Unknown();  //  <- Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
+        Pairs pairs = new Pairs();
 //        LinkedList<Character> knownIn = new LinkedList<>();
         Set<Character> knownIn = new HashSet<>();
 //        LinkedList<Character> knownOut = new LinkedList<>();
         Set<Character> knownOut = new HashSet<>();
-        Set<Character> knownTogether = new HashSet<>();
+//        Set<Character> knownTogether = new HashSet<>();
         LinkedList<Turn> Turns = new LinkedList<>();
 
         //  SETUP: Load database tables...
@@ -46,8 +47,8 @@ public class App {
         Messages.play();
 
         do {
-            Messages.report(knownIn, knownOut, knownTogether, Turns, unknown);  //  PRINT a report of possible determinations
-            Messages.results(knownTogether, Turns, unknown);                             //  PRINT the results of previous plays and determinations
+            Messages.report(knownIn, knownOut, pairs, Turns, unknown);  //  PRINT a report of possible determinations
+            Messages.results(pairs, Turns, unknown);                             //  PRINT the results of previous plays and determinations
 
             Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
 
@@ -55,17 +56,17 @@ public class App {
              if(turn.response == 5) {
                  Turns.add(turn);
                  lastGuess = turn.guess;
-                 AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);
+                 AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);
                 break;
             } else if(!(turn.response == 0)) {
                  lastGuess = turn.guess;
                  Turns.add(turn);
             } else {
                  lastGuess = turn.guess;
-                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns, knownTogether, knownIn);
+                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs, knownIn);
              }
 
-            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, knownTogether, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)
+            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)
 
             Messages.reportNumber++;
 
