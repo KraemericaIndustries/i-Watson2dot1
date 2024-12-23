@@ -1,18 +1,18 @@
 package dataStructures;
 
 import transactSQL.Create;
-import java.util.LinkedList;
-import java.util.Set;
+
+import java.util.*;
 
 public class Pairs {
 
-    public LinkedList<Set<Character>> knownTogether = new LinkedList<>();
+    public Set<Set<Character>> knownTogether = new HashSet<>();
 
     public void prettyPrintPairs() {
         System.out.println("Known TOGETHER: " + knownTogether);
-        for (Set<Character> s : knownTogether) {
-            System.out.println(s);
-        }
+//        for (Set<Character> s : knownTogether) {
+//            System.out.println(s);
+//        }
     }
 
     public void checkPairsForKnownIn(Set<Character> knownIn, Unknown unknown) {
@@ -34,5 +34,4 @@ public class Pairs {
             Create.rebuildWatsonDB(s, unknown);
         }
     }
-
 }
