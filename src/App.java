@@ -60,6 +60,9 @@ public class App {
                 break;
             } else if(!(turn.response == 0)) {
                  lastGuess = turn.guess;
+                 //  Process turn (remove kI/kO, if all kT & updatedResp < kT, all kT IS OUT) here
+                 AllTurns.updateTurn(turn, knownIn, knownOut, pairs, unknown, Turns);
+                 // if(updatedResponse == 0) AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs, knownIn);
                  Turns.add(turn);
             } else {
                  lastGuess = turn.guess;

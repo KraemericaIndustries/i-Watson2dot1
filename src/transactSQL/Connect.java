@@ -227,6 +227,7 @@ public class Connect {
         }
     }
 
+    //  OBJECTIVE: Traverse all pairs, create a ResultSet for all pairs, print output from all pairs...
     public static void watson(Pairs pairs) throws SQLException {
 
         LinkedList<ResultSet> rsList= new LinkedList<>();
@@ -237,10 +238,5 @@ public class Connect {
 
             rsList.add(Connect.watson(s));
         }
-
-        for (ResultSet rs : rsList) {
-            System.out.println(rs.getString(1) + ", " + rs.getString(2));
-        }
-
     }
 }

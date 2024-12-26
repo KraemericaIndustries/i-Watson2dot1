@@ -34,22 +34,20 @@ public class Delete {
                 e.printStackTrace();
             }
         }
-        Query.wordsFromDB();
-        Connect.watson("deleteFromWordsTable");
-        Insert.reloadKnownWords();
-        removeKnownOutFromUnknown(knownOut);
-        unknown.sort();
+
+        Create.rebuildWatsonDB(knownOut, unknown);
+
         System.out.println("Delete.wordsWith: END");
     }
 
-    //  DELETE letters in the provided String from the database.  Rebuild data sources...
+    //  DELETE all words NOT containing EVERY LETTER in a String, and UPDATE ALL data sources...
     public static void wordsWithout(String s, Unknown unknown, Set<Character> knownIn) throws SQLException {
+
+        System.out.println("transactSQL.Delete.wordsWithout(): BEGIN");
 
         for(int i = 0; i < s.length(); i++) {
             knownIn.add(s.charAt(i));
         }
-
-        System.out.println("transactSQL.Delete.wordsWithout(): BEGIN");
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words NOT containing '" + s + "' from the database...");
@@ -66,11 +64,8 @@ public class Delete {
                 e.printStackTrace();
             }
         }
-        Query.wordsFromDB();
-        Connect.watson("deleteFromWordsTable");
-        Insert.reloadKnownWords();
-        removeKnownOutFromUnknown(knownIn);
-        unknown.sort();
+
+        Create.rebuildWatsonDB(knownIn, unknown);
 
         System.out.println("transactSQL.Delete.wordsWithout(): END");
     }

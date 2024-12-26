@@ -11,7 +11,7 @@ import java.util.*;
 public class AllTurns {
 
     //  MAKE all possible determinations on ALL previous turns taken...
-    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
+    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) throws SQLException {
 
         System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
 
@@ -19,7 +19,7 @@ public class AllTurns {
         if(!pairs.knownTogether.isEmpty()) {
             pairs.checkPairsForKnownIn(knownIn, unknown);
             pairs.checkPairsForKnownOut(knownOut, unknown);
-            updateAllTurns(Turns, knownIn, knownOut);
+            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, pairs, unknown, Turns);
         }
 
         //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
@@ -30,27 +30,35 @@ public class AllTurns {
         System.out.println("assess.AllTurns.makeDeterminations: END");
     }
 
-    private static void updateAllTurns(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut) {
-        for (Turn t : Turns) {  //  FOR every turn in Turns
-            for (Character c : knownIn) {  //  FOR every character in knownIn
-                if(t.turn.contains(c)) {  //  IF the turn contains the character
-                    t.turn.remove(c);  //  REMOVE the character from the turn
-                    t.updatedResponse -= 1;  //  DECREMENT the updatedResponse
+    public static void updateTurn(Turn turn, Set<Character> knownIn, Set<Character> knownOut, Pairs pairs, Unknown unknown, LinkedList<Turn> Turns) {
+
+            for (Character c : knownIn) {       //  FOR every character in knownIn
+                if(turn.turn.contains(c)) {     //  IF the turn contains the character
+                    System.out.println("Removing all 'KNOWN IN' (" + c + ") from guess of " + turn.turn + "...");
+                    turn.turn.remove(c);        //  REMOVE the character from the turn
+                    System.out.println("Decrementing response from " + turn.updatedGuess + " to " + (turn.updatedResponse - 1) + " to account for the stripped letter known to be IN.");
+                    turn.updatedResponse -= 1;  //  DECREMENT the updatedResponse
+
+                    //  Having removed all letters known to be IN, if the remaining response is 0, the remainder of the guess is known to be OUT...
+                    if(turn.updatedResponse == 0) {
+                        turn.response = turn.updatedResponse;
+                        turn.parseCollectionToString();  //  PARSE the collection back to a String
+                        AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs, knownIn);
+                    }
                 }
             }
-            t.parseCollectionToString();  //  PARSE the collection back to a String
-        }
+            turn.parseCollectionToString();  //  PARSE the collection back to a String
 
-        for (Turn t : Turns) {  //  FOR every turn in Turns
+        for (Turn t : Turns) {              //  FOR every turn in Turns
             for (Character c : knownOut) {  //  FOR every character in knownIn
-                t.turn.remove(c);  //  REMOVE the character from the turn
+                t.turn.remove(c);           //  REMOVE the character from the turn
             }
-            t.parseCollectionToString();  //  PARSE the collection back to a String
+            t.parseCollectionToString();    //  PARSE the collection back to a String
         }
     }
 
     //  COMPARE each updated turn against each other...
-    private static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
+    public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
 
 
         removeDeterminedLettersFromAllTurns(Turns, knownIn, knownOut);
@@ -91,7 +99,10 @@ public class AllTurns {
 //                            knownTogether.addAll(letterChangedFrom);
 //                            knownTogether.addAll(letterChangedTo);
 
-                            pairs.knownTogether.add(new HashSet<>(Arrays.asList(letterChangedFrom.get(0), letterChangedTo.get(0))));
+                            Set<Character> tmp = new HashSet<>(Arrays.asList(letterChangedFrom.get(0), letterChangedTo.get(0)));
+                            HashSet<Character> copy = new HashSet<>(tmp);
+
+                            pairs.knownTogether.add(copy);
                             System.out.println();
 
 
@@ -346,7 +357,7 @@ public class AllTurns {
             System.out.println(turn.guess);
             // DELETE every letter from the String (handle length programmatically) from the DB
             try {
-                Delete.wordsWith(turn.guess, unknown, knownIn);
+                Delete.wordsWith(turn.updatedGuess, unknown, knownOut);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -354,11 +365,11 @@ public class AllTurns {
             regenerateWordPairsTable();
 
             // DELETE every letter from the String from Unknown.letters
-            Unknown.removeFromUnknown(turn.guess);
+            Unknown.removeFromUnknown(turn.updatedGuess);
             // ADD every letter from the String to KNOWN OUT
 //            knownOut.loadLettersFromString(turn.guess);
 
-            removeStringFromAllTurns(turn.guess, Turns);
+            removeStringFromAllTurns(turn.updatedGuess, Turns);
         }
 
         System.out.println("assess.AllTurns.responseOfZero(): END");
