@@ -64,9 +64,13 @@ public class App {
                  AllTurns.updateTurn(turn, knownIn, knownOut, pairs, unknown, Turns);
                  // if(updatedResponse == 0) AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs, knownIn);
                  Turns.add(turn);
+
+                 pairs.checkTurnAgainstPairs(turn, Turns, unknown);
+
+
             } else {
                  lastGuess = turn.guess;
-                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs, knownIn);
+                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs);
              }
 
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)

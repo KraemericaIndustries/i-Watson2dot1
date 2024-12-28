@@ -95,7 +95,7 @@ public class Messages {
             } else {
                 System.out.println("Condition: else");
                 System.out.println("Consider taking a pair of consecutive turns making these guesses:");
-                Connect.watson(Unknown.printFirstEntry());
+                Connect.watson(unknown);
             }
         System.out.println("***********************************************************************************************************************************************************************");
     }
