@@ -48,7 +48,10 @@ public class AllTurns {
                 }
             }
             turn.parseCollectionToString();  //  PARSE the collection back to a String
+        removeKnownOutFromAllTurns(knownOut, Turns);
+    }
 
+    public static void removeKnownOutFromAllTurns(Set<Character> knownOut, LinkedList<Turn> Turns) {
         for (Turn t : Turns) {              //  FOR every turn in Turns
             for (Character c : knownOut) {  //  FOR every character in knownIn
                 t.turn.remove(c);           //  REMOVE the character from the turn
@@ -102,6 +105,7 @@ public class AllTurns {
                             HashSet<Character> copy = new HashSet<>(tmp);
 
                             pairs.addPairsToSets(copy);
+                            pairs.checkPairsForWordExists(unknown, knownOut, Turns);
 
                             System.out.println();
 

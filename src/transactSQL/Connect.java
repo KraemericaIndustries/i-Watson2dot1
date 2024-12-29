@@ -118,7 +118,6 @@ public class Connect {
                     while(rs4.next()) {
                         System.out.println(rs4.getString(1));
                     }
-
                     break;
                 default:
                     System.out.println("Reason for connecting to the DB not recognized.");
@@ -238,5 +237,26 @@ public class Connect {
 
             rsList.add(Connect.watson(s));
         }
+    }
+
+    public static void watson(String sqlQuery, Set<Character> set, Unknown unknown) throws SQLException {
+
+        ResultSet rs5 = Query.select(sqlQuery);
+
+        while(!rs5.next()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("delete from Words_tbl " +
+                    "where " +
+                    "word like '%");
+            for (Character c : set) {
+                sb.append(c).append("%' or word like '%");
+            }
+            sb.delete((sb.length() - 18), (sb.length() - 1));
+            sb.append("';");
+            Query.runStatement(sb.toString());
+            break;
+        }
+        Create.rebuildWatsonDB(set, unknown);
+        System.out.println();
     }
 }

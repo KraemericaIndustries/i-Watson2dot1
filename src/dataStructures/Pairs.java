@@ -1,5 +1,7 @@
 package dataStructures;
 
+import assess.AllTurns;
+import transactSQL.Connect;
 import transactSQL.Create;
 import transactSQL.Delete;
 import java.sql.SQLException;
@@ -105,5 +107,32 @@ public class Pairs {
             }
         }
 
+    }
+
+    public void checkPairsForWordExists(Unknown unknown, Set<Character> knownOut, LinkedList<Turn> Turns) throws SQLException {
+
+        //  ToDo: Need iterator here so we can remove the set
+        for (Set<Character> s : knownTogether) {
+            if (s.size() > 2) {
+
+                StringBuilder sb = new StringBuilder();
+
+                sb.append("select * from Words_tbl " +
+                        "where " +
+                        "word like '%");
+                for (Character c : s) {
+                    sb.append(c).append("%' and word like '%");
+                }
+                sb.delete((sb.length() - 19), (sb.length() - 1));
+                sb.append("';");
+                //connect watson  - send this - send reason
+                Connect.watson(sb.toString(), s, unknown);
+                //  Remove set from AllTurns
+                knownOut.addAll(s);
+                AllTurns.removeKnownOutFromAllTurns(knownOut, Turns);
+                //  ToDo: NEED a ASSESS ALL TURNS HERE!!!
+                System.out.println();
+            }
+        }
     }
 }
