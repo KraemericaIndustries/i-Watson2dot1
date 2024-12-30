@@ -48,7 +48,7 @@ public class App {
 
         do {
             Messages.report(knownIn, knownOut, pairs, Turns, unknown);  //  PRINT a report of possible determinations
-            Messages.results(pairs, Turns, unknown);                             //  PRINT the results of previous plays and determinations
+            Messages.results(pairs, Turns, unknown);                    //  PRINT the results of previous plays and determinations
 
             Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
 
@@ -100,6 +100,9 @@ public class App {
             Connect.watson("deleteFromWordsTable");
 
             System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************");
+            Messages.report(knownIn, knownOut, pairs, Turns, unknown);  //  PRINT a report of possible determinations
+            Messages.results(pairs, Turns, unknown);                    //  PRINT the results of previous plays and determinations
+
             do {
                 if(lastWords.isEmpty()) break;
 

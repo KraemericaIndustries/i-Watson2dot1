@@ -7,6 +7,8 @@ import transactSQL.Delete;
 import java.sql.SQLException;
 import java.util.*;
 
+import static assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse;
+
 public class Pairs {
 
     public Set<Set<Character>> knownTogether = new HashSet<>();
@@ -109,10 +111,13 @@ public class Pairs {
 
     }
 
-    public void checkPairsForWordExists(Unknown unknown, Set<Character> knownOut, LinkedList<Turn> Turns) throws SQLException {
+    public void checkPairsForWordExists(Unknown unknown, Set<Character> knownOut, LinkedList<Turn> Turns, Set<Character> knownIn) throws SQLException {
 
-        //  ToDo: Need iterator here so we can remove the set
-        for (Set<Character> s : knownTogether) {
+        Iterator<Set<Character>> iterator = knownTogether.iterator();  // Create an iterator for the set of sets
+
+        while (iterator.hasNext()) {
+            Set<Character> s = iterator.next();
+
             if (s.size() > 2) {
 
                 StringBuilder sb = new StringBuilder();
@@ -125,13 +130,17 @@ public class Pairs {
                 }
                 sb.delete((sb.length() - 19), (sb.length() - 1));
                 sb.append("';");
+
                 //connect watson  - send this - send reason
-                Connect.watson(sb.toString(), s, unknown);
-                //  Remove set from AllTurns
-                knownOut.addAll(s);
+                Connect.watson(sb.toString(), s, unknown);  //  DELETE from database where word like String
+
+                knownOut.addAll(s);  //  ADD the set to the list of characters KNOWN to be OUT
                 AllTurns.removeKnownOutFromAllTurns(knownOut, Turns);
-                //  ToDo: NEED a ASSESS ALL TURNS HERE!!!
-                System.out.println();
+
+                s.clear();          // Clear the set
+                iterator.remove();  // Remove the cleared set using the iterator
+
+                checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
             }
         }
     }

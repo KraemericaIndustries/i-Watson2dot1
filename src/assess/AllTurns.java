@@ -105,7 +105,7 @@ public class AllTurns {
                             HashSet<Character> copy = new HashSet<>(tmp);
 
                             pairs.addPairsToSets(copy);
-                            pairs.checkPairsForWordExists(unknown, knownOut, Turns);
+                            pairs.checkPairsForWordExists(unknown, knownOut, Turns, knownIn);
 
                             System.out.println();
 
@@ -166,7 +166,7 @@ public class AllTurns {
     }
 
     //  FOR any turn where size = updatedResponse, ALL letters in the updatedGuess are KNOWN IN
-    private static void checkAllTurnsForSizeEqualsUpdatedResponse(LinkedList<Turn> Turns, Set<Character> knownIn, Unknown unknown) {
+    public static void checkAllTurnsForSizeEqualsUpdatedResponse(LinkedList<Turn> Turns, Set<Character> knownIn, Unknown unknown) {
 
         System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): BEGIN");
 
