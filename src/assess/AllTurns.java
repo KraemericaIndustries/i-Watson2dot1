@@ -19,7 +19,7 @@ public class AllTurns {
         if(!pairs.knownTogether.isEmpty()) {
             pairs.checkPairsForKnownIn(knownIn, unknown);
             pairs.checkPairsForKnownOut(knownOut, unknown);
-            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, pairs, unknown, Turns);
+            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, unknown, Turns);
         }
 
         //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
@@ -30,7 +30,7 @@ public class AllTurns {
         System.out.println("assess.AllTurns.makeDeterminations: END");
     }
 
-    public static void updateTurn(Turn turn, Set<Character> knownIn, Set<Character> knownOut, Pairs pairs, Unknown unknown, LinkedList<Turn> Turns) {
+    public static void updateTurn(Turn turn, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, LinkedList<Turn> Turns) {
 
             for (Character c : knownIn) {       //  FOR every character in knownIn
                 if(turn.turn.contains(c)) {     //  IF the turn contains the character
@@ -43,7 +43,7 @@ public class AllTurns {
                     if(turn.updatedResponse == 0) {
                         turn.response = turn.updatedResponse;
                         turn.parseCollectionToString();  //  PARSE the collection back to a String
-                        AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs);
+                        AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
                     }
                 }
             }
@@ -62,7 +62,6 @@ public class AllTurns {
 
     //  COMPARE each updated turn against each other...
     public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) throws SQLException {
-
 
         removeDeterminedLettersFromAllTurns(Turns, knownIn, knownOut);
 
@@ -106,21 +105,17 @@ public class AllTurns {
 
                             pairs.addPairsToSets(copy);
                             pairs.checkPairsForWordExists(unknown, knownOut, Turns, knownIn);
-
-                            System.out.println();
-
-
                         } else {
                             System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                         }
                     } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == 1) {  //  ELSE-IF responses from compared turns are + 1...
                         System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1");
-                        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {              //  AND IF Only 1 letter has changed between turns...
+                        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {          //  AND IF Only 1 letter has changed between turns...
                             System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1:");
                             System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedFrom + " is KNOWN IN, and " + letterChangedTo + " is KNOWN OUT.  Updating all data sources...\n");
                             //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
                             //  Clean this up (someday)
-                            updateDataSources(Turns, pairs, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
+                            updateDataSources(Turns, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
                         } else {
                             System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                         }
@@ -131,7 +126,7 @@ public class AllTurns {
                             System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedTo + " is KNOWN IN, and " + letterChangedFrom + " is KNOWN OUT.  Updating all data sources...\n");
                             //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
                             //  Clean this up (someday)
-                            updateDataSources(Turns, pairs, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
+                            updateDataSources(Turns, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
                             pairs.checkPairsForKnownIn(knownIn, unknown);
                             Create.rebuildWatsonDB(knownIn, unknown);
                         } else {
@@ -147,8 +142,9 @@ public class AllTurns {
     }
 
     private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut) {
+
         for(Character c : knownIn) {  //  walks knownIn
-            for(Turn t : Turns) {  // walks a turn
+            for(Turn t : Turns) {     //  walks a turn
                 if(t.turn.contains(c)) {
                     t.turn.remove(c);
                     t.updatedResponse -= 1;
@@ -158,7 +154,7 @@ public class AllTurns {
         }
 
         for(Character c : knownOut) {  //  walks knownIn
-            for(Turn t : Turns) {  // walks a turn
+            for(Turn t : Turns) {      // walks a turn
                 t.turn.remove(c);
                 t.parseCollectionToString();
             }
@@ -174,55 +170,23 @@ public class AllTurns {
             if(t.turn.size() == t.updatedResponse) {
                 knownIn.addAll(t.turn);
 
-                // delete t.turn from db
-//                StringBuilder sb = new StringBuilder();
-
-//                Set<Character> keys = t.turn.keySet();
-
-                // printing the elements of LinkedHashMap
-//                for (Character c : knownIn) {
-//                    sb.append(c);
-//                }
-//
-//                t.updatedGuess = sb.toString();
-
                 try {
                     Delete.wordsWithout(t.updatedGuess, unknown, knownIn);
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
 
-                // rebuild db
-                Query.wordsFromDB();
-                Connect.watson("deleteFromWordsTable");
-                Insert.reloadKnownWords();
-
-                // remove knownIn from unknown
-                removeKnownInFromUnknown(knownIn);
-
-                unknown.sort();
-
-                // rebuild wordpairs table
-                regenerateWordPairsTable();
+                Create.rebuildWatsonDB(knownIn, unknown);
             }
         }
         System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): END");
     }
 
-    //  REMOVE letters known to be IN, from the list of previously unknown letters...
-    private static void removeKnownInFromUnknown(Set<Character> knownIn) {
-        System.out.println("assess.AllTurns.removeKnownInFromUnknown(): BEGIN");
-        for(Character c : knownIn) {
-            Unknown.letters.remove(c);
-        }
-        System.out.println("assess.AllTurns.removeKnownInFromUnknown(): END");
-    }
-
-    //  Once a DETERMINATION on two letters has been made, UPDATE all data sources accordingly...
-    //  ToDo FIX PARAMETER HELL!!! I can't use this when checking if(knownTogether.contains(knownIn)) due to absent letterChanged params
-    //  I will overload updateAllDataSources (for now) but this may be a candidate to be torn down
-    //  Refactor updateAllDataSources to updateDataSources, and overload updateDataSources for if(knownTogether.contains(knownIn))
-    private static void updateDataSources(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, ArrayList<Character> letterChangedFrom, ArrayList<Character> letterChangedTo, Unknown unknown) {
+    /*  Once a DETERMINATION on two letters has been made, UPDATE all data sources accordingly...
+    PARAMETER HELL!!! I can't use this when checking if(knownTogether.contains(knownIn)) due to absent letterChanged params
+    I will overload updateAllDataSources (for now) but this may be a candidate to be torn down
+    Refactor updateAllDataSources to updateDataSources, and overload updateDataSources for if(knownTogether.contains(knownIn)) */
+    private static void updateDataSources(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, ArrayList<Character> letterChangedFrom, ArrayList<Character> letterChangedTo, Unknown unknown) {
 
         System.out.println("assess.AllTurns.updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown): BEGIN");
 
@@ -273,7 +237,7 @@ public class AllTurns {
     //  PRETTY-PRINT the UPDATED turns being compared...
     private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i, int j) {
 
-//        System.out.println("assess.AllTurns.prettyPrintLinkedHashMap(): BEGIN");
+        //  System.out.println("assess.AllTurns.prettyPrintLinkedHashMap(): BEGIN");
 
         StringBuilder sb = new StringBuilder();
 
@@ -282,14 +246,13 @@ public class AllTurns {
         sb.setLength(0);
         sb.append("    ORIGINAL: ").append(Turns.get(j).guess).append(", ").append(Turns.get(j).response).append(" > UPDATED: [").append(Turns.get(j).updatedGuess).append("]").append(" = ").append(Turns.get(j).updatedResponse);
         System.out.println(sb);
-
-//        System.out.println("assess.AllTurns.prettyPrintLinkedHashMap(): END");
+        //  System.out.println("assess.AllTurns.prettyPrintLinkedHashMap(): END");
     }
 
     //  DETERMINE letters changed between turns...
     private static void identifyChangedLetters(LinkedList<Turn> Turns, ArrayList<Character> letterChangedFrom, int i, ArrayList<Character> letterChangedTo, int j) {
 
-//        System.out.println("assess.AllTurns.identifyChangedLetters(): BEGIN");
+        //  System.out.println("assess.AllTurns.identifyChangedLetters(): BEGIN");
 
         //  CLEAR any existing entries...
         letterChangedFrom.clear();
@@ -300,24 +263,22 @@ public class AllTurns {
         letterChangedTo.addAll(Turns.get(j).turn);
 
         //  ADD a temp ArrayList to preserve values to be deleted...
-        ArrayList<Character> temp = new ArrayList<>();
-        temp.addAll(letterChangedFrom);
+        ArrayList<Character> temp = new ArrayList<>(letterChangedFrom);
 
         letterChangedFrom.removeAll(letterChangedTo);
         letterChangedTo.removeAll(temp);
 
         System.out.println("    " + letterChangedTo + " was changed to " + letterChangedFrom + " in these two turns");
 
-//        System.out.println("assess.AllTurns.identifyChangedLetters(): END");
+        //  System.out.println("assess.AllTurns.identifyChangedLetters(): END");
     }
 
     //  ANY guess with a response of zero is KNOWN OUT.  Remove all letters in the guess from ALL data sources...
-    public static void responseOfZero(Turn turn, Set<Character> knownOut, Unknown unknown, LinkedList<Turn> Turns, Pairs pairs) {
+    public static void responseOfZero(Turn turn, Set<Character> knownOut, Unknown unknown, LinkedList<Turn> Turns) {
 
         System.out.println("assess.AllTurns.responseOfZero(): BEGIN");
 
         if(turn.response == 0) {
-//            System.out.println(turn.guess);
             // DELETE every letter from the String (handle length programmatically) from the DB
             try {
                 Delete.wordsWith(turn.updatedGuess, unknown, knownOut);
@@ -339,12 +300,9 @@ public class AllTurns {
 
         System.out.println("assess.AllTurns.regenerateWordPairsTable(): BEGIN");
 
-        //  DROP the WordPairs table...
-        Connect.watson("dropWordPairsTable");
-        //  REGENERATE the WordPairs table...
-        Connect.watson("createWordPairsTable");
-        //  DELETE dups from the WordPairs table...
-        Connect.watson("deleteDups");
+        Connect.watson("dropWordPairsTable");    //  DROP the WordPairs table...
+        Connect.watson("createWordPairsTable");  //  REGENERATE the WordPairs table...
+        Connect.watson("deleteDups");            //  DELETE dups from the WordPairs table...
 
         System.out.println("assess.AllTurns.regenerateWordPairsTable(): END");
     }
@@ -355,34 +313,29 @@ public class AllTurns {
         System.out.println("assess.AllTurns.removeStringFromAllTurns(): BEGIN");
 
         char[] guessArray = guess.toCharArray();
-
         List<Character> guessList = new ArrayList<>();
-        for (char c : guessArray) {
-            guessList.add(c);
-        }
+
+        for (char c : guessArray) guessList.add(c);
 
         for (Turn t : Turns) {
-            char[] turnArray = t.updatedGuess.toCharArray();
 
+            char[] turnArray = t.updatedGuess.toCharArray();
             List<Character> turnList = new ArrayList<>();
-            for (char c : turnArray) {
-                turnList.add(c);
-            }
+
+            for (char c : turnArray) turnList.add(c);
 
             turnList.removeAll(guessList);
 
             StringBuilder sb = new StringBuilder();
-            for(Character c : turnList) {
-                sb.append(c);
-            }
+
+            for(Character c : turnList) sb.append(c);
 
             t.updatedGuess = sb.toString();
+
             System.out.println(t.updatedGuess);
         }
 
-        for(Turn t : Turns) {
-            t.parseGuessToCollection(t.updatedGuess);
-        }
+        for(Turn t : Turns) t.parseGuessToCollection(t.updatedGuess);
 
         System.out.println("assess.AllTurns.removeStringFromAllTurns END");
     }

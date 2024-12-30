@@ -57,12 +57,12 @@ public class App {
                 break;
             } else if(!(turn.response == 0)) {
                  lastGuess = turn.guess;
-                 AllTurns.updateTurn(turn, knownIn, knownOut, pairs, unknown, Turns);  //  Process turn (remove knownIn/knownOut, if all knownTogether & (updatedRespone < knownTogether, all knownTogether IS OUT, etc.)
+                 AllTurns.updateTurn(turn, knownIn, knownOut, unknown, Turns);  //  Process turn (remove knownIn/knownOut, if all knownTogether & (updatedRespone < knownTogether, all knownTogether IS OUT, etc.)
                  Turns.add(turn);
                  pairs.checkTurnAgainstPairs(turn, Turns, unknown);
             } else {
                  lastGuess = turn.guess;
-                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns, pairs);
+                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
              }
 
             if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)
