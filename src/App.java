@@ -99,7 +99,7 @@ public class App {
 
             Connect.watson("deleteFromWordsTable");
 
-            System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************");
+            System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************\n");
             Messages.report(knownIn, knownOut, pairs, Turns, unknown);  //  PRINT a report of possible determinations
             Messages.results(pairs, Turns, unknown);                    //  PRINT the results of previous plays and determinations
 

@@ -47,7 +47,7 @@ public class Keyboard {
         String yesOrNo;
 
         do {
-            System.out.print("\nYour last guess was " + lastGuess + ".  Is " + lastGuess + " your opponents word? ");
+            System.out.print("\nYour last guess was " + lastGuess + ".  Is " + lastGuess + " your opponents word? ('y' or 'n'): ");
             Scanner input= new Scanner(System.in);
             yesOrNo = input.nextLine();
             yesOrNo = yesOrNo.toUpperCase();  //  Regardless of the case in the InputStream typed at the keyboard, convert the String contents of 'guess' variable to UPPERCASE
