@@ -59,7 +59,7 @@ public class App {
                  lastGuess = turn.guess;
                  AllTurns.updateTurn(turn, knownIn, knownOut, unknown, Turns);  //  Process turn (remove knownIn/knownOut, if all knownTogether & (updatedRespone < knownTogether, all knownTogether IS OUT, etc.)
                  Turns.add(turn);
-                 pairs.checkTurnAgainstPairs(turn, Turns, unknown);
+                 pairs.checkTurnAgainstPairs(turn, unknown);
             } else {
                  lastGuess = turn.guess;
                  AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
