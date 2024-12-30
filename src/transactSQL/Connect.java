@@ -64,7 +64,7 @@ public class Connect {
 
                     System.out.println("Creating a table of word pairs that only DIFFER by 1 letter...");
                     transactSQL.Query.runStatement(wordPairsTable);
-                    System.out.println("Finished creating WordPairs table!");
+                    System.out.println(" > Finished creating WordPairs table!");
                     break;
 //                case "getWords":
 //                    transactSQL.Query.getWords(numWords, first, second, third, fourth, fifth);
@@ -78,7 +78,7 @@ public class Connect {
 
                     System.out.println("Deleting duplicates from the WordPairs table...");
                     transactSQL.Query.runStatement(deleteDuplicates);
-                    System.out.println("Finished deleting duplicates from the WordPairs table!");
+                    System.out.println(" > Finished deleting duplicates from the WordPairs table!");
                     break;
                 case "countWordPairs":
 

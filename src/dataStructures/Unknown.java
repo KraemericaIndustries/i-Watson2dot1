@@ -15,7 +15,7 @@ public class Unknown {
     //  https://stackoverflow.com/questions/81346/most-efficient-way-to-increment-a-map-value-in-java
     public static void letterEnumerator(String word) {
         for(int i = 0; i <word.length(); i++) {
-            int count = letters.containsKey(word.charAt(i)) ? letters.get(word.charAt(i)) : 0;
+            int count = letters.getOrDefault(word.charAt(i), 0);
             letters.put(word.charAt(i), count + 1);
         }
     }
