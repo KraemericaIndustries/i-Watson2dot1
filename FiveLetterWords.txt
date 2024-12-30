@@ -279,6 +279,7 @@ range
 randy
 ranks
 rants
+rates
 raven
 ready
 remit
@@ -298,7 +299,6 @@ scare
 scone
 scope
 scrap
-shade
 share
 sigma
 smack
