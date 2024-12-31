@@ -68,5 +68,5 @@ public class Keyboard {
         System.out.println();
         capture = capture.toUpperCase();  //  Regardless of the case in the InputStream typed at the keyboard, convert the String contents of the 'guessString' variable to UPPERCASE
         return capture;
-    }  //  keyboardInput()
+    }
 }

@@ -15,7 +15,8 @@ import static transactSQL.DatabaseConnection.*;
 //  PARAMETERIZED database invocations are found in OVERLOADED methods in this class
 public class Connect {
 
-    //  The VAST MAJORITY of database invocations (primarily NOT requiring a return) are handled through this method - switching on the reason for the requested connection...
+    //  The VAST MAJORITY of database invocations (primarily NOT requiring a return) are handled through this method -
+    //  (switching on the reason for the requested connection...)
     public static Object watson(String reason) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
@@ -32,50 +33,47 @@ public class Connect {
                     return numWords;
                 case "createWordPairsTable":
                     //  This query was generated with assistance from Microsoft Copilot:
-                    String wordPairsTable = "SELECT w1.word AS word1, w2.word AS word2 \n" +
-                            "INTO WordPairs FROM Words_tbl w1, Words_tbl w2 \n" +
-                            "WHERE w1.word <> w2.word \n" +
-                            "AND ( \n" +
-                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1)) \n" +
-                            "OR \n" +
-                            "\t(SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1)) \n" +
-                            "OR \n" +
-                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1)) \n" +
-                            "OR \n" +
-                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1)) \n" +
-                            "OR \n" +
-                            "\t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND \n" +
-                            "\t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\n" +
-                            ");";
+                    String wordPairsTable = """
+                            SELECT w1.word AS word1, w2.word AS word2\s
+                            INTO WordPairs FROM Words_tbl w1, Words_tbl w2\s
+                            WHERE w1.word <> w2.word\s
+                            AND (\s
+                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
+                            \t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
+                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
+                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1))\s
+                            OR\s
+                            \t(SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
+                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
+                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND\s
+                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\s
+                            OR\s
+                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
+                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
+                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND\s
+                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\s
+                            OR\s
+                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
+                            \t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
+                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND\s
+                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\s
+                            OR\s
+                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
+                            \t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
+                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
+                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))
+                            );""";
 
                     System.out.println("Creating a table of word pairs that only DIFFER by 1 letter...");
                     transactSQL.Query.runStatement(wordPairsTable);
                     System.out.println(" > Finished creating WordPairs table!");
                     break;
-//                case "getWords":
-//                    transactSQL.Query.getWords(numWords, first, second, third, fourth, fifth);
-//                    break;
                 case "deleteDups":
 
                     String deleteDuplicates = "DELETE a FROM WordPairs a " +
-                            "JOIN WordPairs b ON a.word1 = b.word2 " +
-                            "AND a.word2 = b.word1 " +
-                            "WHERE a.word1 < a.word2;";
-
+                                              "JOIN WordPairs b ON a.word1 = b.word2 " +
+                                              "AND a.word2 = b.word1 " +
+                                              "WHERE a.word1 < a.word2;";
                     System.out.println("Deleting duplicates from the WordPairs table...");
                     transactSQL.Query.runStatement(deleteDuplicates);
                     System.out.println(" > Finished deleting duplicates from the WordPairs table!");
@@ -88,7 +86,6 @@ public class Connect {
                     while(rs2.next()) {
                         numPairs += ((Number) rs2.getObject(1)).intValue();
                     }
-
                     return numPairs;
                 case "deleteFromWordsTable":
                     System.out.println("Deleting all words from the Words_tbl table...");
@@ -103,20 +100,10 @@ public class Connect {
                 case "selectAllFromWordsTable":
                     System.out.println("Selecting all remaining words from Words_tbl...");
 
-                    ResultSet rs3 = Query.select("select * from Words_tbl");
+                    ResultSet rs3 = Query.select("select * from Words_tbl...");
 
                     while(rs3.next()) {
                         System.out.println(rs3.getString(1));
-                    }
-
-                    break;
-                case "queryWordPairsByKnownTogether":
-                    System.out.println("Selecting all remaining words from Words_tbl...");
-
-                    ResultSet rs4 = Query.select("select * from Words_tbl");
-
-                    while(rs4.next()) {
-                        System.out.println(rs4.getString(1));
                     }
                     break;
                 default:
@@ -129,16 +116,16 @@ public class Connect {
     }
 
     //  QUERY the WordPairs table for any pairs that differ by the most commonly occurring letter in the database...
-    public static void watson(char mostCommonLetter) {
-
-        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
-
-            transactSQL.Select.wordPairsDifferByLetter(mostCommonLetter);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void watson(char mostCommonLetter) {
+//
+//        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
+//
+//            transactSQL.Select.wordPairsDifferByLetter(mostCommonLetter);
+//
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     //  In the event letters are known to be together, make a determination by leveraging the WordPairs table...
     public static ResultSet watson(Set<Character> knownTogether) {
@@ -149,19 +136,19 @@ public class Connect {
             StringBuilder sb = new StringBuilder();
 
             sb.append("SELECT TOP (5) Word " +
-                    "FROM Words_tbl YT " +
-                    "CROSS JOIN (VALUES('");
-            for (Character c : knownTogether) {
-                sb.append(c).append("'),('");
-            }
-            String query = sb.substring(0, sb.length() - 3) +  //  Strip the last 3 characters
-                    ")L(Letter)" +
-                    "GROUP BY YT.Word " +
-                    "ORDER BY COUNT(" +
-                    "CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN " +
-                    "1 " +
-                    "END) " +
-                    "DESC";
+                      "FROM Words_tbl YT " +
+                      "CROSS JOIN (VALUES('");
+                      for (Character c : knownTogether) {
+                          sb.append(c).append("'),('");
+                      }
+                      String query = sb.substring(0, sb.length() - 3) +  //  Strip the last 3 characters
+                      ")L(Letter)" +
+                      "GROUP BY YT.Word " +
+                      "ORDER BY COUNT(" +
+                      "CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN " +
+                      "1 " +
+                      "END) " +
+                      "DESC";
 
             rs5 = Query.select(query);
 
@@ -181,15 +168,13 @@ public class Connect {
     Pull the TOP FIVE letters remaining in the database that are UNKNOWN
     The Unknown object passed by a parameter is backed by a LinkedHashMap which is ALREADY SORTED!
     */
-    public static void watson(Unknown unknown) throws SQLException {
+    public static void watson(Unknown unknown) {
 
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
 
-            Character[] fiveMostCommonLetters = new Character[5];  //  DECLARE an array to hold the desired number (5) of keys from the LinkedHashMap
-
+            Character[] fiveMostCommonLetters = new Character[5];                      //  DECLARE an array to hold the desired number (5) of keys from the LinkedHashMap
             Set<Map.Entry<Character, Integer>> entrySet = Unknown.letters.entrySet();  // Get a set of all the entries (key - value pairs) contained in the LinkedHashMap
-
-            Iterator<Map.Entry<Character, Integer>> it = entrySet.iterator();  // Obtain an Iterator for the entries Set
+            Iterator<Map.Entry<Character, Integer>> it = entrySet.iterator();          // Obtain an Iterator for the entries Set
 
             // Iterate through LinkedHashMap entries
             int i = 0;  //  Set an index to break out of the 'while=hasNext' loop once the desired number of keys is retrieved
@@ -227,7 +212,7 @@ public class Connect {
     }
 
     //  OBJECTIVE: Traverse all pairs, create a ResultSet for all pairs, print output from all pairs...
-    public static void watson(Pairs pairs) throws SQLException {
+    public static void watson(Pairs pairs) {
 
         LinkedList<ResultSet> rsList= new LinkedList<>();
 
@@ -246,13 +231,13 @@ public class Connect {
         while(!rs5.next()) {
             StringBuilder sb = new StringBuilder();
             sb.append("delete from Words_tbl " +
-                    "where " +
-                    "word like '%");
-            for (Character c : set) {
-                sb.append(c).append("%' or word like '%");
-            }
-            sb.delete((sb.length() - 18), (sb.length() - 1));
-            sb.append("';");
+                      "where " +
+                      "word like '%");
+                      for (Character c : set) {
+                          sb.append(c).append("%' or word like '%");
+                      }
+                      sb.delete((sb.length() - 18), (sb.length() - 1));
+                      sb.append("';");
             Query.runStatement(sb.toString());
             break;
         }
