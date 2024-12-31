@@ -54,7 +54,7 @@ public class Query extends DatabaseConnection{
                     System.out.println("Unable to read file: " + file);
                 }
         } catch (SQLException e) {
-//            e.printStackTrace();
+            //  e.printStackTrace();
         }
         System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
     }

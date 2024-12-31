@@ -13,9 +13,9 @@ public class Select {
         Statement statement = conn.createStatement(); {
 
             ResultSet resultSet = transactSQL.Query.select("select TOP (6) word1, word2\n" +
-                    "from WordPairs\n" +
-                    "where word1 not like '%" + mostCommonLetter + "%'\n" +
-                    "and word2 like '%" + mostCommonLetter + "%'");
+                                                                      "from WordPairs\n" +
+                                                                      "where word1 not like '%" + mostCommonLetter + "%'\n" +
+                                                                      "and word2 like '%" + mostCommonLetter + "%'");
 
             while(resultSet.next()) {
                 System.out.println(resultSet.getString(1) + ", " + resultSet.getString(2));
@@ -29,11 +29,11 @@ public class Select {
         Statement statement = conn.createStatement(); {
 
             ResultSet resultSet = transactSQL.Query.select("select TOP (6) word1, word2\n" +
-                    "from WordPairs\n" +
-                    "where word1 like '%" + letter + "%'\n" +
-                    "and word1 not like '%" + letter + "%'" +
-                    "or word1 not like '%" + letter + "%'" +
-                    "and word2 like '%" + letter + "%'");
+                                                                      "from WordPairs\n" +
+                                                                      "where word1 like '%" + letter + "%'\n" +
+                                                                      "and word1 not like '%" + letter + "%'" +
+                                                                      "or word1 not like '%" + letter + "%'" +
+                                                                      "and word2 like '%" + letter + "%'");
 
             while(resultSet.next()) {
                 System.out.println(resultSet.getString(1) + ", " + resultSet.getString(2));
