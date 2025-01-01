@@ -79,8 +79,10 @@ public class App {
 
         if(guessIsWord) {
             Messages.victorySummary(lastGuess);
+        } else if (Insert.wordCount == 0) {
+            stumped();
         } else {
-
+            System.out.println();
             LinkedList<String> lastWords = new LinkedList<>();
 
             ResultSet rs = Query.select("select * from Words_tbl where word != '" + lastGuess + "'");
@@ -114,17 +116,22 @@ public class App {
             if(guessIsWord) {
                 Messages.victorySummary(lastGuess);
             } else {
-                System.out.println("\nYa got me!  I'm stumped (this time)!  But I'm adding your word to my database, so the next time I run I KNOW YOUR WORD!  What was your word?:");
-
-                lastGuess = Keyboard.enterUnknownWord();
-
-                try {
-                    Files.write(Paths.get("C:/Users/Bob/IdeaProjects/i-Watson2dot1/FiveLetterWords.txt"), ("\n" + lastGuess).getBytes(), StandardOpenOption.APPEND);
-                }catch (IOException e) {
-                    //exception handling left as an exercise for the reader
-                }
-                System.out.println(" > Added " + lastGuess + " to the data file used to generate the watson database.");
+                stumped();
             }
         }
+    }
+
+    private static void stumped() {
+        String lastGuess;
+        System.out.println("\nYa got me!  I'm stumped (this time)!  But I'm adding your word to my database, so the next time I run I KNOW YOUR WORD!  What was your word?:");
+
+        lastGuess = Keyboard.enterUnknownWord();
+
+        try {
+            Files.write(Paths.get("C:/Users/Bob/IdeaProjects/i-Watson2dot1/FiveLetterWords.txt"), ("\n" + lastGuess).getBytes(), StandardOpenOption.APPEND);
+        }catch (IOException e) {
+            //exception handling left as an exercise for the reader
+        }
+        System.out.println(" > Added " + lastGuess + " to the data file used to generate the watson database.");
     }
 }

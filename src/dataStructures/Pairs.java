@@ -44,11 +44,12 @@ public class Pairs {
             while (iterator.hasNext()) {
                 Set<Character> s = iterator.next();
                 if (s.contains(c)) {  // Check if the set contains the desired character (e.g., 'a')
-                    knownOut.addAll(s);
+                    knownOut.addAll(s); //  << WORKS
+                    Delete.wordsWith(createStringFromSet(s), unknown, knownOut);  //  CHANGED to .wordsWith()
                     s.clear();          // Clear the set
                     iterator.remove();  // Remove the cleared set using the iterator
-                    Delete.wordsWithout(createStringFromSet(s), unknown, knownOut);
                 }
+                return;  //  <<  KLUDGE fixes NYMPH Crash
             }
         }
     }

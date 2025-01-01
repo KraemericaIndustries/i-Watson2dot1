@@ -226,9 +226,9 @@ public class Connect {
 
     public static void watson(String sqlQuery, Set<Character> set, Unknown unknown) throws SQLException {
 
-        ResultSet rs5 = Query.select(sqlQuery);
+        ResultSet rs6 = Query.select(sqlQuery);
 
-        while(!rs5.next()) {
+        while(!rs6.next()) {
             StringBuilder sb = new StringBuilder();
             sb.append("delete from Words_tbl " +
                       "where " +
