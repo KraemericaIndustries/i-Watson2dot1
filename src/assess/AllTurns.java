@@ -25,7 +25,11 @@ public class AllTurns {
         //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
         checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
 
-        //  COMPARE each (updated) turn against each other...
+        //  ToDo: ALL Turns where updatedResponse == 0 and .size() > 0, ALL letters are OUT!!!
+        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
+
+
+            //  COMPARE each (updated) turn against each other...
         compareAllTurnsAgainstEachOther(Turns, pairs, knownIn, knownOut, unknown);
         System.out.println("assess.AllTurns.makeDeterminations: END");
     }
@@ -40,15 +44,19 @@ public class AllTurns {
                     turn.updatedResponse -= 1;  //  DECREMENT the updatedResponse
 
                     //  Having removed all letters known to be IN, if the remaining response is 0, the remainder of the guess is known to be OUT...
-                    if(turn.updatedResponse == 0) {
-                        turn.response = turn.updatedResponse;
-                        turn.parseCollectionToString();  //  PARSE the collection back to a String
-                        AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
-                    }
+                    updatedResponseIsZero(turn, knownOut, unknown, Turns);
                 }
             }
             turn.parseCollectionToString();  //  PARSE the collection back to a String
         removeKnownOutFromAllTurns(knownOut, Turns);
+    }
+
+    private static void updatedResponseIsZero(Turn turn, Set<Character> knownOut, Unknown unknown, LinkedList<Turn> Turns) {
+        if(turn.updatedResponse == 0) {
+            turn.response = turn.updatedResponse;
+            turn.parseCollectionToString();  //  PARSE the collection back to a String
+            AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
+        }
     }
 
     public static void removeKnownOutFromAllTurns(Set<Character> knownOut, LinkedList<Turn> Turns) {
@@ -95,6 +103,10 @@ public class AllTurns {
 
                     if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {  //  IF responses from compared turns are EQUAL...
                         System.out.println("    Scenario: i.updatedResponse == j.updatedResponse");
+
+                        responseIsEqualWithOneLetterDifferent(Turns, knownOut, unknown, i, j);
+
+
                         if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {  //  AND IF Only 1 letter has changed between turns...
                             System.out.println("    Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
                             System.out.println("    We now know that " + letterChangedTo + " and " + letterChangedFrom + " are either both IN, or both OUT (but cannot be sure which is the case).\n");
@@ -139,6 +151,35 @@ public class AllTurns {
             }
         }
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): END");
+    }
+
+    private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, Set<Character> knownOut, Unknown unknown, int i, int j) {
+
+
+
+        //  If what remains is size = 1, then the turns MUST have been 1 letter different
+            //  Therefore, the remaining letter is OUT, so go ahead and do it
+
+        //  CREATE a temp pair of collections for a pair of turns to make the assessment...
+        Set<Character> a = Turns.get(i).turn;
+        Set<Character> b = Turns.get(i).turn;
+
+        //  Take the smaller (Set<Character>) away from the bigger
+        if(a.size() > b.size()) {
+            System.out.println("Removing " + b + " from " + a);
+            a.removeAll(b);
+            //  If what remains is size = 1, then the turns MUST have been 1 letter different
+                //  Therefore, the remaining letter is OUT, so go ahead and do it
+            if (a.size() == 1) Turns.get(i).turn = a;
+            updatedResponseIsZero(Turns.get(i), knownOut, unknown, Turns);
+        } else if (a.size() < b.size()){
+            System.out.println("Removing " + Turns.get(i).turn + " from " + Turns.get(j).turn);
+            b.removeAll(a);
+            //  If what remains is size = 1, then the turns MUST have been 1 letter different
+                //  Therefore, the remaining letter is OUT, so go ahead and do it
+            if (b.size() == 1) Turns.get(i).turn = b;
+            updatedResponseIsZero(Turns.get(j), knownOut, unknown, Turns);
+        }
     }
 
     private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut) {
