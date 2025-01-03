@@ -104,8 +104,8 @@ public class AllTurns {
                     if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {  //  IF responses from compared turns are EQUAL...
                         System.out.println("    Scenario: i.updatedResponse == j.updatedResponse");
 
-                        responseIsEqualWithOneLetterDifferent(Turns, knownOut, unknown, i, j);
-
+                        responseIsEqualWithOneLetterDifferent(Turns, knownIn, knownOut, unknown, i, j);
+                        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
 
                         if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {  //  AND IF Only 1 letter has changed between turns...
                             System.out.println("    Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
@@ -128,6 +128,7 @@ public class AllTurns {
                             //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
                             //  Clean this up (someday)
                             updateDataSources(Turns, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
+                            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
                         } else {
                             System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
                         }
@@ -153,7 +154,7 @@ public class AllTurns {
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): END");
     }
 
-    private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, Set<Character> knownOut, Unknown unknown, int i, int j) {
+    private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, int i, int j) {
 
 
 
@@ -172,6 +173,7 @@ public class AllTurns {
                 //  Therefore, the remaining letter is OUT, so go ahead and do it
             if (a.size() == 1) Turns.get(i).turn = a;
             updatedResponseIsZero(Turns.get(i), knownOut, unknown, Turns);
+            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
         } else if (a.size() < b.size()){
             System.out.println("Removing " + Turns.get(i).turn + " from " + Turns.get(j).turn);
             b.removeAll(a);
@@ -179,6 +181,7 @@ public class AllTurns {
                 //  Therefore, the remaining letter is OUT, so go ahead and do it
             if (b.size() == 1) Turns.get(i).turn = b;
             updatedResponseIsZero(Turns.get(j), knownOut, unknown, Turns);
+            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
         }
     }
 
