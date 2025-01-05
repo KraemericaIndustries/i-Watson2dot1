@@ -2,6 +2,7 @@ package transactSQL;
 
 import dataStructures.Pairs;
 import dataStructures.Unknown;
+import print.Messages;
 
 import java.sql.*;
 import java.util.Iterator;
@@ -243,5 +244,26 @@ public class Connect {
         }
         Create.rebuildWatsonDB(set, unknown);
         System.out.println();
+    }
+
+    public static void watson(String sqlQuery, Unknown unknown) throws SQLException {
+
+        if(Messages.numWordPairs > 0) {
+
+            char mostCommonUnknownLetter = Unknown.printFirstEntry();
+            String query = "select * from WordPairs " +
+                    "where " +
+                    "word1 like '%" + mostCommonUnknownLetter + "%' and " +
+                    "word2 not like '%" + mostCommonUnknownLetter + "%' or " +
+                    "word1 not like '%" + mostCommonUnknownLetter + "%' and " +
+                    "word2 like '%" + mostCommonUnknownLetter + "%;'";
+            ResultSet rs7 = Query.select(query);
+
+            while(rs7.next()) {
+                System.out.println(rs7.getString(1) + ", " + rs7.getString(2));
+            }
+        } else {
+            System.out.println();
+        }
     }
 }

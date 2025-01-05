@@ -10,6 +10,7 @@ import java.util.*;
 public class Messages {
 
     public static int reportNumber = 1;
+    public static int numWordPairs = 0;
 
     //  Introduce the game, and how it is played...
     public static void welcome() {
@@ -51,7 +52,7 @@ public class Messages {
 
         //  GET counts from database table to furnish report, and drive logic...
         int numWords = (int) Connect.watson("getNumWordsInDB");
-        int numWordPairs = (int) Connect.watson("countWordPairs");
+        numWordPairs = (int) Connect.watson("countWordPairs");
 
         System.out.print("There are " + numWords + " words remaining in the database.\n");
         System.out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
