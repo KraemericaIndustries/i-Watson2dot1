@@ -45,7 +45,7 @@ public class App {
 
         do {
             Messages.report(knownIn, knownOut, pairs, Turns);  //  PRINT a report of possible determinations
-            Messages.results(pairs, Turns, unknown);                    //  PRINT the results of previous plays and determinations
+            Messages.results(pairs, Turns, unknown);           //  PRINT the results of previous plays and determinations
 
             Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
 
