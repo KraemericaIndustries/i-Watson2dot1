@@ -1,6 +1,5 @@
 package assess;
 
-import dataStructures.Pairs;
 import dataStructures.Turn;
 import dataStructures.Unknown;
 import transactSQL.*;
@@ -11,16 +10,10 @@ import java.util.*;
 public class AllTurns {
 
     //  MAKE all possible determinations on ALL previous turns taken...
-    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) throws SQLException {
+    public static void makeDeterminations(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
 
         System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
 
-        //  Checks if any one knownTogether pair is knownIn, if yes, the other must be knownIn (because we only process turns where the response varies by 1)
-        if(!pairs.knownTogether.isEmpty()) {
-            pairs.checkPairsForKnownIn(knownIn, unknown);
-            pairs.checkPairsForKnownOut(knownOut, unknown);
-            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, unknown, Turns);
-        }
 
         //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
         checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
@@ -30,10 +23,11 @@ public class AllTurns {
 
 
             //  COMPARE each (updated) turn against each other...
-        compareAllTurnsAgainstEachOther(Turns, pairs, knownIn, knownOut, unknown);
+        compareAllTurnsAgainstEachOther(Turns, knownIn, knownOut, unknown);
         System.out.println("assess.AllTurns.makeDeterminations: END");
     }
 
+    //  Each time a turn is taken, STRIP all letters known (in and out), check for an updatedResponse of zero, and remove knownOut from ALL turns...
     public static void updateTurn(Turn turn, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, LinkedList<Turn> Turns) {
 
             for (Character c : knownIn) {       //  FOR every character in knownIn
@@ -69,7 +63,7 @@ public class AllTurns {
     }
 
     //  COMPARE each updated turn against each other...
-    public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Pairs pairs, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) throws SQLException {
+    public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown) {
 
         removeDeterminedLettersFromAllTurns(Turns, knownIn, knownOut);
 
@@ -83,9 +77,9 @@ public class AllTurns {
         for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
             for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
 
-                int simplifier = Turns.get(i).updatedResponse - Turns.get(j).updatedResponse;
+                int differenceOfUpdatedResponses = Turns.get(i).updatedResponse - Turns.get(j).updatedResponse;
 
-                if(simplifier < 2 && simplifier > -2) {
+                if(differenceOfUpdatedResponses <= 1 && differenceOfUpdatedResponses >= -1) {  //  Only turns where the updatedResponses differ by 1 need be compared.  No determinations can be made, otherwise
 
                     System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
                     prettyPrintLinkedHashMap(Turns, i, j);
@@ -102,49 +96,11 @@ public class AllTurns {
                     comparisonNumber++;
 
                     if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {  //  IF responses from compared turns are EQUAL...
-                        System.out.println("    Scenario: i.updatedResponse == j.updatedResponse");
-
-                        responseIsEqualWithOneLetterDifferent(Turns, knownIn, knownOut, unknown, i, j);
-                        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
-
-                        if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {  //  AND IF Only 1 letter has changed between turns...
-                            System.out.println("    Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
-                            System.out.println("    We now know that " + letterChangedTo + " and " + letterChangedFrom + " are either both IN, or both OUT (but cannot be sure which is the case).\n");
-
-                            //  CREATE a COPY of the pair set prior to adding the copy to the set of sets (prevents a cleared set from appearing in the set of sets)
-                            Set<Character> tmp = new HashSet<>(Arrays.asList(letterChangedFrom.get(0), letterChangedTo.get(0)));
-                            HashSet<Character> copy = new HashSet<>(tmp);
-
-                            pairs.addPairsToSets(copy);
-                            pairs.checkPairsForWordExists(unknown, knownOut, Turns, knownIn);
-                        } else {
-                            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
-                        }
+                        updatedResponsesEqual(Turns, knownIn, knownOut, unknown, i, j, letterChangedTo, letterChangedFrom);
                     } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == 1) {  //  ELSE-IF responses from compared turns are + 1...
-                        System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1");
-                        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {          //  AND IF Only 1 letter has changed between turns...
-                            System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1:");
-                            System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedFrom + " is KNOWN IN, and " + letterChangedTo + " is KNOWN OUT.  Updating all data sources...\n");
-                            //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
-                            //  Clean this up (someday)
-                            updateDataSources(Turns, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
-                            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
-                        } else {
-                            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
-                        }
+                        differenceIsOne(Turns, knownIn, knownOut, unknown, letterChangedTo, letterChangedFrom);
                     } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == -1) {  //  ELSE-IF responses from compared turns are + 1...
-                        System.out.println("    AllTurns.makeDeterminations: updatedResponse(i) - updatedResponse(j) = -1");
-                        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {               //  AND IF Only 1 letter has changed between turns...
-                            System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = -1:");
-                            System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedTo + " is KNOWN IN, and " + letterChangedFrom + " is KNOWN OUT.  Updating all data sources...\n");
-                            //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
-                            //  Clean this up (someday)
-                            updateDataSources(Turns, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
-                            pairs.checkPairsForKnownIn(knownIn, unknown);
-                            Create.rebuildWatsonDB(knownIn, unknown);
-                        } else {
-                            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
-                        }
+                        differenceIsMinusOne(Turns, knownIn, knownOut, unknown, letterChangedTo, letterChangedFrom);
                     }
                 }
                 letterChangedFrom.clear();
@@ -154,7 +110,55 @@ public class AllTurns {
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): END");
     }
 
-    private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, int i, int j) {
+    private static void differenceIsMinusOne(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, ArrayList<Character> letterChangedTo, ArrayList<Character> letterChangedFrom) {
+        System.out.println("    AllTurns.makeDeterminations: updatedResponse(i) - updatedResponse(j) = -1");
+        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {               //  AND IF Only 1 letter has changed between turns...
+            System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = -1:");
+            System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedTo + " is KNOWN IN, and " + letterChangedFrom + " is KNOWN OUT.  Updating all data sources...\n");
+            //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
+            //  Clean this up (someday)
+            updateDataSources(Turns, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
+            Create.rebuildWatsonDB(unknown);
+        } else {
+            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
+        }
+    }
+
+    private static void differenceIsOne(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, ArrayList<Character> letterChangedTo, ArrayList<Character> letterChangedFrom) {
+        System.out.println("    Turns[i].updatedResponse - Turns[j].updatedResponse = 1");
+        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {          //  AND IF Only 1 letter has changed between turns...
+            System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1:");
+            System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedFrom + " is KNOWN IN, and " + letterChangedTo + " is KNOWN OUT.  Updating all data sources...\n");
+            //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
+            //  Clean this up (someday)
+            updateDataSources(Turns, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
+            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
+        } else {
+            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
+        }
+    }
+
+    private static void updatedResponsesEqual(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, int i, int j, ArrayList<Character> letterChangedTo, ArrayList<Character> letterChangedFrom) {
+        System.out.println("    Turns[i].updatedResponse == Turns[j].updatedResponse");
+
+        responseIsEqualWithOneAdditionalLetter(Turns, knownIn, knownOut, unknown, i, j);
+        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
+
+        if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {  //  AND IF Only 1 letter has changed between turns...
+            System.out.println("    Turns[i].updatedResponse == Turns[j].updatedResponse & Only 1 letter changed between turns:");
+            System.out.println("    We now know that " + letterChangedTo + " and " + letterChangedFrom + " are either both IN, or both OUT (but cannot be sure which is the case).\n" +
+                               "    Determining which is the case...");
+            try {
+                Connect.watson(letterChangedFrom, letterChangedTo, unknown, knownIn, Turns);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
+        }
+    }
+
+    private static void responseIsEqualWithOneAdditionalLetter(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut, Unknown unknown, int i, int j) {
 
 
 
@@ -220,7 +224,7 @@ public class AllTurns {
                     throw new RuntimeException(e);
                 }
 
-                Create.rebuildWatsonDB(knownIn, unknown);
+                Create.rebuildWatsonDB(unknown);
             }
         }
         System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): END");
@@ -247,7 +251,7 @@ public class AllTurns {
             }
 
             try {
-                Delete.wordsWith(String.valueOf(c), unknown, knownOut);
+                Delete.wordsWith(String.valueOf(c), unknown);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
@@ -274,7 +278,7 @@ public class AllTurns {
 
         System.out.println();
 
-        Create.rebuildWatsonDB(knownIn, unknown);
+        Create.rebuildWatsonDB(unknown);
         System.out.println("assess.AllTurns.updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown): END");
     }
 
@@ -325,7 +329,7 @@ public class AllTurns {
         if(turn.response == 0) {
             // DELETE every letter from the String (handle length programmatically) from the DB
             try {
-                Delete.wordsWith(turn.updatedGuess, unknown, knownOut);
+                Delete.wordsWith(turn.updatedGuess, unknown);
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

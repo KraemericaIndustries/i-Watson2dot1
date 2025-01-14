@@ -13,11 +13,12 @@ import static transactSQL.DatabaseConnection.*;
 public class Delete {
 
     //  DELETE all words containing EVERY LETTER in a String, and UPDATE ALL data sources...
-    public static void wordsWith(String s, Unknown unknown, Set<Character> knownOut) throws SQLException {
+//    public static void wordsWith(String s, Unknown unknown, Set<Character> knownOut) throws SQLException {
+        public static void wordsWith(String s, Unknown unknown) throws SQLException {
 
-        for(int i = 0; i < s.length(); i++) {
-            knownOut.add(s.charAt(i));
-        }
+//        for(int i = 0; i < s.length(); i++) {
+//            knownOut.add(s.charAt(i));
+//        }
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words containing '" + s + "' from the database...");
@@ -35,7 +36,7 @@ public class Delete {
             }
         }
 
-        Create.rebuildWatsonDB(knownOut, unknown);
+        Create.rebuildWatsonDB(unknown);
 
         System.out.println("Delete.wordsWith: END");
     }
@@ -65,16 +66,8 @@ public class Delete {
             }
         }
 
-        Create.rebuildWatsonDB(knownIn, unknown);
+        Create.rebuildWatsonDB(unknown);
 
         System.out.println("transactSQL.Delete.wordsWithout(): END");
-    }
-
-    //  Following each REBUILD of the database, all letters KNOWN IN must be REMOVED from the list of UNKNOWN letters
-    private static void removeKnownOutFromUnknown(Set<Character> knownIn) {
-
-        for(Character c : knownIn) {
-            Unknown.letters.remove(c);
-        }
     }
 }

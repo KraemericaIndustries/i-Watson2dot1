@@ -5,7 +5,6 @@ import dataStructures.Unknown;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.sql.*;
-import java.util.Set;
 
 import static assess.AllTurns.regenerateWordPairsTable;
 
@@ -46,26 +45,18 @@ public class Create extends DatabaseConnection{
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        System.out.println(" > 'watson' database created!");
-        System.out.println();
+        System.out.println(" > 'watson' database created!\n");
 
         url = url + "DatabaseName=watson";
     }
 
     //  RELOAD remaining words into tables...
     //  (This is how we get our letter counts - by loading the tables.)
-    public static void rebuildWatsonDB(Set<Character> letters, Unknown unknown) {
-
+    public static void rebuildWatsonDB(Unknown unknown) {
         Query.wordsFromDB();                            //  QUERY remaining words out to a file
         Connect.watson("deleteFromWordsTable");  //  DELETE the remaining words from Words_tbl
         Insert.reloadKnownWords();                      //  RELOAD words from file
-
-        // remove knownTogether(set) from unknown(linkedHashMap)
-        for (Character c : letters) {
-            Unknown.letters.remove(c);
-        }
-
-        unknown.sort();  //  SORT unknown letters by frequency of occurrence in the database
-        regenerateWordPairsTable();  // rebuild WordPairs table
+        unknown.sort();                                 //  SORT unknown letters by frequency of occurrence in the database
+        regenerateWordPairsTable();                     // rebuild WordPairs table
     }
 }

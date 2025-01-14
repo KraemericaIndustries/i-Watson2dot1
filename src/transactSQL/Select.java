@@ -41,7 +41,7 @@ public class Select {
         }
     }
     public static void lastNumWordPairs() throws SQLException {
-
+        //  ToDo:  Refactoring this out to Query.select() would allow this class to be obliterated
         Connection conn = DriverManager.getConnection(url, user, password);
         Statement statement = conn.createStatement(); {
 

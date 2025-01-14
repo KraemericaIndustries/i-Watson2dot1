@@ -39,13 +39,12 @@ public class Messages {
     }
 
     //  PRINT a report...
-    public static void report(Set<Character> knownIn, Set<Character> knownOut, Pairs pairs, LinkedList<Turn> Turns) {
+    public static void report(Set<Character> knownIn, Set<Character> knownOut, LinkedList<Turn> Turns) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
         //  PRINT the LinkedHashMaps...
         System.out.println("Known IN: " + knownIn);
         System.out.println("Known OUT: " + knownOut);
-        pairs.prettyPrintPairs();
         System.out.println("Unknown: " + Unknown.letters + "\n");
 
         prettyPrintPreviousGuesses(Turns);  //  PRINT all previous guesses
@@ -60,7 +59,7 @@ public class Messages {
     }
 
     //  PRINT the result(s) of a given turn...
-    public static void results(Pairs pairs, LinkedList<Turn> Turns, Unknown unknown) throws SQLException {
+    public static void results(LinkedList<Turn> Turns) throws SQLException {
 
         Object z = Connect.watson("countWordPairs");
         int numWordPairs = (int) z;
@@ -71,33 +70,16 @@ public class Messages {
 
         //  STRATEGY #1
         System.out.println("SUGGESTION:");
-            if(!pairs.knownTogether.isEmpty()) {
-
-                System.out.println("""
-                Condition: !knownTogether.isEmpty()
-                Try to make a determination on letters known to be together.
-                Consider a turn making any of these guesses:
-                """);
-                Connect.watson(pairs);
-            }  else if(numWordPairs < 6) {
-                System.out.println("Condition: numWordPairs < 6");
+            if(numWordPairs < 6) {
+                System.out.println("Condition: numWordPairs < 6\nTry to eliminate the most common letter among the remaining word pairs");
                 try {
                     Select.lastNumWordPairs();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
-            } else if(Turns.size() <= 1) {
-                System.out.println("Condition: Turns.size() <= 1");
-                System.out.println(" - With 0 previous plays to draw information from, try to make a determination on the most commonly occurring letter in the database, which is: " + Unknown.printFirstEntry());
-                System.out.println("Consider taking a pair of consecutive turns making these guesses:");
-                Connect.watson(unknown);
             } else {
-
-                System.out.println("""
-                Condition: else
-                Consider taking a pair of consecutive turns making these guesses:
-                """);
-                Connect.watson(unknown);
+                System.out.println("Try to eliminate the most common letter found in the database (which is " + Unknown.printFirstEntry() + ").\nConsider taking a pair of consecutive turns making these guesses:");
+                Connect.watson();
             }
         System.out.println("***********************************************************************************************************************************************************************");
     }
