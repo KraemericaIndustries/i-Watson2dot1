@@ -83,9 +83,9 @@ public class AllTurns {
         for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
             for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
 
-                int simplifier = Turns.get(i).updatedResponse - Turns.get(j).updatedResponse;
+                int differenceOfUpdatedResponses = Turns.get(i).updatedResponse - Turns.get(j).updatedResponse;
 
-                if(simplifier < 2 && simplifier > -2) {
+                if(differenceOfUpdatedResponses < 2 && differenceOfUpdatedResponses > -2) {
 
                     System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
                     prettyPrintLinkedHashMap(Turns, i, j);
@@ -105,21 +105,7 @@ public class AllTurns {
                         System.out.println("    Scenario: i.updatedResponse == j.updatedResponse");
 
                         responseIsEqualWithOneLetterDifferent(Turns, knownIn, knownOut, unknown, i, j);
-                        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
 
-                        if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {  //  AND IF Only 1 letter has changed between turns...
-                            System.out.println("    Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
-                            System.out.println("    We now know that " + letterChangedTo + " and " + letterChangedFrom + " are either both IN, or both OUT (but cannot be sure which is the case).\n");
-
-                            //  CREATE a COPY of the pair set prior to adding the copy to the set of sets (prevents a cleared set from appearing in the set of sets)
-                            Set<Character> tmp = new HashSet<>(Arrays.asList(letterChangedFrom.get(0), letterChangedTo.get(0)));
-                            HashSet<Character> copy = new HashSet<>(tmp);
-
-                            pairs.addPairsToSets(copy);
-                            pairs.checkPairsForWordExists(unknown, knownOut, Turns, knownIn);
-                        } else {
-                            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
-                        }
                     } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == 1) {  //  ELSE-IF responses from compared turns are + 1...
                         System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1");
                         if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {          //  AND IF Only 1 letter has changed between turns...
@@ -183,6 +169,7 @@ public class AllTurns {
             updatedResponseIsZero(Turns.get(j), knownOut, unknown, Turns);
             checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
         }
+
     }
 
     private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, Set<Character> knownIn, Set<Character> knownOut) {
