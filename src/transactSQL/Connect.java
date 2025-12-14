@@ -1,5 +1,6 @@
 package transactSQL;
 
+import dataStructures.IdentifiedLetters;
 import dataStructures.Pairs;
 import dataStructures.Unknown;
 import print.Messages;

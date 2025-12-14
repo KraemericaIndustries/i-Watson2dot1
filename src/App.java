@@ -25,8 +25,10 @@ public class App {
         //  SETUP: Create datastore objects to facilitate play...
         Unknown unknown = new Unknown();  //  <- Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
         Pairs pairs = new Pairs();
-        Set<Character> knownIn = new HashSet<>();
-        Set<Character> knownOut = new HashSet<>();
+//        Set<Character> knownIn = new HashSet<>();
+        IdentifiedLetters knownIn = new IdentifiedLetters();
+//        Set<Character> knownOut = new HashSet<>();
+        IdentifiedLetters knownOut = new IdentifiedLetters();
         LinkedList<Turn> Turns = new LinkedList<>();
 
         //  SETUP: Load database tables...

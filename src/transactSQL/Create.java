@@ -1,5 +1,6 @@
 package transactSQL;
 
+import dataStructures.IdentifiedLetters;
 import dataStructures.Unknown;
 
 import java.io.BufferedReader;
@@ -54,18 +55,18 @@ public class Create extends DatabaseConnection{
 
     //  RELOAD remaining words into tables...
     //  (This is how we get our letter counts - by loading the tables.)
-    public static void rebuildWatsonDB(Set<Character> letters, Unknown unknown) {
+    public static void rebuildWatsonDB(Set<Character> s, Unknown unknown) {
 
         Query.wordsFromDB();                            //  QUERY remaining words out to a file
         Connect.watson("deleteFromWordsTable");  //  DELETE the remaining words from Words_tbl
         Insert.reloadKnownWords();                      //  RELOAD words from file
 
         // remove knownTogether(set) from unknown(linkedHashMap)
-        for (Character c : letters) {
+        for (Character c : s) {
             Unknown.letters.remove(c);
         }
-
         unknown.sort();  //  SORT unknown letters by frequency of occurrence in the database
+
         regenerateWordPairsTable();  // rebuild WordPairs table
     }
 }

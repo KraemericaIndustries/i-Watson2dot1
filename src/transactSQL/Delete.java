@@ -1,5 +1,6 @@
 package transactSQL;
 
+import dataStructures.IdentifiedLetters;
 import dataStructures.Unknown;
 
 import java.sql.Connection;
@@ -13,10 +14,10 @@ import static transactSQL.DatabaseConnection.*;
 public class Delete {
 
     //  DELETE all words containing EVERY LETTER in a String, and UPDATE ALL data sources...
-    public static void wordsWith(String s, Unknown unknown, Set<Character> knownOut) throws SQLException {
+    public static void wordsWith(String s, Unknown unknown, IdentifiedLetters knownOut) throws SQLException {
 
         for(int i = 0; i < s.length(); i++) {
-            knownOut.add(s.charAt(i));
+            knownOut.letters.addAll(Set.of(s.charAt(i)));  //  <-- Copilot
         }
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
@@ -35,7 +36,7 @@ public class Delete {
             }
         }
 
-        Create.rebuildWatsonDB(knownOut, unknown);
+        Create.rebuildWatsonDB(knownOut.letters, unknown);
 
         System.out.println("Delete.wordsWith: END");
     }
@@ -45,9 +46,9 @@ public class Delete {
 
         System.out.println("transactSQL.Delete.wordsWithout(): BEGIN");
 
-        for(int i = 0; i < s.length(); i++) {
-            knownIn.add(s.charAt(i));
-        }
+//        for(int i = 0; i < s.length(); i++) {
+//            knownIn.add(s.charAt(i));
+//        }
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words NOT containing '" + s + "' from the database...");
@@ -64,8 +65,6 @@ public class Delete {
                 e.printStackTrace();
             }
         }
-
-        Create.rebuildWatsonDB(knownIn, unknown);
 
         System.out.println("transactSQL.Delete.wordsWithout(): END");
     }

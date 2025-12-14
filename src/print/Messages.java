@@ -39,7 +39,7 @@ public class Messages {
     }
 
     //  PRINT a report...
-    public static void report(Set<Character> knownIn, Set<Character> knownOut, Pairs pairs, LinkedList<Turn> Turns) {
+    public static void report(IdentifiedLetters knownIn, IdentifiedLetters knownOut, Pairs pairs, LinkedList<Turn> Turns) {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
         //  PRINT the LinkedHashMaps...

@@ -17,8 +17,8 @@ public class Pairs {
         System.out.println("Known TOGETHER: " + knownTogether);
     }
 
-    public void checkPairsForKnownIn(Set<Character> knownIn, Unknown unknown) throws SQLException {
-        for (Character c : knownIn) {
+    public void checkPairsForKnownIn(IdentifiedLetters knownIn, Unknown unknown) throws SQLException {
+        for (Character c : knownIn.letters) {
 
             Iterator<Set<Character>> iterator = knownTogether.iterator();  // Create an iterator for the set of sets
 
@@ -26,8 +26,8 @@ public class Pairs {
             while (iterator.hasNext()) {
                 Set<Character> s = iterator.next();
                 if (s.contains(c)) {  // Check if the set contains the desired character (e.g., 'a')
-                    knownIn.addAll(s);
-                    Delete.wordsWithout(createStringFromSet(s), unknown, knownIn);
+                    knownIn.letters.addAll(s);
+                    Delete.wordsWithout(createStringFromSet(s), unknown, knownIn.letters);
                     s.clear();          // Clear the set
                     iterator.remove();  // Remove the cleared set using the iterator
                 }
@@ -35,8 +35,8 @@ public class Pairs {
         }
     }
 
-    public void checkPairsForKnownOut(Set<Character> knownOut, Unknown unknown) throws SQLException {
-        for (Character c : knownOut) {
+    public void checkPairsForKnownOut(IdentifiedLetters knownOut, Unknown unknown) throws SQLException {
+        for (Character c : knownOut.letters) {
 
             Iterator<Set<Character>> iterator = knownTogether.iterator();  // Create an iterator for the set of sets
 
@@ -44,7 +44,7 @@ public class Pairs {
             while (iterator.hasNext()) {
                 Set<Character> s = iterator.next();
                 if (s.contains(c)) {  // Check if the set contains the desired character (e.g., 'a')
-                    knownOut.addAll(s); //  << WORKS
+                    knownOut.letters.addAll(s); //  << WORKS
                     Delete.wordsWith(createStringFromSet(s), unknown, knownOut);  //  CHANGED to .wordsWith()
                     s.clear();          // Clear the set
                     iterator.remove();  // Remove the cleared set using the iterator
@@ -90,7 +90,7 @@ public class Pairs {
         }
     }
 
-    public void checkPairsForWordExists(Unknown unknown, Set<Character> knownOut, LinkedList<Turn> Turns, Set<Character> knownIn) throws SQLException {
+    public void checkPairsForWordExists(Unknown unknown, IdentifiedLetters knownOut, LinkedList<Turn> Turns, IdentifiedLetters knownIn) throws SQLException {
 
         Iterator<Set<Character>> iterator = knownTogether.iterator();  // Create an iterator for the set of sets
 
@@ -113,7 +113,7 @@ public class Pairs {
 
                 Connect.watson(sb.toString(), s, unknown);  //  DELETE from database where word like String
 
-                knownOut.addAll(s);  //  ADD the set to the list of characters KNOWN to be OUT
+                knownOut.letters.addAll(s);  //  ADD the set to the list of characters KNOWN to be OUT
                 AllTurns.removeKnownOutFromAllTurns(knownOut, Turns);
 
                 s.clear();          // Clear the set
