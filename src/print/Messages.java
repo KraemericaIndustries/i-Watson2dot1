@@ -43,8 +43,8 @@ public class Messages {
         System.out.println("*****************************************************************  REPORT # " + reportNumber + " *****************************************************************************************");
 
         //  PRINT the LinkedHashMaps...
-        System.out.println("Known IN: " + knownIn);
-        System.out.println("Known OUT: " + knownOut);
+        System.out.println("Known IN: " + knownIn.letters);
+        System.out.println("Known OUT: " + knownOut.letters);
         pairs.prettyPrintPairs();
         System.out.println("Unknown: " + Unknown.letters + "\n");
 
