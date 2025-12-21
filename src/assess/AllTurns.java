@@ -85,6 +85,23 @@ public class AllTurns {
         for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
             for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
 
+                //  *** CLASSIFY PAIRS OF TURNS ***
+                //  INITIALIZE and DECLARE booleans to simplify eventual if-else ladder conditions...
+                boolean updatedGuesssesExactlyTheSame;
+                boolean updatedGuesssesDifferByOneLetter;
+                boolean updatedGuesssesDifferByOneMoreThanLetter;
+
+                boolean updatedGuesssesSameLength;
+                boolean updatedGuesssesDifferInLengthByOne;
+                boolean updatedGuesssesDifferInLengthByMoreThanOne;
+
+                boolean updatedResponsesSame = checkForUpdatedResponseSame(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse);
+                boolean updatedResponsesDifferByOne = checkForUpdatedResponsesDifferByOne(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse);
+                boolean updatedResponsesDifferByMoreThanOne = checkForUpdatedResponsesDifferByMoreThanOne(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse);
+
+
+
+                //  Todo THIS IS THE LEGACY CODE:
                 int simplifier = Turns.get(i).updatedResponse - Turns.get(j).updatedResponse;
 
                 if(simplifier < 2 && simplifier > -2) {
@@ -154,6 +171,18 @@ public class AllTurns {
             }
         }
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): END");
+    }
+
+    private static boolean checkForUpdatedResponsesDifferByMoreThanOne(int i, int j) {
+        return i - j > 1 || i - j < -1;
+    }
+
+    private static boolean checkForUpdatedResponsesDifferByOne(int i, int j) {
+        return i - j == 1 || i - j == -1;
+    }
+
+    private static boolean checkForUpdatedResponseSame(int i, int j) {
+        return i == j;
     }
 
     private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, int i, int j) throws SQLException {
