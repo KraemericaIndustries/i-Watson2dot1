@@ -1,5 +1,6 @@
 package assess;
 
+import classify.Classification;
 import dataStructures.IdentifiedLetters;
 import dataStructures.Pairs;
 import dataStructures.Turn;
@@ -85,19 +86,41 @@ public class AllTurns {
         for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
             for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
 
-                //  *** CLASSIFY PAIRS OF TURNS ***
-                //  INITIALIZE and DECLARE booleans to simplify eventual if-else ladder conditions...
-                boolean updatedGuesssesExactlyTheSame;
-                boolean updatedGuesssesDifferByOneLetter;
-                boolean updatedGuesssesDifferByOneMoreThanLetter;
+                System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
+                prettyPrintLinkedHashMap(Turns, i, j);
 
-                boolean updatedGuesssesSameLength;
-                boolean updatedGuesssesDifferInLengthByOne;
-                boolean updatedGuesssesDifferInLengthByMoreThanOne;
+                //  ToDo CLASSIFICATION logic...
+                System.out.println("CLASSIFICATION:");
+                Classification classification;
+                classification = new Classification(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse, Turns.get(i).updatedGuess, Turns.get(j).updatedGuess);
 
-                boolean updatedResponsesSame = checkForUpdatedResponseSame(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse);
-                boolean updatedResponsesDifferByOne = checkForUpdatedResponsesDifferByOne(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse);
-                boolean updatedResponsesDifferByMoreThanOne = checkForUpdatedResponsesDifferByMoreThanOne(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse);
+                //  ToDo FINDINGS logic...
+                System.out.println("FINDINGS:");
+                if(updatedResponsesSame && updatedGuessesSameLength && !updatedGuessesExactlyTheSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
+                    // ToDo: Use identifyChangedLetters() as the basis for your findings
+
+                }
+
+                //  ToDo DETERMINATIONS logic...
+                System.out.println("DETERMINATIONS:");
+                //  ToDo: Go ahead and do identifyChangedLetters() again - not elegant, but KeepTheChangeSimple, OptRootAllEvil, GetSomethingWorkingFirst(AllElseSecondary)
+
+
+                //  ToDo ACTUATOR logic...
+                System.out.println("ACTIONABLES:");
+
+
+
+
+
+                // Todo NEW turn comparison logic:
+                // if differenceInUpdatedResponses == 0 & updatedGuesses different, take the smaller set away from the bigger.  What remains is OUT!  <-- (Kim thing)
+                // if differenceInUpdatedResponses == 0, and updatedGuesses same, do nothing   <-- (DON'T write code for DO NOTHING scenarios)
+                // if differenceInUpdatedResponses == 1 or -1, and the guesses differ by 1 letter, that letter is IN!
+                // if differenceInUpdatedResponses == 2 or -2, nothing can be learned  <-- Not necessarily true!!!
+
+                // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
+
 
 
 
@@ -105,9 +128,6 @@ public class AllTurns {
                 int simplifier = Turns.get(i).updatedResponse - Turns.get(j).updatedResponse;
 
                 if(simplifier < 2 && simplifier > -2) {
-
-                    System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
-                    prettyPrintLinkedHashMap(Turns, i, j);
 
                     //  This 'if' statement prevents pairs of updated turns consisting of only 1 letter each from being treated as indeterminate...
                     if(Turns.get(i).updatedGuess.length() == 1 && Turns.get(j).updatedGuess.length() == 1 &&
@@ -173,17 +193,14 @@ public class AllTurns {
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): END");
     }
 
-    private static boolean checkForUpdatedResponsesDifferByMoreThanOne(int i, int j) {
-        return i - j > 1 || i - j < -1;
+
+
+    private static String getLongerUpdatedGuessInCurrentPair(String iUpdatedGuess, String jUpdatedGuess) {
+        if(iUpdatedGuess.length() > jUpdatedGuess.length()) return iUpdatedGuess;
+        else return jUpdatedGuess;
     }
 
-    private static boolean checkForUpdatedResponsesDifferByOne(int i, int j) {
-        return i - j == 1 || i - j == -1;
-    }
 
-    private static boolean checkForUpdatedResponseSame(int i, int j) {
-        return i == j;
-    }
 
     private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, int i, int j) throws SQLException {
 
