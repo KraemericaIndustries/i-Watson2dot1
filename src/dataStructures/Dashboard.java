@@ -51,7 +51,7 @@ public class Dashboard {
 //    }
     public void letterEnumerator(String word) {
         for(int i = 0; i <word.length(); i++) {
-            int count = letters.getOrDefault(word.charAt(i), 0);
+            int count = unknownLetters.getOrDefault(word.charAt(i), 0);
             unknownLetters.put(word.charAt(i), count + 1);
         }
     }
