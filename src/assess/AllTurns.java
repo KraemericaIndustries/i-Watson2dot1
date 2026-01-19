@@ -85,19 +85,25 @@ public class AllTurns {
         for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
             for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
 
-                System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
+                System.out.println("COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
                 prettyPrintLinkedHashMap(Turns, i, j);
 
                 //  CLASSIFICATION:
                 System.out.println("CLASSIFICATION:");
                 Classification classification;
                 classification = new Classification(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse, Turns.get(i).updatedGuess, Turns.get(j).updatedGuess);
+                classification.printClassification();
 
                 // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
                 if(!classification.updatedGuessesSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
                     System.out.println("FINDINGS:");
-                    classification.printClassification();
+                    classification.printFindings();
                     System.out.println("DETERMINATIONS:");
+                    if(classification.updatedResponsesDifferByOne && classification.updatedGuessesSameLength) {
+                        System.out.println(" - Since updated responses are the same length, and the responses differ by 1, we know:");
+                        System.out.println("   " + classification.onlyInFirst + " is IN.");
+                        System.out.println("   " + classification.onlyInSecond + " is OUT.");
+                    }
                     System.out.println("ACTIONS:");
                 }
 
