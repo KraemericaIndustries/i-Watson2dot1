@@ -1,4 +1,3 @@
-import assess.AllTurns;
 import dataStructures.*;
 import print.Messages;
 import read.Keyboard;
@@ -9,9 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.ResultSet;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Set;
 
 
 
@@ -37,13 +34,13 @@ public class App {
         Dashboard dashboard = new Dashboard();
 
         //  SETUP: Load database tables...
-        Insert.loadKnownWords();
+        Insert.loadKnownWords(dashboard);
         Connect.watson("createWordPairsTable");
         Connect.watson("deleteDups");
 
         //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
         dashboard.sort();
-        dashboard.loadSortedLetters(Unknown.letters);
+        dashboard.loadSortedLetters();
 
         //  PLAY the game...
         String lastGuess;

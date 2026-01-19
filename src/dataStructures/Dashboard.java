@@ -19,11 +19,11 @@ public class Dashboard {
     public Set<Character> knownIn;
     public Set<Character> knownOut;
     public LinkedList<Turn> Turns;
-    public static LinkedHashMap<Character, Integer> letters;
     public char[] unsortedLettersFromMap;  //  To create char[] sortedLetters, a temporary array is declared and only initialized once the map has been populated with letter occurrences read in from all words
     public char[] sortedLetters;           //  DOWNSTREAM DB query for words unable to get key from map by index.  Creating this sorted array to accommodate that
-    public static int reportNumber = 1;
+    public int reportNumber = 1;
     public static int numWordPairs = 0;
+    public static LinkedHashMap<Character, Integer> unknownLetters;
 
     // CONSTRUCTOR
     public Dashboard() {
@@ -33,6 +33,7 @@ public class Dashboard {
         knownOut = new HashSet<>();
         Turns = new LinkedList<>();
         letters = new LinkedHashMap<>();
+        unknownLetters = new LinkedHashMap<>();
     }
 
     // BEHAVIOUR (methods)
@@ -48,10 +49,10 @@ public class Dashboard {
 //        Create.rebuildWatsonDB(letters, unknown);
 //
 //    }
-    public static void letterEnumerator(String word) {
+    public void letterEnumerator(String word) {
         for(int i = 0; i <word.length(); i++) {
             int count = letters.getOrDefault(word.charAt(i), 0);
-            letters.put(word.charAt(i), count + 1);
+            unknownLetters.put(word.charAt(i), count + 1);
         }
     }
 
@@ -68,7 +69,7 @@ public class Dashboard {
         sortedMap.clear();
     }
 
-    public void loadSortedLetters(LinkedHashMap<Character, Integer> letters) {
+    public void loadSortedLetters() {
 
         unsortedLettersFromMap = new char[letters.size()];
         int i = 0;
@@ -90,7 +91,7 @@ public class Dashboard {
         System.out.println("Known IN: " + knownIn);
         System.out.println("Known OUT: " + knownOut);
         pairs.prettyPrintPairs();
-        System.out.println("Unknown: " + Unknown.letters + "\n");
+        System.out.println("Unknown: " + unknownLetters + "\n");
 
         prettyPrintPreviousGuesses(Turns);  //  PRINT all previous guesses
 
