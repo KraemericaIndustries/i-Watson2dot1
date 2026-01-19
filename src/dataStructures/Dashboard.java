@@ -23,7 +23,7 @@ public class Dashboard {
     public char[] sortedLetters;           //  DOWNSTREAM DB query for words unable to get key from map by index.  Creating this sorted array to accommodate that
     public int reportNumber = 1;
     public static int numWordPairs = 0;
-    public static LinkedHashMap<Character, Integer> unknownLetters;
+    public LinkedHashMap<Character, Integer> unknownLetters;
 
     // CONSTRUCTOR
     public Dashboard() {
@@ -57,15 +57,15 @@ public class Dashboard {
     }
 
     public void sort() {
-        LinkedHashMap<Character, Integer> sortedMap = letters.entrySet()
+        LinkedHashMap<Character, Integer> sortedMap = unknownLetters.entrySet()
                 .stream()
                 .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-        letters.clear();
-        letters.putAll(sortedMap);
+        unknownLetters.clear();
+        unknownLetters.putAll(sortedMap);
         sortedMap.clear();
     }
 

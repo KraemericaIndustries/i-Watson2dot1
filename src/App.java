@@ -35,6 +35,7 @@ public class App {
 
         //  SETUP: Load database tables...
         Insert.loadKnownWords(dashboard);
+        dashboard.sort();
         Connect.watson("createWordPairsTable");
         Connect.watson("deleteDups");
 
