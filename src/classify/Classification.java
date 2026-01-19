@@ -5,19 +5,20 @@ import java.util.*;
 public class Classification {
 
     // STATE of RESPONSES
-    boolean updatedResponsesSame;
-    boolean updatedResponsesDifferByOne;
-    boolean updatedResponsesDifferByMoreThanOne;
+    public boolean updatedResponsesSame;
+    public boolean updatedResponsesDifferByOne;
+    public boolean updatedResponsesDifferByMoreThanOne;
 
     // STATE of UPDATED GUESS LENGTH
-    boolean updatedGuessesSameLength;
-    boolean updatedGuessesDifferInLengthByOne;
-    boolean updatedGuessesDifferInLengthByMoreThanOne;
+    public boolean updatedGuessesSameLength;
+    public boolean updatedGuessesDifferInLengthByOne;
+    public boolean updatedGuessesDifferInLengthByMoreThanOne;
 
     // STATE of UPDATED GUESS CONTENTS
-    private final Set<Character> onlyInFirst = getOnlyInFirst();
-    private final Set<Character> inBoth = getInBoth();
-    private final Set<Character> onlyInSecond = getOnlyInSecond();
+    public boolean updatedGuessesSame;
+    public Set<Character> onlyInFirst;
+    public Set<Character> inBoth;
+    public Set<Character> onlyInSecond;
 
     // CONSTRUCTOR
     public Classification(int iUpdatedResponse, int jUpdatedResponse, String iUpdatedGuess, String jUpdatedGuess) {
@@ -29,25 +30,27 @@ public class Classification {
         if (!updatedGuessesSameLength) updatedGuessesDifferInLengthByOne = checkForUpdatedGuessesDifferInLengthByOne(iUpdatedGuess, jUpdatedGuess);
         if (!updatedGuessesSameLength && !updatedGuessesDifferInLengthByOne) updatedGuessesDifferInLengthByMoreThanOne = checkForUpdatedGuessesDifferInLengthByMoreThanOne(iUpdatedGuess, jUpdatedGuess);
 
+        if(iUpdatedGuess.equals(jUpdatedGuess)) updatedGuessesSame = true;
+
         //  COPILOT String comparison:
         Set<Character> set1 = toCharSet(iUpdatedGuess);
+        Set<Character> temp = toCharSet(iUpdatedGuess);
         Set<Character> set2 = toCharSet(jUpdatedGuess);
 
         // Characters in s1 but not s2
-        Set<Character> onlyInFirst = new HashSet<>(set1);
-        onlyInFirst.removeAll(set2);
+        Set<Character> onlyInFirstCons = new HashSet<>(set1);
+        onlyInFirstCons.removeAll(set2);
+        onlyInFirst = onlyInFirstCons;
 
         // Characters in both
-        Set<Character> inBoth = new HashSet<>(set1);
-        inBoth.retainAll(set2);
+        Set<Character> inBothCons = new HashSet<>(set1);
+        inBothCons.retainAll(set2);
+        inBoth = inBothCons;
 
         // Characters in s2 but not s1
-        Set<Character> onlyInSecond = new HashSet<>(set2);
-        onlyInSecond.removeAll(set1);
-
-        System.out.println("Only in first: " + onlyInFirst);
-        System.out.println("In both: " + inBoth);
-        System.out.println("Only in second: " + onlyInSecond);
+        Set<Character> onlyInSecondCons = new HashSet<>(set2);
+        onlyInSecondCons.removeAll(temp);
+        onlyInSecond = onlyInSecondCons;
     }
 
     private static boolean checkForUpdatedGuessesDifferInLengthByMoreThanOne(String iUpdatedGuess, String jUpdatedGuess) {
@@ -104,5 +107,11 @@ public class Classification {
 
     public Set<Character> getOnlyInSecond() {
         return onlyInSecond;
+    }
+
+    public void printClassification() {
+        System.out.println("Only in first: " + onlyInFirst);
+        System.out.println("In both: " + inBoth);
+        System.out.println("Only in second: " + onlyInSecond);
     }
 }

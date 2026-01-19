@@ -30,8 +30,7 @@ public class AllTurns {
         //  ToDo: ALL Turns where updatedResponse == 0 and .size() > 0, ALL letters are OUT!!!
         for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
 
-
-            //  COMPARE each (updated) turn against each other...
+        //  COMPARE each (updated) turn against each other...
         compareAllTurnsAgainstEachOther(Turns, pairs, knownIn, knownOut, unknown);
         System.out.println("assess.AllTurns.makeDeterminations: END");
     }
@@ -50,7 +49,7 @@ public class AllTurns {
                 updatedResponseIsZero(turn, knownOut, unknown, Turns);
             }
         }
-            turn.parseCollectionToString();  //  PARSE the collection back to a String
+        turn.parseCollectionToString();  //  PARSE the collection back to a String
         removeKnownOutFromAllTurns(knownOut, Turns);
     }
 
@@ -89,28 +88,18 @@ public class AllTurns {
                 System.out.println("Comparison #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
                 prettyPrintLinkedHashMap(Turns, i, j);
 
-                //  ToDo CLASSIFICATION logic...
+                //  CLASSIFICATION:
                 System.out.println("CLASSIFICATION:");
                 Classification classification;
                 classification = new Classification(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse, Turns.get(i).updatedGuess, Turns.get(j).updatedGuess);
 
-                //  ToDo FINDINGS logic...
-                System.out.println("FINDINGS:");
-                if(updatedResponsesSame && updatedGuessesSameLength && !updatedGuessesExactlyTheSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
-                    // ToDo: Use identifyChangedLetters() as the basis for your findings
-
+                // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
+                if(!classification.updatedGuessesSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
+                    System.out.println("FINDINGS:");
+                    classification.printClassification();
+                    System.out.println("DETERMINATIONS:");
+                    System.out.println("ACTIONS:");
                 }
-
-                //  ToDo DETERMINATIONS logic...
-                System.out.println("DETERMINATIONS:");
-                //  ToDo: Go ahead and do identifyChangedLetters() again - not elegant, but KeepTheChangeSimple, OptRootAllEvil, GetSomethingWorkingFirst(AllElseSecondary)
-
-
-                //  ToDo ACTUATOR logic...
-                System.out.println("ACTIONABLES:");
-
-
-
 
 
                 // Todo NEW turn comparison logic:
@@ -119,73 +108,8 @@ public class AllTurns {
                 // if differenceInUpdatedResponses == 1 or -1, and the guesses differ by 1 letter, that letter is IN!
                 // if differenceInUpdatedResponses == 2 or -2, nothing can be learned  <-- Not necessarily true!!!
 
-                // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
 
 
-
-
-                //  Todo THIS IS THE LEGACY CODE:
-                int simplifier = Turns.get(i).updatedResponse - Turns.get(j).updatedResponse;
-
-                if(simplifier < 2 && simplifier > -2) {
-
-                    //  This 'if' statement prevents pairs of updated turns consisting of only 1 letter each from being treated as indeterminate...
-                    if(Turns.get(i).updatedGuess.length() == 1 && Turns.get(j).updatedGuess.length() == 1 &&
-                            Turns.get(i).updatedResponse == 1 && Turns.get(j).updatedResponse == 1) {
-                        knownIn.letters.addAll(Turns.get(i).turn);
-                        knownIn.letters.addAll(Turns.get(j).turn);
-                    } else {
-                        identifyChangedLetters(Turns, letterChangedFrom, i, letterChangedTo, j);
-                    }
-
-                    comparisonNumber++;
-
-                    if(Turns.get(i).updatedResponse == Turns.get(j).updatedResponse) {  //  IF responses from compared turns are EQUAL...
-                        System.out.println("    Scenario: i.updatedResponse == j.updatedResponse");
-
-                        responseIsEqualWithOneLetterDifferent(Turns, knownIn, knownOut, unknown, i, j);
-                        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
-
-                        if(letterChangedTo.size()==1 && letterChangedFrom.size()==1) {  //  AND IF Only 1 letter has changed between turns...
-                            System.out.println("    Scenario: i.updatedResponse == j.updatedResponse + Only 1 letter changed between turns:");
-                            System.out.println("    We now know that " + letterChangedTo + " and " + letterChangedFrom + " are either both IN, or both OUT (but cannot be sure which is the case).\n");
-
-                            //  CREATE a COPY of the pair set prior to adding the copy to the set of sets (prevents a cleared set from appearing in the set of sets)
-                            Set<Character> tmp = new HashSet<>(Arrays.asList(letterChangedFrom.get(0), letterChangedTo.get(0)));
-                            HashSet<Character> copy = new HashSet<>(tmp);
-
-                            pairs.addPairsToSets(copy);
-                            pairs.checkPairsForWordExists(unknown, knownOut, Turns, knownIn);
-                        } else {
-                            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
-                        }
-                    } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == 1) {  //  ELSE-IF responses from compared turns are + 1...
-                        System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1");
-                        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {          //  AND IF Only 1 letter has changed between turns...
-                            System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = 1:");
-                            System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedFrom + " is KNOWN IN, and " + letterChangedTo + " is KNOWN OUT.  Updating all data sources...\n");
-                            //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
-                            //  Clean this up (someday)
-                            updateDataSources(Turns, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown);
-                            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
-                        } else {
-                            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
-                        }
-                    } else if (Turns.get(i).updatedResponse - Turns.get(j).updatedResponse == -1) {  //  ELSE-IF responses from compared turns are + 1...
-                        System.out.println("    AllTurns.makeDeterminations: updatedResponse(i) - updatedResponse(j) = -1");
-                        if(letterChangedTo.size() == 1 && letterChangedFrom.size() == 1) {               //  AND IF Only 1 letter has changed between turns...
-                            System.out.println("    Scenario: updatedResponse(i) - updatedResponse(j) = -1:");
-                            System.out.println("    With 1 letter changed, and the responses varying by 1, " + letterChangedTo + " is KNOWN IN, and " + letterChangedFrom + " is KNOWN OUT.  Updating all data sources...\n");
-                            //  HACK:  By changing the order of parameters in this invocation, I accomplish inversion of cases.
-                            //  Clean this up (someday)
-                            updateDataSources(Turns, knownIn, knownOut, letterChangedTo, letterChangedFrom, unknown);
-                            pairs.checkPairsForKnownIn(knownIn, unknown);
-                            Create.rebuildWatsonDB(knownIn.letters, unknown);
-                        } else {
-                            System.out.println("    More than 1 letter changed between these 2 turns.  No conclusions may be drawn.\n");
-                        }
-                    }
-                }
                 letterChangedFrom.clear();
                 letterChangedTo.clear();
             }
@@ -200,14 +124,12 @@ public class AllTurns {
         else return jUpdatedGuess;
     }
 
-
-
     private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, int i, int j) throws SQLException {
 
 
 
         //  If what remains is size = 1, then the turns MUST have been 1 letter different
-            //  Therefore, the remaining letter is OUT, so go ahead and do it
+        //  Therefore, the remaining letter is OUT, so go ahead and do it
 
         //  CREATE a temp pair of collections for a pair of turns to make the assessment...
         Set<Character> a = Turns.get(i).turn;
@@ -218,7 +140,7 @@ public class AllTurns {
             System.out.println("Removing " + b + " from " + a);
             a.removeAll(b);
             //  If what remains is size = 1, then the turns MUST have been 1 letter different
-                //  Therefore, the remaining letter is OUT, so go ahead and do it
+            //  Therefore, the remaining letter is OUT, so go ahead and do it
             if (a.size() == 1) Turns.get(i).turn = a;
             updatedResponseIsZero(Turns.get(i), knownOut, unknown, Turns);
             checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
@@ -226,7 +148,7 @@ public class AllTurns {
             System.out.println("Removing " + Turns.get(i).turn + " from " + Turns.get(j).turn);
             b.removeAll(a);
             //  If what remains is size = 1, then the turns MUST have been 1 letter different
-                //  Therefore, the remaining letter is OUT, so go ahead and do it
+            //  Therefore, the remaining letter is OUT, so go ahead and do it
             if (b.size() == 1) Turns.get(i).turn = b;
             updatedResponseIsZero(Turns.get(j), knownOut, unknown, Turns);
             checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
