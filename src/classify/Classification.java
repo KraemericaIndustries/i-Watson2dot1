@@ -62,13 +62,8 @@ public class Classification {
     }
 
     private static boolean checkForUpdatedGuessesSameLength(String iUpdatedGuess, String jUpdatedGuess) {
-        if(iUpdatedGuess.length() == jUpdatedGuess.length()) {
-            System.out.println(" - Updated guesses are the same length.");
-            return true;
-        } else {
-            System.out.println(" - Updated guesses are the different in length.");
-        }
-        return false;
+        if(iUpdatedGuess.length() == jUpdatedGuess.length()) return true;
+        else return false;
     }
 
     private static boolean checkForUpdatedResponsesDifferByMoreThanOne(int i, int j) {
@@ -80,13 +75,8 @@ public class Classification {
     }
 
     private static boolean checkForUpdatedResponseSame(int i, int j) {
-        if(i == j) {
-            System.out.println(" - Updated responses are the same.");
-            return true;
-        } else {
-            System.out.println(" - Updated responses are different.");
-        }
-        return false;
+        if(i == j) return true;
+        else return false;
     }
 
     private static Set<Character> toCharSet(String s) {
@@ -110,8 +100,17 @@ public class Classification {
     }
 
     public void printClassification() {
-        System.out.println("Only in first: " + onlyInFirst);
-        System.out.println("In both: " + inBoth);
-        System.out.println("Only in second: " + onlyInSecond);
+        System.out.println("    Only in first:  " + onlyInFirst);
+        System.out.println("    In both:        " + inBoth);
+        System.out.println("    Only in second: " + onlyInSecond);
+    }
+
+    public void printFindings() {
+        if(updatedResponsesSame) System.out.println(" - Updated responses are the same");;
+        if(updatedResponsesDifferByOne) System.out.println(" - Updated responses differ by one");;
+        if(updatedResponsesDifferByMoreThanOne) System.out.println(" - Updated responses differ by more than one");;
+        if(updatedGuessesSameLength) System.out.println(" - Updated guesses are the same length");
+        if(updatedGuessesDifferInLengthByOne) System.out.println(" - Updated guesses differ in length by one");;
+        if(updatedGuessesDifferInLengthByMoreThanOne) System.out.println(" - Updated guesses differ in length by one");;
     }
 }
