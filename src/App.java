@@ -13,6 +13,8 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Set;
 
+
+
 public class App {
 
     public static void main(String[] args) throws Exception {
@@ -23,13 +25,16 @@ public class App {
         Create.watsonDB();
 
         //  SETUP: Create datastore objects to facilitate play...
-        Unknown unknown = new Unknown();  //  <- Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
-        Pairs pairs = new Pairs();
+
+//        Unknown unknown = new Unknown();  //  <- Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
+//        Pairs pairs = new Pairs();
 //        Set<Character> knownIn = new HashSet<>();
-        IdentifiedLetters knownIn = new IdentifiedLetters();
+//        IdentifiedLetters knownIn = new IdentifiedLetters();
 //        Set<Character> knownOut = new HashSet<>();
-        IdentifiedLetters knownOut = new IdentifiedLetters();
-        LinkedList<Turn> Turns = new LinkedList<>();
+//        IdentifiedLetters knownOut = new IdentifiedLetters();
+//        LinkedList<Turn> Turns = new LinkedList<>();
+        //  CREATE a dashboard...
+        Dashboard dashboard = new Dashboard();
 
         //  SETUP: Load database tables...
         Insert.loadKnownWords();
@@ -37,8 +42,8 @@ public class App {
         Connect.watson("deleteDups");
 
         //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
-        unknown.sort();
-        unknown.loadSortedLetters(Unknown.letters);
+        dashboard.sort();
+        dashboard.loadSortedLetters(Unknown.letters);
 
         //  PLAY the game...
         String lastGuess;
@@ -46,30 +51,30 @@ public class App {
         Messages.play();
 
         do {
-            Messages.report(knownIn, knownOut, pairs, Turns);  //  PRINT a report of possible determinations
-            Messages.results(pairs, Turns, unknown);           //  PRINT the results of previous plays and determinations
+            dashboard.printDashboard();  //  PRINT a report of possible determinations
+//            Messages.results(pairs, Turns, unknown);           //  PRINT the results of previous plays and determinations
+//
+//            Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
+//
+//            //  Take action, based on the response...
+//             if(turn.response == 5) {
+//                 Turns.add(turn);
+//                 lastGuess = turn.guess;
+//                 AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);
+//                break;
+//            } else if(!(turn.response == 0)) {
+//                 lastGuess = turn.guess;
+//                 AllTurns.updateTurn(turn, knownIn, knownOut, unknown, Turns);  //  Process turn (remove knownIn/knownOut, if all knownTogether & (updatedResponse < knownTogether, all knownTogether IS OUT, etc.)
+//                 Turns.add(turn);
+//                 pairs.checkTurnAgainstPairs(turn, unknown);
+//            } else {
+//                 lastGuess = turn.guess;
+//                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
+//             }
+//
+//            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)
 
-            Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
-
-            //  Take action, based on the response...
-             if(turn.response == 5) {
-                 Turns.add(turn);
-                 lastGuess = turn.guess;
-                 AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);
-                break;
-            } else if(!(turn.response == 0)) {
-                 lastGuess = turn.guess;
-                 AllTurns.updateTurn(turn, knownIn, knownOut, unknown, Turns);  //  Process turn (remove knownIn/knownOut, if all knownTogether & (updatedResponse < knownTogether, all knownTogether IS OUT, etc.)
-                 Turns.add(turn);
-                 pairs.checkTurnAgainstPairs(turn, unknown);
-            } else {
-                 lastGuess = turn.guess;
-                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
-             }
-
-            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)
-
-            Messages.reportNumber++;
+            dashboard.reportNumber++;
 
             int numWordPairsRemaining = (Integer) Connect.watson("countWordPairs");
             if (numWordPairsRemaining == 0) break;
@@ -77,6 +82,7 @@ public class App {
         } while (Insert.wordCount > 3);
 
         //  Response is 5 BUT last guess is NOT opponents word!!!
+        lastGuess = "ABC";
         guessIsWord = Keyboard.verify(lastGuess);
 
         if(guessIsWord) {
@@ -96,8 +102,8 @@ public class App {
             Connect.watson("deleteFromWordsTable");
 
             System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************\n");
-            Messages.report(knownIn, knownOut, pairs, Turns);  //  PRINT a report of possible determinations
-            Messages.results(pairs, Turns, unknown);                    //  PRINT the results of previous plays and determinations
+//            Messages.report(knownIn, knownOut, pairs, Turns);  //  PRINT a report of possible determinations
+//            Messages.results(pairs, Turns, unknown);                    //  PRINT the results of previous plays and determinations
 
             do {
                 if(lastWords.isEmpty()) break;

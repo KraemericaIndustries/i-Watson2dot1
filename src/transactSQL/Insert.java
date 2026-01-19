@@ -1,5 +1,6 @@
 package transactSQL;
 
+import dataStructures.Dashboard;
 import dataStructures.Unknown;
 
 import java.io.File;
@@ -27,7 +28,7 @@ public class Insert extends DatabaseConnection{
 
                 line = (input.nextLine().toUpperCase());
 
-                Unknown.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+                Dashboard.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
 
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                                   //  Establish Connection Object
