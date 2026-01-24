@@ -1,3 +1,4 @@
+import classify.Strategies;
 import dataStructures.*;
 import print.Messages;
 import read.Keyboard;
@@ -8,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 
@@ -51,7 +53,11 @@ public class App {
         do {
             dashboard.printDashboard();  //  PRINT a report of possible determinations
 
-            //  ToDo: Strategies, here
+            LinkedList<String> strategies = Strategies.buildStrategies(dashboard);
+
+            Strategies.prettyPrintStrategies(strategies);
+            System.out.println("break");
+
 
 //            Messages.results(pairs, Turns, unknown);           //  PRINT the results of previous plays and determinations
 //
