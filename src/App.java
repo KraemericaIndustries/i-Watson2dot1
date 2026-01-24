@@ -53,9 +53,15 @@ public class App {
         do {
             dashboard.printDashboard();  //  PRINT a report of possible determinations
 
+            //  CREATE and PRESENT strategies, and make a selection...
             LinkedList<String> strategies = Strategies.buildStrategies(dashboard);
-
             Strategies.prettyPrintStrategies(strategies);
+            String selectedStrategy = Keyboard.selectStrategy(strategies);
+
+
+
+
+            System.out.println("You have chosen: " + selectedStrategy);
             System.out.println("break");
 
 
