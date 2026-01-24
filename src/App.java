@@ -50,6 +50,9 @@ public class App {
 
         do {
             dashboard.printDashboard();  //  PRINT a report of possible determinations
+
+            //  ToDo: Strategies, here
+
 //            Messages.results(pairs, Turns, unknown);           //  PRINT the results of previous plays and determinations
 //
 //            Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
@@ -79,6 +82,7 @@ public class App {
 
         } while (Insert.wordCount > 3);
 
+        //  THE HOME STRETCH!
         //  Response is 5 BUT last guess is NOT opponents word!!!
         lastGuess = "ABC";
         guessIsWord = Keyboard.verify(lastGuess);
