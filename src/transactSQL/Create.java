@@ -38,6 +38,7 @@ public class Create extends DatabaseConnection{
                                    "create database watson;" +
                                    "use watson;"  +
                                    "create table Words_tbl (word varchar(5) primary key(word));" +
+                                   "create table WordPairs (Id int IDENTITY(1,1) PRIMARY KEY, word1 varchar(5), word2 varchar(5));" +
                                    "create table letterCounts_tbl (Letter varchar, Count int);");
             try {
                 statement.executeBatch();

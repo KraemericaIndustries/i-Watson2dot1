@@ -63,6 +63,11 @@ public class App {
             System.out.println("You have chosen: " + selectedStrategy);
             System.out.println("break");
 
+            if(selectedStrategy.equals("Eliminate the most common letter from word pairs that differ by one letter.")) {
+                System.out.println("Here I am.");
+                System.out.println("Hut!");
+            }
+
 
 //            Messages.results(pairs, Turns, unknown);           //  PRINT the results of previous plays and determinations
 //
