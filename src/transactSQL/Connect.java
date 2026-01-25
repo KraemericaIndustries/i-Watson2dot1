@@ -36,35 +36,37 @@ public class Connect {
                 case "createWordPairsTable":
                     //  This query was generated with assistance from Microsoft Copilot:
                     String wordPairsTable = """
-                            SELECT w1.word AS word1, w2.word AS word2\s
-                            INTO WordPairs FROM Words_tbl w1, Words_tbl w2\s
-                            WHERE w1.word <> w2.word\s
-                            AND (\s
-                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
-                            \t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
-                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
-                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1))\s
-                            OR\s
-                            \t(SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
-                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
-                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND\s
-                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\s
-                            OR\s
-                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
-                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
-                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND\s
-                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\s
-                            OR\s
-                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
-                            \t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
-                            \t SUBSTRING(w1.word, 4, 1) = SUBSTRING(w2.word, 4, 1) AND\s
-                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))\s
-                            OR\s
-                            \t(SUBSTRING(w1.word, 1, 1) = SUBSTRING(w2.word, 1, 1) AND\s
-                            \t SUBSTRING(w1.word, 2, 1) = SUBSTRING(w2.word, 2, 1) AND\s
-                            \t SUBSTRING(w1.word, 3, 1) = SUBSTRING(w2.word, 3, 1) AND\s
-                            \t SUBSTRING(w1.word, 5, 1) = SUBSTRING(w2.word, 5, 1))
-                            );""";
+                    INSERT INTO WordPairs (word1, word2)
+                    SELECT w1.word, w2.word
+                    FROM Words_tbl w1
+                    JOIN Words_tbl w2 ON w1.word <> w2.word
+                    WHERE
+                    (
+                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
+                         SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
+                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
+                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1))
+                     OR
+                        (SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
+                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
+                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1) AND
+                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
+                     OR
+                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
+                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
+                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1) AND
+                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
+                     OR
+                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
+                         SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
+                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1) AND
+                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
+                     OR
+                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
+                         SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
+                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
+                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
+                    );""";
 
                     System.out.println("Creating a table of word pairs that only DIFFER by 1 letter...");
                     transactSQL.Query.runStatement(wordPairsTable);
