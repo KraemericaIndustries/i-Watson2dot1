@@ -1,5 +1,6 @@
 package transactSQL;
 
+import dataStructures.Dashboard;
 import dataStructures.Unknown;
 
 import java.io.File;
@@ -17,7 +18,7 @@ public class Insert extends DatabaseConnection{
     static char[] animationChars = new char[] {'|', '/', '-', '\\'};  //  class fields
 
     //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
-    public static void loadKnownWords() {
+    public static void loadKnownWords(Dashboard dashboard) {
         System.out.println("Loading known words into the 'watson' database...");
         try {
             File file = new File("FiveLetterWords.txt");
@@ -27,7 +28,7 @@ public class Insert extends DatabaseConnection{
 
                 line = (input.nextLine().toUpperCase());
 
-                Unknown.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+                dashboard.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
 
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                                   //  Establish Connection Object

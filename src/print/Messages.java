@@ -103,7 +103,7 @@ public class Messages {
     }
 
     //  PRETTY-PRINT the original and updated previous turns taken...
-    private static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
+    public static void prettyPrintPreviousGuesses(LinkedList<Turn> Turns) {
 
         //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
         //  System.out.println("print.Messages.prettyPrintPreviousGuesses(): BEGIN");
