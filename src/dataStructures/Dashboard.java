@@ -22,7 +22,7 @@ public class Dashboard {
     public char[] unsortedLettersFromMap;  //  To create char[] sortedLetters, a temporary array is declared and only initialized once the map has been populated with letter occurrences read in from all words
     public char[] sortedLetters;           //  DOWNSTREAM DB query for words unable to get key from map by index.  Creating this sorted array to accommodate that
     public int reportNumber = 1;
-    public static int numWordPairs = 0;
+    public int numWordPairs = 0;
     public LinkedHashMap<Character, Integer> unknownLetters;
 
     // CONSTRUCTOR
@@ -85,7 +85,7 @@ public class Dashboard {
     public void printDashboard() {
 
 
-        System.out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " *****************************************************************************************");
+        System.out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************");
 
         //  PRINT the LinkedHashMaps...
         System.out.println("Known IN: " + knownIn);
@@ -101,7 +101,7 @@ public class Dashboard {
 
         System.out.print("There are " + numWords + " words remaining in the database.\n");
         System.out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
-        System.out.println("***********************************************************************************************************************************************************************\n");
+        System.out.println("*******************************************************************************************************************************************************************************\n");
 
     }
 
