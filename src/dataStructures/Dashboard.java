@@ -17,7 +17,7 @@ public class Dashboard {
     public int reportNumber = 1;
     public int numWordPairs = 0;
     public int [] letterCounts = new int[26];
-    List<LetterScore> unknownLetters = new ArrayList<>();
+    public List<LetterScore> unknownLetters = new ArrayList<>();
 
     // CONSTRUCTOR
     public Dashboard() {
@@ -101,12 +101,3 @@ public class Dashboard {
     }
 }
 
-class LetterScore {
-    char letter;
-    int score;
-
-    public LetterScore(char a, int i) {
-        letter = a;
-        score = i;
-    }
-}

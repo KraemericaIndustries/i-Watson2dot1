@@ -11,6 +11,7 @@ import java.nio.file.StandardOpenOption;
 import java.sql.ResultSet;
 import java.util.LinkedList;
 
+import static transactSQL.Select.selectBestWordPair;
 
 
 public class App {
@@ -58,15 +59,11 @@ public class App {
             Strategies.prettyPrintStrategies(strategies);
             String selectedStrategy = Keyboard.selectStrategy(strategies);
 
-
-
-
-            System.out.println("You have chosen: " + selectedStrategy);
-            System.out.println("break");
-
             if(selectedStrategy.equals("Eliminate the most common letter from word pairs that differ by one letter.")) {
-                System.out.println("Here I am.");
-                System.out.println("Hut!");
+                System.out.println("You have chosen: " + selectedStrategy);
+                System.out.println("break");
+
+                selectBestWordPair(dashboard);
             }
 
 
