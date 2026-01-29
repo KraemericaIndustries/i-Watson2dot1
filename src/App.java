@@ -36,13 +36,14 @@ public class App {
 
         //  SETUP: Load database tables...
         Insert.loadKnownWords(dashboard);
-        dashboard.sort();
+        dashboard.buildUnknownLettersList();
+        dashboard.sortUnknownLettersByFrequencyDescending();
         Connect.watson("createWordPairsTable");
         Connect.watson("deleteDups");
 
         //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
-        dashboard.sort();
-        dashboard.loadSortedLetters();
+//        dashboard.sort();
+//        dashboard.loadSortedLetters();
 
         //  PLAY the game...
         String lastGuess;

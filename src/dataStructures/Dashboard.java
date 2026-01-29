@@ -1,97 +1,43 @@
 package dataStructures;
 
 import transactSQL.Connect;
-import transactSQL.Create;
-import transactSQL.Delete;
-
-import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static dataStructures.Unknown.letters;
+import static java.lang.System.out;
 import static print.Messages.prettyPrintPreviousGuesses;
 
 public class Dashboard {
 
     // STATE
-    public Unknown unknown;
     public Pairs pairs;
     public Set<Character> knownIn;
     public Set<Character> knownOut;
     public LinkedList<Turn> Turns;
-    public char[] unsortedLettersFromMap;  //  To create char[] sortedLetters, a temporary array is declared and only initialized once the map has been populated with letter occurrences read in from all words
-    public char[] sortedLetters;           //  DOWNSTREAM DB query for words unable to get key from map by index.  Creating this sorted array to accommodate that
     public int reportNumber = 1;
     public int numWordPairs = 0;
-    public LinkedHashMap<Character, Integer> unknownLetters;
+    public int [] letterCounts = new int[26];
+    List<LetterScore> unknownLetters = new ArrayList<>();
 
     // CONSTRUCTOR
     public Dashboard() {
-        unknown = new Unknown();  //  <- Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
         pairs = new Pairs();
         knownIn = new HashSet<>();
         knownOut = new HashSet<>();
         Turns = new LinkedList<>();
         letters = new LinkedHashMap<>();
-        unknownLetters = new LinkedHashMap<>();
     }
 
     // BEHAVIOUR (methods)
-//    public void addSet(Set<Character> determined, Unknown unknown) throws SQLException {
-//        Commenting OUT as there are no current usages
-//
-//        letters.addAll(determined);
-//
-//        String toAdd = Pairs.createStringFromSet(determined);
-//
-//        Delete.wordsWithout(toAdd, unknown, letters);
-//
-//        Create.rebuildWatsonDB(letters, unknown);
-//
-//    }
-    public void letterEnumerator(String word) {
-        for(int i = 0; i <word.length(); i++) {
-            int count = unknownLetters.getOrDefault(word.charAt(i), 0);
-            unknownLetters.put(word.charAt(i), count + 1);
-        }
-    }
-
-    public void sort() {
-        LinkedHashMap<Character, Integer> sortedMap = unknownLetters.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-        unknownLetters.clear();
-        unknownLetters.putAll(sortedMap);
-        sortedMap.clear();
-    }
-
-    public void loadSortedLetters() {
-
-        unsortedLettersFromMap = new char[letters.size()];
-        int i = 0;
-
-        for(Map.Entry<Character, Integer> entry : letters.entrySet()) {
-            unsortedLettersFromMap[i] = entry.getKey();
-            i++;
-        }
-        sortedLetters = unsortedLettersFromMap;
-    }
-
-
     public void printDashboard() {
 
-
-        System.out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************");
+        out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************");
 
         //  PRINT the LinkedHashMaps...
-        System.out.println("Known IN: " + knownIn);
-        System.out.println("Known OUT: " + knownOut);
+        out.println("Known IN: " + knownIn);
+        out.println("Known OUT: " + knownOut);
         pairs.prettyPrintPairs();
-        System.out.println("Unknown: " + unknownLetters + "\n");
+        prettyPrintUnknownLetters(unknownLetters);
 
         prettyPrintPreviousGuesses(Turns);  //  PRINT all previous guesses
 
@@ -99,10 +45,68 @@ public class Dashboard {
         int numWords = (int) Connect.watson("getNumWordsInDB");
         numWordPairs = (int) Connect.watson("countWordPairs");
 
-        System.out.print("There are " + numWords + " words remaining in the database.\n");
-        System.out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
-        System.out.println("*******************************************************************************************************************************************************************************\n");
+        out.print("There are " + numWords + " words remaining in the database.\n");
+        out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
+        out.println("*******************************************************************************************************************************************************************************\n");
 
     }
+    public static void prettyPrintUnknownLetters(List<LetterScore> unknownLetters) {
 
+        out.println("------------------------------------------------------------------------UNKNOWN LETTERS AND FREQUENCY OF OCCURRENCE------------------------------------------------------");
+        out.print("Unknown:   ");
+        for(int i = 0; i < 26; i++) {
+            out.printf(" | %3s", unknownLetters.get(i).letter);
+        }
+        out.println();
+
+        out.print("Frequency: ");
+        for(int i = 0; i < 26; i++) {
+            out.printf(" | %3d", unknownLetters.get(i).score);
+        }
+        out.println();
+        out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+    }
+
+    public void buildUnknownLettersList() {
+        unknownLetters.add(new LetterScore('A', letterCounts[0]));
+        unknownLetters.add(new LetterScore('B', letterCounts[1]));
+        unknownLetters.add(new LetterScore('C', letterCounts[2]));
+        unknownLetters.add(new LetterScore('D', letterCounts[3]));
+        unknownLetters.add(new LetterScore('E', letterCounts[4]));
+        unknownLetters.add(new LetterScore('F', letterCounts[5]));
+        unknownLetters.add(new LetterScore('G', letterCounts[6]));
+        unknownLetters.add(new LetterScore('H', letterCounts[7]));
+        unknownLetters.add(new LetterScore('I', letterCounts[8]));
+        unknownLetters.add(new LetterScore('J', letterCounts[9]));
+        unknownLetters.add(new LetterScore('K', letterCounts[10]));
+        unknownLetters.add(new LetterScore('L', letterCounts[11]));
+        unknownLetters.add(new LetterScore('M', letterCounts[12]));
+        unknownLetters.add(new LetterScore('N', letterCounts[13]));
+        unknownLetters.add(new LetterScore('O', letterCounts[14]));
+        unknownLetters.add(new LetterScore('P', letterCounts[15]));
+        unknownLetters.add(new LetterScore('Q', letterCounts[16]));
+        unknownLetters.add(new LetterScore('R', letterCounts[17]));
+        unknownLetters.add(new LetterScore('S', letterCounts[18]));
+        unknownLetters.add(new LetterScore('T', letterCounts[19]));
+        unknownLetters.add(new LetterScore('U', letterCounts[20]));
+        unknownLetters.add(new LetterScore('V', letterCounts[21]));
+        unknownLetters.add(new LetterScore('W', letterCounts[22]));
+        unknownLetters.add(new LetterScore('X', letterCounts[23]));
+        unknownLetters.add(new LetterScore('Y', letterCounts[24]));
+        unknownLetters.add(new LetterScore('Z', letterCounts[25]));
+    }
+
+    public void sortUnknownLettersByFrequencyDescending() {
+        unknownLetters.sort((a, b) -> b.score - a.score);
+    }
+}
+
+class LetterScore {
+    char letter;
+    int score;
+
+    public LetterScore(char a, int i) {
+        letter = a;
+        score = i;
+    }
 }

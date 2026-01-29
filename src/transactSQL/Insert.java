@@ -28,7 +28,11 @@ public class Insert extends DatabaseConnection{
 
                 line = (input.nextLine().toUpperCase());
 
-                dashboard.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+//                dashboard.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+
+                for (int i = 0; i < line.length(); i++) {
+                    dashboard.letterCounts[line.charAt(i) - 'A']++;
+                }
 
                 try {
                     Connection conn = DriverManager.getConnection(url, user, password);                                   //  Establish Connection Object
