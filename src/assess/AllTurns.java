@@ -1,10 +1,7 @@
 package assess;
 
 import classify.Classification;
-import dataStructures.IdentifiedLetters;
-import dataStructures.Pairs;
-import dataStructures.Turn;
-import dataStructures.Unknown;
+import dataStructures.*;
 import transactSQL.*;
 
 import java.sql.SQLException;
@@ -13,27 +10,27 @@ import java.util.*;
 public class AllTurns {
 
     //  MAKE all possible determinations on ALL previous turns taken...
-    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown) throws SQLException {
-
-        System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
-
-        //  Checks if any one knownTogether pair is knownIn, if yes, the other must be knownIn (because we only process turns where the response varies by 1)
-        if(!pairs.knownTogether.isEmpty()) {
-            pairs.checkPairsForKnownIn(knownIn, unknown);
-            pairs.checkPairsForKnownOut(knownOut, unknown);
-            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, unknown, Turns);
-        }
-
-        //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
-        checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
-
-        //  ToDo: ALL Turns where updatedResponse == 0 and .size() > 0, ALL letters are OUT!!!
-        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
-
-        //  COMPARE each (updated) turn against each other...
-        compareAllTurnsAgainstEachOther(Turns, pairs, knownIn, knownOut, unknown);
-        System.out.println("assess.AllTurns.makeDeterminations: END");
-    }
+//    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown) throws SQLException {
+//
+//        System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
+//
+//        //  Checks if any one knownTogether pair is knownIn, if yes, the other must be knownIn (because we only process turns where the response varies by 1)
+//        if(!pairs.knownTogether.isEmpty()) {
+//            pairs.checkPairsForKnownIn(knownIn, unknown);
+//            pairs.checkPairsForKnownOut(knownOut, unknown);
+//            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, unknown, Turns);
+//        }
+//
+//        //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
+//        checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
+//
+//        //  ToDo: ALL Turns where updatedResponse == 0 and .size() > 0, ALL letters are OUT!!!
+//        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
+//
+//        //  COMPARE each (updated) turn against each other...
+//        compareAllTurnsAgainstEachOther(Turns, dashboard);
+//        System.out.println("assess.AllTurns.makeDeterminations: END");
+//    }
 
     public static void updateTurn(Turn turn, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
 
@@ -71,9 +68,9 @@ public class AllTurns {
     }
 
     //  COMPARE each updated turn against each other...
-    public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Pairs pairs, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown) throws SQLException {
+    public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Dashboard dashboard) throws SQLException {
 
-        removeDeterminedLettersFromAllTurns(Turns, knownIn, knownOut);
+        removeDeterminedLettersFromAllTurns(Turns, dashboard);
 
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): BEGIN");
 
@@ -103,8 +100,14 @@ public class AllTurns {
                         System.out.println(" - Since updated responses are the same length, and the responses differ by 1, we know:");
                         System.out.println("   " + classification.onlyInFirst + " is IN.");
                         System.out.println("   " + classification.onlyInSecond + " is OUT.");
+                    } else if (classification.onlyInFirst.size() == 1  && classification.onlyInSecond.size() == 1) {
+                        System.out.println("All we can say for certain, is that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are together.  (Could both be IN, could both be OUT.)");
                     }
                     System.out.println("ACTIONS:");
+                    System.out.println("Add " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to 'knownTogether' on the dashboard");
+                    dashboard.knownTogether.add(classification.onlyInFirst.toString() + classification.onlyInSecond.toString());
+                    System.out.println(dashboard.knownTogether.get(0));
+                    System.out.println();
                 }
 
 
@@ -161,9 +164,9 @@ public class AllTurns {
         }
     }
 
-    private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut) {
+    private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, Dashboard dashboard) {
 
-        for(Character c : knownIn.letters) {  //  walks knownIn
+        for(Character c : dashboard.knownIn) {  //  walks knownIn
             for(Turn t : Turns) {     //  walks a turn
                 if(t.turn.contains(c)) {
                     t.turn.remove(c);
@@ -173,7 +176,7 @@ public class AllTurns {
             }
         }
 
-        for(Character c : knownOut.letters) {  //  walks knownIn
+        for(Character c : dashboard.knownOut) {  //  walks knownIn
             for(Turn t : Turns) {      // walks a turn
                 t.turn.remove(c);
                 t.parseCollectionToString();

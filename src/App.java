@@ -1,3 +1,4 @@
+import assess.AllTurns;
 import classify.Strategies;
 import dataStructures.*;
 import print.Messages;
@@ -70,7 +71,9 @@ public class App {
                     Turn turn = new Turn(g, Keyboard.responseFromOpponent());
                     Turns.add(turn);
                 }
+                AllTurns.compareAllTurnsAgainstEachOther(Turns, dashboard);
                 System.out.println("break");
+
             }
 
 

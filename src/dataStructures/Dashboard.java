@@ -4,7 +4,7 @@ import transactSQL.Connect;
 import java.util.*;
 
 import static dataStructures.Unknown.letters;
-import static java.lang.System.out;
+//import static java.lang.System.out;
 import static print.Messages.prettyPrintPreviousGuesses;
 
 public class Dashboard {
@@ -32,12 +32,12 @@ public class Dashboard {
     // BEHAVIOUR (methods)
     public void printDashboard() {
 
-        out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************");
+        System.out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************");
 
         //  PRINT the LinkedHashMaps...
-        out.println("Known IN: " + knownIn);
-        out.println("Known OUT: " + knownOut);
-        pairs.prettyPrintPairs();
+        System.out.println("Known IN:  " + knownIn);
+        System.out.println("Known OUT: " + knownOut);
+        System.out.println("Known Together: " + knownTogether);
         prettyPrintUnknownLetters(unknownLetters);
 
         prettyPrintPreviousGuesses(Turns);  //  PRINT all previous guesses
@@ -46,26 +46,26 @@ public class Dashboard {
         int numWords = (int) Connect.watson("getNumWordsInDB");
         numWordPairs = (int) Connect.watson("countWordPairs");
 
-        out.print("There are " + numWords + " words remaining in the database.\n");
-        out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
-        out.println("*******************************************************************************************************************************************************************************\n");
+        System.out.print("There are " + numWords + " words remaining in the database.\n");
+        System.out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
+        System.out.println("*******************************************************************************************************************************************************************************\n");
 
     }
     public static void prettyPrintUnknownLetters(List<LetterScore> unknownLetters) {
 
-        out.println("------------------------------------------------------------------------UNKNOWN LETTERS AND FREQUENCY OF OCCURRENCE------------------------------------------------------");
-        out.print("Unknown:   ");
+        System.out.println("------------------------------------------------------------------------UNKNOWN LETTERS AND FREQUENCY OF OCCURRENCE------------------------------------------------------");
+        System.out.print("Unknown:   ");
         for(int i = 0; i < 26; i++) {
-            out.printf(" | %3s", unknownLetters.get(i).letter);
+            System.out.printf(" | %3s", unknownLetters.get(i).letter);
         }
-        out.println();
+        System.out.println();
 
-        out.print("Frequency: ");
+        System.out.print("Frequency: ");
         for(int i = 0; i < 26; i++) {
-            out.printf(" | %3d", unknownLetters.get(i).score);
+            System.out.printf(" | %3d", unknownLetters.get(i).score);
         }
-        out.println();
-        out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println();
+        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
     }
 
     public void buildUnknownLettersList() {
