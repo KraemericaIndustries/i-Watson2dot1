@@ -106,10 +106,10 @@ public class Select {
                     int count = rs.getInt("ChosenTopCount");
                     String other = rs.getString("OtherWord");
                     // use result
-                    System.out.println("id: " + id);
-                    System.out.println("chosen: " + chosen);
-                    System.out.println("other: " + other);
-                    System.out.println();
+//                    System.out.println("id: " + id);
+//                    System.out.println("chosen: " + chosen);
+//                    System.out.println("other: " + other);
+//                    System.out.println();
                     guesses.add(chosen);
                     guesses.add(other);
                 }

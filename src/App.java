@@ -32,7 +32,7 @@ public class App {
 //        IdentifiedLetters knownIn = new IdentifiedLetters();
 //        Set<Character> knownOut = new HashSet<>();
 //        IdentifiedLetters knownOut = new IdentifiedLetters();
-//        LinkedList<Turn> Turns = new LinkedList<>();
+        LinkedList<Turn> Turns = new LinkedList<>();
         //  CREATE a dashboard...
         Dashboard dashboard = new Dashboard();
 
@@ -64,9 +64,11 @@ public class App {
                 System.out.println("You have chosen: " + selectedStrategy);
 
                 List<String> guesses = bestWordPair(dashboard);  //  SELECT the BEST pair of guesses from WordPairs
-                for(String g : guesses) {
-                    //  ToDo: iterate guesses here
-                    System.out.println(g);
+
+                for(String g : guesses) {  //  ITERATE all guesses, submit the guess, prompt for the response, add the play to 'Turns' collection
+                    System.out.println("Your guess is: " + g);
+                    Turn turn = new Turn(g, Keyboard.responseFromOpponent());
+                    Turns.add(turn);
                 }
                 System.out.println("break");
             }
