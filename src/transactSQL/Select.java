@@ -3,12 +3,13 @@ package transactSQL;
 import dataStructures.Dashboard;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import static transactSQL.DatabaseConnection.*;
-
 public class Select {
 
-    //  QUERY the WordPairs table for any pairs that differ by the most commonly occurring letter in the database...
+//  QUERY the WordPairs table for any pairs that differ by the most commonly occurring letter in the database...
 //    public static void wordPairsDifferByLetter(char mostCommonLetter) throws SQLException {
 //
 //        Connection conn = DriverManager.getConnection(url, user, password);
@@ -55,7 +56,9 @@ public class Select {
         }
     }
 
-    public static void selectBestWordPair(Dashboard dashboard) {
+    public static List<String> bestWordPair(Dashboard dashboard) {
+
+        List<String> guesses = new ArrayList<>();
 
         String sql = "/* the T-SQL above without the DECLAREs, using ? placeholders */\n"
                 + "SELECT TOP (1) wp.Id, CASE WHEN w1.HasMost = 1 THEN wp.Word1 ELSE wp.Word2 END AS ChosenWord, "
@@ -107,11 +110,13 @@ public class Select {
                     System.out.println("chosen: " + chosen);
                     System.out.println("other: " + other);
                     System.out.println();
+                    guesses.add(chosen);
+                    guesses.add(other);
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        return guesses;
     }
 }

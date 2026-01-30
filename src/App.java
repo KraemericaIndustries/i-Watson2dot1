@@ -10,8 +10,9 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.sql.ResultSet;
 import java.util.LinkedList;
+import java.util.List;
 
-import static transactSQL.Select.selectBestWordPair;
+import static transactSQL.Select.bestWordPair;
 
 
 public class App {
@@ -61,9 +62,13 @@ public class App {
 
             if(selectedStrategy.equals("Eliminate the most common letter from word pairs that differ by one letter.")) {
                 System.out.println("You have chosen: " + selectedStrategy);
-                System.out.println("break");
 
-                selectBestWordPair(dashboard);
+                List<String> guesses = bestWordPair(dashboard);  //  SELECT the BEST pair of guesses from WordPairs
+                for(String g : guesses) {
+                    //  ToDo: iterate guesses here
+                    System.out.println(g);
+                }
+                System.out.println("break");
             }
 
 
