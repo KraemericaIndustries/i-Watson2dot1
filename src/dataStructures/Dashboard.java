@@ -18,6 +18,7 @@ public class Dashboard {
     public int numWordPairs = 0;
     public int [] letterCounts = new int[26];
     public List<LetterScore> unknownLetters = new ArrayList<>();
+    public List<String> knownTogether = new ArrayList<>();
 
     // CONSTRUCTOR
     public Dashboard() {

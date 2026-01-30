@@ -14,7 +14,9 @@ public class Strategies {
             strategies.add("Now it's down to chance.  Make a guess from the remaining words.");
         } else {
             strategies.add("Eliminate the most common letter from word pairs that differ by one letter.\n   > This will make a determination on 1 letter in a single play.");
-            strategies.add("Try to make a determination on letters that are known to be together, whether IN or OUT (as this may identify more than 1 letter with a single play.)\n   > This has the potential to make a determination on MORE THAN one 1 letter in a single play.");
+            if(!dashboard.knownTogether.isEmpty()) {
+                strategies.add("Try to make a determination on letters that are known to be together, whether IN or OUT (as this may identify more than 1 letter with a single play.)\n   > This has the potential to make a determination on MORE THAN one 1 letter in a single play.");
+            }
             strategies.add("Take a shot in the dark.\n   > Hey, who knows.  You might get lucky (but I doubt it.)");
         }
         return strategies;
