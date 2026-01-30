@@ -54,7 +54,7 @@ public class App {
         Messages.play();
 
         do {
-            dashboard.printDashboard();  //  PRINT a report of possible determinations
+            dashboard.printDashboard(Turns);  //  PRINT a report of possible determinations
 
             //  CREATE and PRESENT strategies, and make a selection...
             LinkedList<String> strategies = Strategies.buildStrategies(dashboard);

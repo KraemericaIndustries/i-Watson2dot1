@@ -4,7 +4,6 @@ import transactSQL.Connect;
 import java.util.*;
 
 import static dataStructures.Unknown.letters;
-//import static java.lang.System.out;
 import static print.Messages.prettyPrintPreviousGuesses;
 
 public class Dashboard {
@@ -30,7 +29,7 @@ public class Dashboard {
     }
 
     // BEHAVIOUR (methods)
-    public void printDashboard() {
+    public void printDashboard(LinkedList<Turn> Turns) {
 
         System.out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************");
 
