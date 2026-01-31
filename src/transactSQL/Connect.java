@@ -39,48 +39,19 @@ public class Connect {
                     INSERT INTO WordPairs (word1, word2)
                     SELECT w1.word, w2.word
                     FROM Words_tbl w1
-                    JOIN Words_tbl w2 ON w1.word <> w2.word
+                    JOIN Words_tbl w2
+                        ON w1.word < w2.word   -- prevents duplicates and self-pairs
                     WHERE
-                    (
-                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
-                         SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
-                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
-                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1))
-                     OR
-                        (SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
-                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
-                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1) AND
-                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
-                     OR
-                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
-                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
-                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1) AND
-                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
-                     OR
-                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
-                         SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
-                         SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1) AND
-                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
-                     OR
-                        (SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) AND
-                         SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) AND
-                         SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) AND
-                         SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1))
-                    );""";
+                        (CASE WHEN SUBSTRING(w1.word,1,1) = SUBSTRING(w2.word,1,1) THEN 0 ELSE 1 END +
+                         CASE WHEN SUBSTRING(w1.word,2,1) = SUBSTRING(w2.word,2,1) THEN 0 ELSE 1 END +
+                         CASE WHEN SUBSTRING(w1.word,3,1) = SUBSTRING(w2.word,3,1) THEN 0 ELSE 1 END +
+                         CASE WHEN SUBSTRING(w1.word,4,1) = SUBSTRING(w2.word,4,1) THEN 0 ELSE 1 END +
+                         CASE WHEN SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1) THEN 0 ELSE 1 END
+                        ) = 1;""";
 
                     System.out.println("Creating a table of word pairs that only DIFFER by 1 letter...");
                     transactSQL.Query.runStatement(wordPairsTable);
                     System.out.println(" > Finished creating WordPairs table!");
-                    break;
-                case "deleteDups":
-
-                    String deleteDuplicates = "DELETE a FROM WordPairs a " +
-                                              "JOIN WordPairs b ON a.word1 = b.word2 " +
-                                              "AND a.word2 = b.word1 " +
-                                              "WHERE a.word1 < a.word2;";
-                    System.out.println("Deleting duplicates from the WordPairs table...");
-                    transactSQL.Query.runStatement(deleteDuplicates);
-                    System.out.println(" > Finished deleting duplicates from the WordPairs table!");
                     break;
                 case "countWordPairs":
 

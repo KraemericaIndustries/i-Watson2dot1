@@ -45,7 +45,7 @@ public class App {
         dashboard.buildUnknownLettersList();
         dashboard.sortUnknownLettersByFrequencyDescending();
         Connect.watson("createWordPairsTable");
-        Connect.watson("deleteDups");
+//        Connect.watson("deleteDups");
 
         //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
 //        dashboard.sort();
@@ -63,9 +63,9 @@ public class App {
             LinkedList<String> strategies = Strategies.buildStrategies(dashboard);
             Strategies.prettyPrintStrategies(strategies);
             String selectedStrategy = Keyboard.selectStrategy(strategies);
+            System.out.println("You have chosen: " + selectedStrategy);
 
             if(selectedStrategy.equals("ELIMINATE THE MOST COMMON LETTER")) {
-                System.out.println("You have chosen: " + selectedStrategy);
 
                 List<String> guesses = bestWordPair(dashboard);  //  SELECT the BEST pair of guesses from WordPairs
 
@@ -76,6 +76,7 @@ public class App {
                 }
                 AllTurns.compareAllTurnsAgainstEachOther(Turns, dashboard);
                 System.out.println("break");
+            } else if (selectedStrategy.equals("ELIMINATE LETTERS KNOWN TOGETHER")) {
 
             }
 
