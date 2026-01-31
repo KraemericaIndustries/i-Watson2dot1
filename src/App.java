@@ -21,6 +21,9 @@ public class App {
     public static void main(String[] args) throws Exception {
 
         //  SETUP...
+
+
+
         Messages.welcome();
         DatabaseConnection.getProperties();
         Create.watsonDB();
@@ -61,7 +64,7 @@ public class App {
             Strategies.prettyPrintStrategies(strategies);
             String selectedStrategy = Keyboard.selectStrategy(strategies);
 
-            if(selectedStrategy.equals("Eliminate the most common letter from word pairs that differ by one letter.")) {
+            if(selectedStrategy.equals("ELIMINATE THE MOST COMMON LETTER")) {
                 System.out.println("You have chosen: " + selectedStrategy);
 
                 List<String> guesses = bestWordPair(dashboard);  //  SELECT the BEST pair of guesses from WordPairs

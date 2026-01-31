@@ -10,14 +10,20 @@ public class Strategies {
 
         LinkedList<String> strategies = new LinkedList<>();
 
-        if(dashboard.numWordPairs ==0) {
-            strategies.add("Now it's down to chance.  Make a guess from the remaining words.");
+        String tryEliminateMostCommon = "ELIMINATE THE MOST COMMON LETTER\n   > Selects a pair of words containing the most commonly occurring letters, where the first word CONTAINS the most common letter, and the second word DOES NOT.\n   > This *might* make a determination on ONE LETTER in a single play, or at least determine that a pair of letters are 'known together' (either IN, or OUT).";
+        String tryDetermineKnownTogether = "ELIMINATE LETTERS KNOWN TOGETHER\n   > Letters 'known together' may either be IN, or OUT.  Another play is required to better determine the outcome.\n   > This *might* make a determination on ONE LETTER in a single play, or at least determine that a pair of letters are 'known together' (either IN, or OUT).";
+        String takeShotInDark = "SHOT IN THE DARK\n   > Hey, who knows.  You might get lucky (but I doubt it.)";
+        String downToChance = "Now it's down to chance.  Make a guess from the remaining words.\n   > Luck of the draw";
+
+        if(dashboard.numWordPairs ==0  && dashboard.knownTogether.isEmpty()) {
+            strategies.add(downToChance);
+        } else if(!dashboard.knownTogether.isEmpty()) {
+            strategies.add(tryDetermineKnownTogether);
+            strategies.add(tryEliminateMostCommon);
+            strategies.add(takeShotInDark);
         } else {
-            strategies.add("Eliminate the most common letter from word pairs that differ by one letter.\n   > This will make a determination on 1 letter in a single play.");
-            if(!dashboard.knownTogether.isEmpty()) {
-                strategies.add("Try to make a determination on letters that are known to be together, whether IN or OUT (as this may identify more than 1 letter with a single play.)\n   > This has the potential to make a determination on MORE THAN one 1 letter in a single play.");
-            }
-            strategies.add("Take a shot in the dark.\n   > Hey, who knows.  You might get lucky (but I doubt it.)");
+            strategies.add(tryEliminateMostCommon);
+            strategies.add(takeShotInDark);
         }
         return strategies;
     }
@@ -35,7 +41,7 @@ public class Strategies {
             rank++;
         }
         System.out.println();
-        System.out.println("Select a strategy from the available list.  (They have been prioritized based on the greatest potential impact.)  Choose a strategy:");
+        System.out.println("Select a strategy from the available list.  (They have been prioritized based on the greatest potential impact.)  Which strategy would you like to try:");
         System.out.println("***********************************************************************************************************************************************************************************");
     }
 }
