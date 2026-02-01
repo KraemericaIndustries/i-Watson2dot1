@@ -9,28 +9,27 @@ import java.util.*;
 
 public class AllTurns {
 
-    //  MAKE all possible determinations on ALL previous turns taken...
-//    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown) throws SQLException {
-//
-//        System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
-//
-//        //  Checks if any one knownTogether pair is knownIn, if yes, the other must be knownIn (because we only process turns where the response varies by 1)
-//        if(!pairs.knownTogether.isEmpty()) {
-//            pairs.checkPairsForKnownIn(knownIn, unknown);
-//            pairs.checkPairsForKnownOut(knownOut, unknown);
-//            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, unknown, Turns);
-//        }
-//
-//        //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
-//        checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
-//
-//        //  ToDo: ALL Turns where updatedResponse == 0 and .size() > 0, ALL letters are OUT!!!
-//        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
-//
-//        //  COMPARE each (updated) turn against each other...
-//        compareAllTurnsAgainstEachOther(Turns, dashboard);
-//        System.out.println("assess.AllTurns.makeDeterminations: END");
-//    }
+/*  MAKE all possible determinations on ALL previous turns taken...
+    public static void makeDeterminations(LinkedList<Turn> Turns, Pairs pairs, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown) throws SQLException {
+
+        System.out.println("assess.AllTurns.makeDeterminations(): BEGIN");
+
+        //  Checks if any one knownTogether pair is knownIn, if yes, the other must be knownIn (because we only process turns where the response varies by 1)
+        if(!pairs.knownTogether.isEmpty()) {
+            pairs.checkPairsForKnownIn(knownIn, unknown);
+            pairs.checkPairsForKnownOut(knownOut, unknown);
+            for (Turn t : Turns) updateTurn(t, knownIn, knownOut, unknown, Turns);
+        }
+
+        //  ANY turn with an (updated) size equal to the (updated) response are KNOWN IN...
+        checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
+
+        for (Turn t : Turns) updatedResponseIsZero(t, knownOut, unknown, Turns);
+
+        //  COMPARE each (updated) turn against each other...
+        compareAllTurnsAgainstEachOther(Turns, dashboard);
+        System.out.println("assess.AllTurns.makeDeterminations: END");
+    }*/
 
     public static void updateTurn(Turn turn, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
 
@@ -74,57 +73,44 @@ public class AllTurns {
 
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): BEGIN");
 
-        ArrayList<Character> letterChangedFrom = new ArrayList<>();
-        ArrayList<Character> letterChangedTo = new ArrayList<>();
+        boolean changesMade = false;
 
-        int comparisonNumber = 1;
+        do {
+            int comparisonNumber = 1;
 
-        for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
-            for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
+            for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
+                for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
 
-                System.out.println("COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
-                prettyPrintLinkedHashMap(Turns, i, j);
+                    System.out.println("COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":");
+                    prettyPrintLinkedHashMap(Turns, i, j);
 
-                //  CLASSIFICATION:
-                System.out.println("CLASSIFICATION:");
-                Classification classification;
-                classification = new Classification(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse, Turns.get(i).updatedGuess, Turns.get(j).updatedGuess);
-                classification.printClassification();
+                    //  CLASSIFICATION:
+                    System.out.println("CLASSIFICATION:");
+                    Classification classification;
+                    classification = new Classification(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse, Turns.get(i).updatedGuess, Turns.get(j).updatedGuess);
+                    classification.printClassification();
 
-                // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
-                if(!classification.updatedGuessesSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
-                    System.out.println("FINDINGS:");
-                    classification.printFindings();
-                    System.out.println("DETERMINATIONS:");
-                    if(classification.updatedResponsesDifferByOne && classification.updatedGuessesSameLength) {
-                        System.out.println(" - Since updated responses are the same length, and the responses differ by 1, we know:");
-                        System.out.println("   " + classification.onlyInFirst + " is IN.");
-                        System.out.println("   " + classification.onlyInSecond + " is OUT.");
-                    } else if (classification.onlyInFirst.size() == 1  && classification.onlyInSecond.size() == 1) {
-                        System.out.println("All we can say for certain, is that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are together.  (Could both be IN, could both be OUT.)");
+                    // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
+                    if(!classification.updatedGuessesSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
+                        System.out.println("FINDINGS:");
+                        classification.printFindings();
+                        System.out.println("DETERMINATIONS:");
+                        if(classification.updatedResponsesDifferByOne && classification.updatedGuessesSameLength) {
+                            System.out.println(" - Since updated responses are the same length, and the responses differ by 1, we know:");
+                            System.out.println("   " + classification.onlyInFirst + " is IN.");
+                            System.out.println("   " + classification.onlyInSecond + " is OUT.");
+                        } else if (classification.onlyInFirst.size() == 1  && classification.onlyInSecond.size() == 1) {
+                            System.out.println("All we can say for certain, is that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are together.  (Could both be IN, could both be OUT.)");
+                        }
+                        System.out.println("ACTIONS:");
+                        System.out.println("Add " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to 'knownTogether' on the dashboard");
+                        classification.onlyInFirst.addAll(classification.onlyInSecond);  //  Since these are now known to be together, ADD the second set to the first
+                        dashboard.mergeSetToKnownTogether(classification.onlyInFirst);   //  MERGE the first set to the list of all sets known to be together
+                        System.out.println();
                     }
-                    System.out.println("ACTIONS:");
-                    System.out.println("Add " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to 'knownTogether' on the dashboard");
-                    classification.onlyInFirst.addAll(classification.onlyInSecond);
-//                    dashboard.knownTogether.add(classification.onlyInFirst);
-                    dashboard.mergeSetToKnownTogether(classification.onlyInFirst);
-//                    System.out.println(dashboard.knownTogether.get(0));
-                    System.out.println();
                 }
-
-
-                // Todo NEW turn comparison logic:
-                // if differenceInUpdatedResponses == 0 & updatedGuesses different, take the smaller set away from the bigger.  What remains is OUT!  <-- (Kim thing)
-                // if differenceInUpdatedResponses == 0, and updatedGuesses same, do nothing   <-- (DON'T write code for DO NOTHING scenarios)
-                // if differenceInUpdatedResponses == 1 or -1, and the guesses differ by 1 letter, that letter is IN!
-                // if differenceInUpdatedResponses == 2 or -2, nothing can be learned  <-- Not necessarily true!!!
-
-
-
-                letterChangedFrom.clear();
-                letterChangedTo.clear();
             }
-        }
+        } while (changesMade);
         System.out.println("assess.AllTurns.compareAllTurnsAgainstEachOther(): END");
     }
 
@@ -136,8 +122,6 @@ public class AllTurns {
     }
 
     private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, int i, int j) throws SQLException {
-
-
 
         //  If what remains is size = 1, then the turns MUST have been 1 letter different
         //  Therefore, the remaining letter is OUT, so go ahead and do it
@@ -199,58 +183,6 @@ public class AllTurns {
         System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): END");
     }
 
-    /*  Once a DETERMINATION on two letters has been made, UPDATE all data sources accordingly...
-    PARAMETER HELL!!! I can't use this when checking if(knownTogether.contains(knownIn)) due to absent letterChanged params
-    I will overload updateAllDataSources (for now) but this may be a candidate to be torn down
-    Refactor updateAllDataSources to updateDataSources, and overload updateDataSources for if(knownTogether.contains(knownIn)) */
-    private static void updateDataSources(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, ArrayList<Character> letterChangedFrom, ArrayList<Character> letterChangedTo, Unknown unknown) {
-
-        System.out.println("assess.AllTurns.updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown): BEGIN");
-
-        knownIn.letters.addAll(letterChangedFrom);
-        knownOut.letters.addAll(letterChangedTo);
-
-        //  ALL letters in KnownOut to be removed from UNKNOWN, ALL TURNS, DATABASE...
-        for(Character c: knownOut.letters) {
-            Unknown.letters.remove(c);
-
-            for(Turn t : Turns) {
-                t.turn.remove(c);
-                t.parseCollectionToString();
-            }
-
-            try {
-                Delete.wordsWith(String.valueOf(c), unknown, knownOut);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        //  ALL letters in knownIn to be removed from UNKNOWN, ALL TURNS (while decrementing updatedResponse), DATABASE...
-        for(Character c: knownIn.letters) {
-            Unknown.letters.remove(c);
-
-            for(Turn t : Turns) {
-                if(t.turn.contains(c)) {
-                    t.turn.remove(c);
-                    t.updatedResponse--;
-                    t.parseCollectionToString();
-                }
-            }
-
-            try {
-                Delete.wordsWithout(String.valueOf(c), unknown, knownIn.letters);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        System.out.println();
-
-        Create.rebuildWatsonDB(knownIn.letters, unknown);
-        System.out.println("assess.AllTurns.updateAllDataSources(Turns, knownTogether, knownIn, knownOut, letterChangedFrom, letterChangedTo, unknown): END");
-    }
-
     //  PRETTY-PRINT the UPDATED turns being compared...
     private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i, int j) {
 
@@ -264,30 +196,6 @@ public class AllTurns {
         sb.append("    ORIGINAL: ").append(Turns.get(j).guess).append(", ").append(Turns.get(j).response).append(" > UPDATED: [").append(Turns.get(j).updatedGuess).append("]").append(" = ").append(Turns.get(j).updatedResponse);
         System.out.println(sb);
         //  System.out.println("assess.AllTurns.prettyPrintLinkedHashMap(): END");
-    }
-
-    //  DETERMINE letters changed between turns...
-    private static void identifyChangedLetters(LinkedList<Turn> Turns, ArrayList<Character> letterChangedFrom, int i, ArrayList<Character> letterChangedTo, int j) {
-
-        //  System.out.println("assess.AllTurns.identifyChangedLetters(): BEGIN");
-
-        //  CLEAR any existing entries...
-        letterChangedFrom.clear();
-        letterChangedTo.clear();
-
-        //  ADD updated guesses to be compared...
-        letterChangedFrom.addAll(Turns.get(i).turn);
-        letterChangedTo.addAll(Turns.get(j).turn);
-
-        //  ADD a temp ArrayList to preserve values to be deleted...
-        ArrayList<Character> temp = new ArrayList<>(letterChangedFrom);
-
-        letterChangedFrom.removeAll(letterChangedTo);
-        letterChangedTo.removeAll(temp);
-
-        System.out.println("    " + letterChangedTo + " was changed to " + letterChangedFrom + " in these two turns");
-
-        //  System.out.println("assess.AllTurns.identifyChangedLetters(): END");
     }
 
     //  ANY guess with a response of zero is KNOWN OUT.  Remove all letters in the guess from ALL data sources...
