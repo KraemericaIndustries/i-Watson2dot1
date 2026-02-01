@@ -105,8 +105,10 @@ public class AllTurns {
                     }
                     System.out.println("ACTIONS:");
                     System.out.println("Add " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to 'knownTogether' on the dashboard");
-                    dashboard.knownTogether.add(classification.onlyInFirst.toString() + classification.onlyInSecond.toString());
-                    System.out.println(dashboard.knownTogether.get(0));
+                    classification.onlyInFirst.addAll(classification.onlyInSecond);
+//                    dashboard.knownTogether.add(classification.onlyInFirst);
+                    dashboard.mergeSetToKnownTogether(classification.onlyInFirst);
+//                    System.out.println(dashboard.knownTogether.get(0));
                     System.out.println();
                 }
 

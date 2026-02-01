@@ -17,7 +17,8 @@ public class Dashboard {
     public int numWordPairs = 0;
     public int [] letterCounts = new int[26];
     public List<LetterScore> unknownLetters = new ArrayList<>();
-    public List<String> knownTogether = new ArrayList<>();
+//    public List<String> knownTogether = new ArrayList<>();
+    public List<Set<Character>> knownTogether = new ArrayList<>();
 
     // CONSTRUCTOR
     public Dashboard() {
@@ -98,6 +99,22 @@ public class Dashboard {
 
     public void sortUnknownLettersByFrequencyDescending() {
         unknownLetters.sort((a, b) -> b.score - a.score);
+    }
+
+    public void mergeSetToKnownTogether(Set<Character> incoming) {
+
+        boolean merged = false;
+
+        for (Set<Character> setsKnownToBeTogether : knownTogether) {
+            if (!Collections.disjoint(setsKnownToBeTogether, incoming)) {
+                setsKnownToBeTogether.addAll(incoming);
+                merged = true;
+                break;
+            }
+        }
+        if (!merged) {
+            knownTogether.add(incoming);
+        }
     }
 }
 

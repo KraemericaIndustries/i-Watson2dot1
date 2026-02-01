@@ -88,9 +88,9 @@ public class App {
                     System.out.println(dashboard.knownTogether.get(0));
 
 
-                    for(int i = 0; i < dashboard.knownTogether.get(0).length(); i++) {
-                        System.out.println(dashboard.knownTogether.get(0).charAt(i));
-                    }
+//                    for(int i = 0; i < dashboard.knownTogether.get(0).length(); i++) {
+//                        System.out.println(dashboard.knownTogether.get(0).charAt(i));
+//                    }
                     System.out.println("break");
                 }
             }
