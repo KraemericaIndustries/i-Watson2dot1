@@ -78,6 +78,21 @@ public class App {
                 System.out.println("break");
             } else if (selectedStrategy.equals("ELIMINATE LETTERS KNOWN TOGETHER")) {
 
+                if(!dashboard.knownOut.isEmpty()) {
+                    System.out.println("knownOUT is Empty!");
+                } else if (!dashboard.knownIn.isEmpty()) {
+                    System.out.println("knownIN is Empty!");
+                } else {
+                    System.out.println("Since we are not certain of any letters yet, let's find the best turn to work against");
+
+                    System.out.println(dashboard.knownTogether.get(0));
+
+
+                    for(int i = 0; i < dashboard.knownTogether.get(0).length(); i++) {
+                        System.out.println(dashboard.knownTogether.get(0).charAt(i));
+                    }
+                    System.out.println("break");
+                }
             }
 
 

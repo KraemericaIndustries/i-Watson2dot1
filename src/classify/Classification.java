@@ -38,19 +38,33 @@ public class Classification {
         Set<Character> set2 = toCharSet(jUpdatedGuess);
 
         // Characters in s1 but not s2
-        Set<Character> onlyInFirstCons = new HashSet<>(set1);
-        onlyInFirstCons.removeAll(set2);
-        onlyInFirst = onlyInFirstCons;
+//        Set<Character> onlyInFirstCons = new HashSet<>(set1);
+//        onlyInFirstCons.removeAll(set2);
+//        onlyInFirst = onlyInFirstCons;
+//        onlyInFirst.addAll(onlyInFirstCons);
+        set1.removeAll(set2);
+        onlyInFirst = set1;
+
+        //only in second
+        set2.removeAll(temp);
+        onlyInSecond = set2;
+
 
         // Characters in both
-        Set<Character> inBothCons = new HashSet<>(set1);
-        inBothCons.retainAll(set2);
-        inBoth = inBothCons;
+//        Set<Character> inBothCons = new HashSet<>(set1);
+//        inBothCons.retainAll(set2);
+//        inBoth = inBothCons;
+//        inBoth.addAll(inBothCons);
+        temp.removeAll(set1);
+        temp.removeAll(set2);
+        inBoth = temp;
+
 
         // Characters in s2 but not s1
-        Set<Character> onlyInSecondCons = new HashSet<>(set2);
-        onlyInSecondCons.removeAll(temp);
-        onlyInSecond = onlyInSecondCons;
+//        Set<Character> onlyInSecondCons = new HashSet<>(set2);
+//        onlyInSecondCons.removeAll(temp);
+//        onlyInSecond = onlyInSecondCons;
+//        onlyInSecond.addAll(onlyInSecondCons);
     }
 
     private static boolean checkForUpdatedGuessesDifferInLengthByMoreThanOne(String iUpdatedGuess, String jUpdatedGuess) {
