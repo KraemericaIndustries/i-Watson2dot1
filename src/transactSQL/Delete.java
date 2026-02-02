@@ -79,4 +79,24 @@ public class Delete {
             Unknown.letters.remove(c);
         }
     }
+
+    public static void rowFromWordPairs(String word) throws SQLException {
+
+        System.out.println("transactSQL.Delete.rowFromWordPairs(): BEGIN");
+
+        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+            try {
+                statement.addBatch("delete from WordPairs where word1 like '" + word +"'");
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+            try {
+                statement.executeBatch();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("transactSQL.Delete.rowFromWordPairs(): END");
+    }
 }

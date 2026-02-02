@@ -74,6 +74,7 @@ public class App {
                     Turn turn = new Turn(g, Keyboard.responseFromOpponent());
                     Turns.add(turn);
                 }
+                Delete.rowFromWordPairs(guesses.get(0));
                 AllTurns.compareAllTurnsAgainstEachOther(Turns, dashboard);
                 System.out.println("break");
             } else if (selectedStrategy.equals("ELIMINATE LETTERS KNOWN TOGETHER")) {
