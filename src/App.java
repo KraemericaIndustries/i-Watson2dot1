@@ -1,5 +1,4 @@
 import assess.AllTurns;
-import classify.Strategies;
 import dataStructures.*;
 import print.Messages;
 import read.Keyboard;
@@ -13,30 +12,19 @@ import java.sql.ResultSet;
 import java.util.LinkedList;
 import java.util.List;
 
-import static transactSQL.Select.bestWordPair;
-
 
 public class App {
 
     public static void main(String[] args) throws Exception {
 
         //  SETUP...
-
-
-
         Messages.welcome();
         DatabaseConnection.getProperties();
         Create.watsonDB();
 
         //  SETUP: Create datastore objects to facilitate play...
-
-//        Unknown unknown = new Unknown();  //  <- Sorting Unknown letters by number of occurrences in the database is done via a stream, requiring an instance of the class
-//        Pairs pairs = new Pairs();
-//        Set<Character> knownIn = new HashSet<>();
-//        IdentifiedLetters knownIn = new IdentifiedLetters();
-//        Set<Character> knownOut = new HashSet<>();
-//        IdentifiedLetters knownOut = new IdentifiedLetters();
         LinkedList<Turn> Turns = new LinkedList<>();
+
         //  CREATE a dashboard...
         Dashboard dashboard = new Dashboard();
 
@@ -45,101 +33,44 @@ public class App {
         dashboard.buildUnknownLettersList();
         dashboard.sortUnknownLettersByFrequencyDescending();
         Connect.watson("createWordPairsTable");
-//        Connect.watson("deleteDups");
-
-        //  SETUP: Use letter counts accumulated during database entry to SORT a list of letters based on how frequently they appear in the database...
-//        dashboard.sort();
-//        dashboard.loadSortedLetters();
 
         //  PLAY the game...
-        String lastGuess;
+        String latestGuess = "ABC";
+        int latestResponse = 0;
         boolean guessIsWord;
         Messages.play();
 
         do {
-            dashboard.printDashboard(Turns);  //  PRINT a report of possible determinations
+            dashboard.printDashboard(Turns);                               //  PRINT the dashboard
+            List<String> guesses = fetch.Play.nextPlay(dashboard, Turns);  //  FETCH the next play
 
-            //  CREATE and PRESENT strategies, and make a selection...
-            LinkedList<String> strategies = Strategies.buildStrategies(dashboard);
-            Strategies.prettyPrintStrategies(strategies);
-            String selectedStrategy = Keyboard.selectStrategy(strategies);
-            System.out.println("You have chosen: " + selectedStrategy);
-
-            if(selectedStrategy.equals("ELIMINATE THE MOST COMMON LETTER")) {
-
-                List<String> guesses = bestWordPair(dashboard);  //  SELECT the BEST pair of guesses from WordPairs
-
-                for(String g : guesses) {  //  ITERATE all guesses, submit the guess, prompt for the response, add the play to 'Turns' collection
-                    System.out.println("Your guess is: " + g);
-                    Turn turn = new Turn(g, Keyboard.responseFromOpponent());
-                    Turns.add(turn);
-                }
-                Delete.rowFromWordPairs(guesses.get(0));
-                AllTurns.compareAllTurnsAgainstEachOther(Turns, dashboard);
-                System.out.println("break");
-            } else if (selectedStrategy.equals("ELIMINATE LETTERS KNOWN TOGETHER")) {
-
-                if(!dashboard.knownOut.isEmpty()) {
-                    System.out.println("knownOUT is Empty!");
-                } else if (!dashboard.knownIn.isEmpty()) {
-                    System.out.println("knownIN is Empty!");
-                } else {
-                    System.out.println("Since we are not certain of any letters yet, let's find the best turn to work against");
-
-                    System.out.println(dashboard.knownTogether.get(0));
-
-
-//                    for(int i = 0; i < dashboard.knownTogether.get(0).length(); i++) {
-//                        System.out.println(dashboard.knownTogether.get(0).charAt(i));
-//                    }
-                    System.out.println("break");
-                }
+            for(String g : guesses) {                                      //  ITERATE all guesses, submit the guess, prompt for the response, add the play to 'Turns' collection
+                System.out.println("Your guess is: " + g);                 //  VERIFY the guess
+                latestGuess = g;
+                latestResponse = Keyboard.responseFromOpponent();          //  GET the latest response
+                if(latestResponse ==5) break;                              //  BREAK the loop if the latest response is 5
+                Turn turn = new Turn(g, latestResponse);                   //  CREATE a turn from a guess
+                Turns.add(turn);                                           //  ADD the turn to the Turns collection
             }
 
+            AllTurns.compareAllTurnsAgainstEachOther(Turns, dashboard);    //  COMPARE all previous turns against each other
 
-//            Messages.results(pairs, Turns, unknown);           //  PRINT the results of previous plays and determinations
-//
-//            Turn turn = new Turn(Keyboard.guess(), Keyboard.responseFromOpponent());  //  Take a turn
-//
-//            //  Take action, based on the response...
-//             if(turn.response == 5) {
-//                 Turns.add(turn);
-//                 lastGuess = turn.guess;
-//                 AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);
-//                break;
-//            } else if(!(turn.response == 0)) {
-//                 lastGuess = turn.guess;
-//                 AllTurns.updateTurn(turn, knownIn, knownOut, unknown, Turns);  //  Process turn (remove knownIn/knownOut, if all knownTogether & (updatedResponse < knownTogether, all knownTogether IS OUT, etc.)
-//                 Turns.add(turn);
-//                 pairs.checkTurnAgainstPairs(turn, unknown);
-//            } else {
-//                 lastGuess = turn.guess;
-//                 AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
-//             }
-//
-//            if(Turns.size() >= 2) AllTurns.makeDeterminations(Turns, pairs, knownIn, knownOut, unknown);  //  ANALYZE all previous guesses (now that a new guess and response are available)
+            dashboard.reportNumber++;                                      //  INCREMENT the report number (lets us know how many turns we've taken)
 
-            dashboard.reportNumber++;
+        } while (!(latestResponse == 5));                                  //  WHILE the latest response is not 5
 
-            int numWordPairsRemaining = (Integer) Connect.watson("countWordPairs");
-            if (numWordPairsRemaining == 0) break;
-
-        } while (Insert.wordCount > 3);
-
-        //  THE HOME STRETCH!
-        //  Response is 5 BUT last guess is NOT opponents word!!!
-        lastGuess = "ABC";
-        guessIsWord = Keyboard.verify(lastGuess);
+        //  THE HOME STRETCH.  (The latest response was 5, but the last guess is NOT the word)
+        guessIsWord = Keyboard.verify(latestGuess);
 
         if(guessIsWord) {
-            Messages.victorySummary(lastGuess);
+            Messages.victorySummary(latestGuess);
         } else if (Insert.wordCount == 0) {
             stumped();
         } else {
             System.out.println();
             LinkedList<String> lastWords = new LinkedList<>();
 
-            ResultSet rs = Query.select("select * from Words_tbl where word != '" + lastGuess + "'");
+            ResultSet rs = Query.select("select * from Words_tbl where word != '" + latestGuess + "'");
 
             while(rs.next()) {
                 lastWords.add(rs.getString(1));
@@ -148,9 +79,6 @@ public class App {
             Connect.watson("deleteFromWordsTable");
 
             System.out.println("\n*****************************************************************  END GAME  *******************************************************************************************\n");
-//            Messages.report(knownIn, knownOut, pairs, Turns);  //  PRINT a report of possible determinations
-//            Messages.results(pairs, Turns, unknown);                    //  PRINT the results of previous plays and determinations
-
             do {
                 if(lastWords.isEmpty()) break;
 
@@ -161,14 +89,14 @@ public class App {
                     Messages.reportNumber++;
                     System.out.println("Here are the last remaining words in the database:\n" + lastWords);
                     System.out.println("Make a guess from the choices, above.  ");
-                    lastGuess = Keyboard.guess();
-                    guessIsWord = Keyboard.verify(lastGuess);
-                    lastWords.remove(lastGuess);
+                    latestGuess = Keyboard.guess();
+                    guessIsWord = Keyboard.verify(latestGuess);
+                    lastWords.remove(latestGuess);
                 }
             } while (!(lastWords.isEmpty()));
 
             if(guessIsWord) {
-                Messages.victorySummary(lastGuess);
+                Messages.victorySummary(latestGuess);
             } else {
                 stumped();
             }

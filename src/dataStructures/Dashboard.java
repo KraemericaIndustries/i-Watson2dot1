@@ -11,7 +11,9 @@ public class Dashboard {
     // STATE
     public Pairs pairs;
     public Set<Character> knownIn;
+    public Set<Character> changesToKnownIn;
     public Set<Character> knownOut;
+    public Set<Character> changesToKnownOut;
     public LinkedList<Turn> Turns;
     public int reportNumber = 1;
     public int numWordPairs = 0;
@@ -115,6 +117,24 @@ public class Dashboard {
         if (!merged) {
             knownTogether.add(incoming);
         }
+    }
+
+    public void updateDashboard() {
+
+        if(!changesToKnownIn.isEmpty()) {
+            knownIn.addAll(changesToKnownIn);
+            // delete all words from DB that DO NOT contain letters in this set
+            // remove this set from all updatedTurns in 'Turns' AND decrement updatedResponse
+        }
+        if(!changesToKnownOut.isEmpty()) {
+            knownOut.addAll(changesToKnownOut);
+            // delete all words from DB that DO contain letters in this set
+            // remove this set from all updatedTurns in 'Turns'
+        }
+
+        // REBUILD THE DATABASE
+        // REBUILD WORD PAIRS
+
     }
 }
 

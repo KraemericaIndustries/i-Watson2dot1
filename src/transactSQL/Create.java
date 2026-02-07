@@ -39,6 +39,17 @@ public class Create extends DatabaseConnection{
                                    "use watson;"  +
                                    "create table Words_tbl (word varchar(5) primary key(word));" +
                                    "create table WordPairs (Id int IDENTITY(1,1) PRIMARY KEY, word1 varchar(5), word2 varchar(5));" +
+                                   "CREATE TYPE CharList AS TABLE (ch char(1));;" +
+                                   "SELECT TOP 1 wp.*\n" +
+                                   "FROM WordPairs wp\n" +
+                                   "CROSS APPLY (\n" +
+                                   "    SELECT \n" +
+                                   "        SUM(CASE WHEN CHARINDEX(ch, wp.word1) > 0 THEN 1 ELSE 0 END) AS w1count,\n" +
+                                   "        SUM(CASE WHEN CHARINDEX(ch, wp.word2) > 0 THEN 1 ELSE 0 END) AS w2count\n" +
+                                   "    FROM @CharList\n" +
+                                   ") x\n" +
+                                   "WHERE (x.w1count = 2 AND x.w2count = 1)\n" +
+                                   "   OR (x.w1count = 1 AND x.w2count = 2);\n" +
                                    "create table letterCounts_tbl (Letter varchar, Count int);");
             try {
                 statement.executeBatch();

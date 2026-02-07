@@ -2,37 +2,9 @@ package read;
 
 import print.Messages;
 
-import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Keyboard {
-
-    //  Select a strategy...
-    public static String selectStrategy(LinkedList<String> strategies) {
-
-        int response;
-
-        do {
-//            System.out.print("What was the response?: ");
-            Scanner input= new Scanner(System.in);
-            response = input.nextInt();
-
-            if (response > strategies.size() || response < 1) {  //  Discard responses that are NOT 0 through 5
-                System.out.print("HEY!  DUMMY!  You selected " + response + ", but the only valid selections are ");
-                for(int i = 0; i < strategies.size() - 1; i++) {
-                    System.out.print(i + 1 + ", ");
-                }
-                System.out.println("or " + strategies.size() + "!  Try again, moron.");
-            }
-        } while (response > strategies.size() || response < 1);
-
-        String text = strategies.get(response - 1);
-        int pos = text.indexOf('\n');
-
-        return (pos == -1)
-                ? text
-                : text.substring(0, pos);
-    }
 
     //  INPUT a guess...
     public static String guess() {

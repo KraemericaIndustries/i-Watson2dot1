@@ -82,7 +82,7 @@ public class Delete {
 
     public static void rowFromWordPairs(String word) throws SQLException {
 
-        System.out.println("transactSQL.Delete.rowFromWordPairs(): BEGIN");
+//        System.out.println("transactSQL.Delete.rowFromWordPairs(): BEGIN");
 
         Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
             try {
@@ -97,6 +97,6 @@ public class Delete {
             }
         }
 
-        System.out.println("transactSQL.Delete.rowFromWordPairs(): END");
+//        System.out.println("transactSQL.Delete.rowFromWordPairs(): END");
     }
 }
