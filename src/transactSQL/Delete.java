@@ -22,7 +22,7 @@ public class Delete {
 
         if(!s.isEmpty()) {  //   PREVENT deletion of stings with no value from the database
 
-            Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+            Connection conn = DriverManager.getConnection(urlToWatson, user, password); Statement statement = conn.createStatement(); {
                 System.out.println("Deleting all words containing '" + s + "' from the database...");
                 try {
                     for(int i = 0; i < s.length(); i++) {
@@ -53,7 +53,7 @@ public class Delete {
 //            knownIn.add(s.charAt(i));
 //        }
 
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+        Connection conn = DriverManager.getConnection(urlToWatson, user, password); Statement statement = conn.createStatement(); {
             System.out.println("Deleting all words NOT containing '" + s + "' from the database...");
             try {
                 for(int i = 0; i < s.length(); i++) {
@@ -84,7 +84,7 @@ public class Delete {
 
 //        System.out.println("transactSQL.Delete.rowFromWordPairs(): BEGIN");
 
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+        Connection conn = DriverManager.getConnection(urlToWatson, user, password); Statement statement = conn.createStatement(); {
             try {
                 statement.addBatch("delete from WordPairs where word1 like '" + word +"'");
             } catch (SQLException ex) {

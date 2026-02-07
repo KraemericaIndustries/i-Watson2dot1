@@ -33,24 +33,30 @@ public class Create extends DatabaseConnection{
         System.out.println("Connecting to: " + url + "...");
         try (Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement()) {
             System.out.println(" > Connection established!");
-            statement.addBatch("drop database watson;" +
-                                   "WAITFOR DELAY '00:00:05';"  +
-                                   "create database watson;" +
-                                   "use watson;"  +
-                                   "create table Words_tbl (word varchar(5) primary key(word));" +
-                                   "create table WordPairs (Id int IDENTITY(1,1) PRIMARY KEY, word1 varchar(5), word2 varchar(5));" +
-                                   "CREATE TYPE CharList AS TABLE (ch char(1));;" +
-                                   "SELECT TOP 1 wp.*\n" +
-                                   "FROM WordPairs wp\n" +
-                                   "CROSS APPLY (\n" +
-                                   "    SELECT \n" +
-                                   "        SUM(CASE WHEN CHARINDEX(ch, wp.word1) > 0 THEN 1 ELSE 0 END) AS w1count,\n" +
-                                   "        SUM(CASE WHEN CHARINDEX(ch, wp.word2) > 0 THEN 1 ELSE 0 END) AS w2count\n" +
-                                   "    FROM @CharList\n" +
-                                   ") x\n" +
-                                   "WHERE (x.w1count = 2 AND x.w2count = 1)\n" +
-                                   "   OR (x.w1count = 1 AND x.w2count = 2);\n" +
-                                   "create table letterCounts_tbl (Letter varchar, Count int);");
+            statement.addBatch("DROP DATABASE watson;");
+            statement.addBatch("WAITFOR DELAY '00:00:05';");
+            statement.addBatch("CREATE DATABASE watson;");
+            statement.addBatch("USE watson;");
+            statement.addBatch("CREATE TABLE Words_tbl (word varchar(5) PRIMARY KEY);");
+            statement.addBatch("CREATE TABLE WordPairs (Id INT IDENTITY(1,1) PRIMARY KEY, word1 varchar(5), word2 varchar(5));");
+            statement.addBatch("CREATE TYPE CharList AS TABLE (ch char(1));");
+            statement.addBatch(
+                    "DECLARE @CharList CharList;" +
+                            "INSERT INTO @CharList VALUES ('a'), ('b'), ('c');" +   // example
+                            "SELECT TOP 1 wp.*\n" +
+                            "FROM WordPairs wp\n" +
+                            "CROSS APPLY (\n" +
+                            "    SELECT SUM(CASE WHEN CHARINDEX(ch, wp.word1) > 0 THEN 1 ELSE 0 END) AS w1count\n" +
+                            "    FROM @CharList\n" +
+                            ") a\n" +
+                            "CROSS APPLY (\n" +
+                            "    SELECT SUM(CASE WHEN CHARINDEX(ch, wp.word2) > 0 THEN 1 ELSE 0 END) AS w2count\n" +
+                            "    FROM @CharList\n" +
+                            ") b\n" +
+                            "WHERE (a.w1count = 2 AND b.w2count = 1)\n" +
+                            "   OR (a.w1count = 1 AND b.w2count = 2);"
+            );
+            statement.addBatch("CREATE TABLE letterCounts_tbl (Letter varchar(1), Count int);");
             try {
                 statement.executeBatch();
             } catch (SQLException e) {
@@ -63,6 +69,74 @@ public class Create extends DatabaseConnection{
         System.out.println();
 
         url = url + "DatabaseName=watson";
+    }
+
+    public static void copilotWatsonDB() throws Exception {
+
+        try (Connection conn = DriverManager.getConnection(url, user, password);
+             Statement s = conn.createStatement()) {
+
+            s.execute("IF DB_ID('watson') IS NOT NULL DROP DATABASE watson;");
+            s.execute("CREATE DATABASE watson;");
+        }
+
+        try (Connection conn = DriverManager.getConnection(urlToWatson, user, password);
+             Statement s = conn.createStatement()) {
+
+            s.execute("CREATE TABLE Words_tbl (word VARCHAR(5) PRIMARY KEY);");
+            s.execute("CREATE TABLE WordPairs (Id INT IDENTITY(1,1) PRIMARY KEY, word1 VARCHAR(5), word2 VARCHAR(5));");
+            s.execute("CREATE TYPE CharList AS TABLE (ch CHAR(1));");
+            s.execute("CREATE PROCEDURE FindWordPair\n" +
+                    "    @chars CharList READONLY\n" +
+                    "AS\n" +
+                    "BEGIN\n" +
+                    "    SET NOCOUNT ON;\n" +
+                    "\n" +
+                    "    SELECT TOP 1 wp.*\n" +
+                    "    FROM WordPairs wp\n" +
+                    "    CROSS APPLY (\n" +
+                    "        SELECT \n" +
+                    "            SUM(w1match) AS w1count,\n" +
+                    "            SUM(w2match) AS w2count\n" +
+                    "        FROM (\n" +
+                    "            SELECT \n" +
+                    "                CASE WHEN CHARINDEX(c.ch, wp.word1) > 0 THEN 1 ELSE 0 END AS w1match,\n" +
+                    "                CASE WHEN CHARINDEX(c.ch, wp.word2) > 0 THEN 1 ELSE 0 END AS w2match\n" +
+                    "            FROM @chars AS c\n" +
+                    "        ) d\n" +
+                    "    ) x\n" +
+                    "    WHERE (x.w1count = 2 AND x.w2count = 1)\n" +
+                    "       OR (x.w1count = 1 AND x.w2count = 2);\n" +
+                    "END;\n");
+            s.execute("CREATE TABLE letterCounts_tbl (Letter VARCHAR(1), Count INT);");
+
+            String query =
+                    "DECLARE @CharList CharList;\n" +
+                            "INSERT INTO @CharList VALUES ('a'), ('b'), ('c');\n" +
+                            "\n" +
+                            "SELECT TOP 1 wp.*\n" +
+                            "FROM WordPairs wp\n" +
+                            "CROSS APPLY (\n" +
+                            "    SELECT SUM(w1match) AS w1count\n" +
+                            "    FROM (\n" +
+                            "        SELECT CASE WHEN CHARINDEX(cl.ch, wp.word1) > 0 THEN 1 ELSE 0 END AS w1match\n" +
+                            "        FROM @CharList cl\n" +
+                            "    ) x\n" +
+                            ") a\n" +
+                            "CROSS APPLY (\n" +
+                            "    SELECT SUM(w2match) AS w2count\n" +
+                            "    FROM (\n" +
+                            "        SELECT CASE WHEN CHARINDEX(cl.ch, wp.word2) > 0 THEN 1 ELSE 0 END AS w2match\n" +
+                            "        FROM @CharList cl\n" +
+                            "    ) y\n" +
+                            ") b\n" +
+                            "WHERE (a.w1count = 2 AND b.w2count = 1)\n" +
+                            "   OR (a.w1count = 1 AND b.w2count = 2);";
+
+            s.execute(query);
+        }
+
+
     }
 
     //  RELOAD remaining words into tables...

@@ -8,6 +8,7 @@ import java.sql.Statement;
 
 public class DatabaseConnection {
     static String url;
+    static String urlToWatson;
     static String user;
     static String password;
     static Connection conn;
@@ -24,11 +25,13 @@ public class DatabaseConnection {
             throw new RuntimeException(e);
         }
         url = props.getProperty("url");
+        urlToWatson = props.getProperty("urlToWatson");
         user = props.getProperty("user");
         password = props.getProperty("password");
         //  DEBUG:
         System.out.println(" > Successfully read the following values: ");
         System.out.println(" > Database url: " + url);
+        System.out.println(" > Database urlToWatson: " + urlToWatson);
         System.out.println(" > Username: " + user);
         System.out.println(" > Password: " + password);
         System.out.println(" > Success!\n");

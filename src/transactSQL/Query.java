@@ -39,7 +39,7 @@ public class Query extends DatabaseConnection{
         System.out.println("Retrieving all remaining words from the 'watson' database...");
         int counter = 0;
         try {
-            conn = DriverManager.getConnection(url, user, password);  		       //  Establish Connection Object
+            conn = DriverManager.getConnection(urlToWatson, user, password);  		       //  Establish Connection Object
             statement = conn.createStatement();  								   //  Create a SQL statement object to send to the database
             resultSet = statement.executeQuery("select * from Words_tbl");     //  Execute the statement object
 
@@ -65,7 +65,7 @@ public class Query extends DatabaseConnection{
         ResultSet resultSet = null;
 
         try {
-            conn = DriverManager.getConnection(url, user, password);
+            conn = DriverManager.getConnection(urlToWatson, user, password);
             statement = conn.createStatement();
             resultSet = statement.executeQuery(selectQuery);
         } catch (SQLException e) {
@@ -77,7 +77,7 @@ public class Query extends DatabaseConnection{
     //  Generic method that accepts a SQL query as a parameter...
     public static void runStatement(String sqlQuery) throws SQLException {
 
-        Connection conn = DriverManager.getConnection(url, user, password); Statement statement = conn.createStatement(); {
+        Connection conn = DriverManager.getConnection(urlToWatson, user, password); Statement statement = conn.createStatement(); {
             try {
                 statement.executeUpdate(sqlQuery);
             } catch (SQLException ex) {

@@ -20,7 +20,7 @@ public class App {
         //  SETUP...
         Messages.welcome();
         DatabaseConnection.getProperties();
-        Create.watsonDB();
+        Create.copilotWatsonDB();
 
         //  SETUP: Create datastore objects to facilitate play...
         LinkedList<Turn> Turns = new LinkedList<>();

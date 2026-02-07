@@ -21,7 +21,7 @@ public class Connect {
     //  (switching on the reason for the requested connection...)
     public static Object watson(String reason) {
 
-        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
+        try (Connection conn = DriverManager.getConnection(urlToWatson, user, password); Statement ignored = conn.createStatement()) {
 
             switch(reason) {
                 case "getNumWordsInDB":
@@ -106,7 +106,7 @@ public class Connect {
     public static ResultSet watson(Set<Character> knownTogether) {
 
         ResultSet rs5 = null;
-        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
+        try (Connection conn = DriverManager.getConnection(urlToWatson, user, password); Statement ignored = conn.createStatement()) {
 
             StringBuilder sb = new StringBuilder();
 
@@ -145,7 +145,7 @@ public class Connect {
     */
     public static void watson(Unknown unknown) {
 
-        try (Connection conn = DriverManager.getConnection(url, user, password); Statement ignored = conn.createStatement()) {
+        try (Connection conn = DriverManager.getConnection(urlToWatson, user, password); Statement ignored = conn.createStatement()) {
 
             Character[] fiveMostCommonLetters = new Character[5];                      //  DECLARE an array to hold the desired number (5) of keys from the LinkedHashMap
             Set<Map.Entry<Character, Integer>> entrySet = Unknown.letters.entrySet();  // Get a set of all the entries (key - value pairs) contained in the LinkedHashMap

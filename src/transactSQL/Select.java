@@ -32,7 +32,7 @@ public class Select {
 
     public static void wordsContainingTwoLetters(char letter) throws SQLException {
 
-        Connection conn = DriverManager.getConnection(url, user, password);
+        Connection conn = DriverManager.getConnection(urlToWatson, user, password);
         Statement statement = conn.createStatement(); {
 
             ResultSet resultSet = transactSQL.Query.select("select TOP (6) word1, word2\n" +
@@ -49,7 +49,7 @@ public class Select {
     }
     public static void lastNumWordPairs() throws SQLException {
 
-        Connection conn = DriverManager.getConnection(url, user, password);
+        Connection conn = DriverManager.getConnection(urlToWatson, user, password);
         Statement statement = conn.createStatement(); {
 
             ResultSet resultSet = transactSQL.Query.select("select * from WordPairs");
@@ -193,7 +193,7 @@ public class Select {
 
         String sql = "{ call FindWordPair(?) }";
 
-        try (Connection conn = DriverManager.getConnection(url, user, password);
+        try (Connection conn = DriverManager.getConnection(urlToWatson, user, password);
              SQLServerCallableStatement stmt =
                      (SQLServerCallableStatement) conn.prepareCall(sql)) {
 
