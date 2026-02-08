@@ -19,13 +19,24 @@ public class Play {
         if(Turns.isEmpty() && dashboard.knownTogether.isEmpty()) {
             System.out.println("Since there are no previous turns, and I have no knowledge of any letters known to be together, Lets make a pair of guesses to try and eliminate the most common letter...");
             guesses = Select.bestWordPair(dashboard);
+            System.out.println("Let's play these two guesses back to back: ");
+            for(String s : guesses) {
+                System.out.println(s);
+            }
             Delete.rowFromWordPairs(guesses.get(0));  //  PREVENT previously selected bestWordPairs from being selected again
         } else if (!dashboard.knownTogether.isEmpty()) {
             // look for any word pairs where one of the words contains any letter in the set, and the other word contains no letters from the set  // DETERMINES ALL kT!!!
             // look for any word pairs where one of the words contains BOTH letters in the set, and the other word contains ONE letter from the set  //  DETERMINES ALL kT!!! (EXCLUSIVE TO kT set being a PAIR OF LETTERS
             // sout some pretty stuff, so the console reflects what has been done
+            System.out.print("Checking to see if we can use a pair of guesses to determine if " );
+            dashboard.printKnownTogether();
+            System.out.println(" are IN or OUT...");
             guesses = Select.scourWordPairsForAnyKnownTogether(dashboard);
-            System.out.println();
+            if(guesses.isEmpty()) {
+                System.out.print(" > I don't know any pair of words that can eliminate ");
+                dashboard.printKnownTogether();
+                System.out.println("\nLet's check letters known to be together against what we know from previous turns...");
+            }
         }
         return guesses;
     }

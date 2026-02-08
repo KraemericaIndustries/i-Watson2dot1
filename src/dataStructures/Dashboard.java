@@ -136,5 +136,13 @@ public class Dashboard {
         // REBUILD WORD PAIRS
 
     }
+
+    public void printKnownTogether() {
+        for(Set<Character> set : knownTogether) {
+            for(Character c: set) {
+                System.out.print(c);
+            }
+        }
+    }
 }
 
