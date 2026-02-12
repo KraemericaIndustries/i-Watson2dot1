@@ -99,4 +99,20 @@ public class Delete {
 
 //        System.out.println("transactSQL.Delete.rowFromWordPairs(): END");
     }
+
+    public static void fromWordsTable(Set<Character> changesToKnownIn, Set<Character> changesToKnownOut) throws SQLException {
+
+        Connection conn = DriverManager.getConnection(urlToWatson, user, password);
+        Statement statement = conn.createStatement();
+        {
+            for (Character c : changesToKnownIn) {
+                statement.addBatch("delete from Words_tbl where word not like '%" + c + "%'");
+            }
+
+            for (Character c : changesToKnownOut) {
+                statement.addBatch("delete from Words_tbl where word like '%" + c + "%'");
+            }
+            statement.executeBatch();
+        }
+    }
 }

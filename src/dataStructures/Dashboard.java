@@ -1,6 +1,8 @@
 package dataStructures;
 
 import transactSQL.Connect;
+import transactSQL.Delete;
+
 import java.util.*;
 
 import static dataStructures.Unknown.letters;
@@ -155,6 +157,9 @@ public class Dashboard {
 
 
         //  Update Words table (drop words without, drop words with)  //  ToDo: Any subsequent invocations should use dashboard as a parameter.  Avoids PARAMETER HELL
+        Delete.fromWordsTable(changesToKnownIn, changesToKnownOut);
+
+
         //  Regenerate/populate Words_tbl
         //  Re-generate WordPairs
         //  Clear changesTo sets
