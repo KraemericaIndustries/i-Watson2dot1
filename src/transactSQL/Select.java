@@ -2,7 +2,6 @@ package transactSQL;
 
 import com.microsoft.sqlserver.jdbc.SQLServerCallableStatement;
 import com.microsoft.sqlserver.jdbc.SQLServerDataTable;
-import com.microsoft.sqlserver.jdbc.SQLServerException;
 import dataStructures.Dashboard;
 
 import java.sql.*;
@@ -124,9 +123,9 @@ public class Select {
         return guesses;
     }
 
-    public static List<String> scourWordPairsForAnyKnownTogether(Dashboard dashboard) throws SQLException {
+    public static List<String> findTwoInOneOutFromWordPairs(Dashboard dashboard) throws SQLException {
 
-        //  EXPLANATION of scourWordPairsForAnyKnownTogether()
+        //  EXPLANATION of queryTwoInOneOutFromWordPairs()
         /*
         This method is meant to scour the dashboard.knwonTogether List of Sets of type <Character> looking for ANY rows in the WordPairs table
         where one word contains any two letters from a set while the other word only contains one.
@@ -212,6 +211,37 @@ public class Select {
                         guesses.add(w2);
                     }
                 }
+            }
+        }
+        return guesses;
+    }
+
+    public static List<String> findAsymmetricCharMatch(String s) throws SQLException {
+
+        List<String> guesses = new ArrayList<>();
+
+        Connection conn = DriverManager.getConnection(urlToWatson, user, password);
+        Statement statement = conn.createStatement(); {
+
+            ResultSet resultSet = transactSQL.Query.select("SELECT TOP (1) *\n" +
+                    "FROM WordPairs\n" +
+                    "WHERE\n" +
+                    "(\n" +
+                    "    word1 LIKE '%['" + s + "']%' AND\n" +
+                    "    word2 NOT LIKE '%['" + s + "']%'\n" +
+                    ")\n" +
+                    "OR\n" +
+                    "(\n" +
+                    "    word2 LIKE '%['" + s + "']%' AND\n" +
+                    "    word1 NOT LIKE '%['" + s + "']%'\n" +
+                    ");");
+
+            while(resultSet.next()) {
+                String w1 = resultSet.getString("word1");
+                String w2 = resultSet.getString("word2");
+                // Use the result
+                guesses.add(w1);
+                guesses.add(w2);
             }
         }
         return guesses;

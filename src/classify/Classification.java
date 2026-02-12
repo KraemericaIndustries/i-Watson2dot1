@@ -8,6 +8,7 @@ public class Classification {
     public boolean updatedResponsesSame;
     public boolean updatedResponsesDifferByOne;
     public boolean updatedResponsesDifferByMoreThanOne;
+    public int deltaUpdatedResponse;
 
     // STATE of UPDATED GUESS LENGTH
     public boolean updatedGuessesSameLength;
@@ -22,7 +23,7 @@ public class Classification {
 
     // CONSTRUCTOR
     public Classification(int iUpdatedResponse, int jUpdatedResponse, String iUpdatedGuess, String jUpdatedGuess) {
-        updatedResponsesSame = checkForUpdatedResponseSame(iUpdatedResponse, jUpdatedResponse);
+        deltaUpdatedResponse = iUpdatedResponse - jUpdatedResponse;
         if (!updatedResponsesSame) updatedResponsesDifferByOne = checkForUpdatedResponsesDifferByOne(iUpdatedResponse, jUpdatedResponse);
         if (!updatedResponsesSame && !updatedResponsesDifferByOne) updatedResponsesDifferByMoreThanOne = checkForUpdatedResponsesDifferByMoreThanOne(iUpdatedResponse, jUpdatedResponse);
 
@@ -120,11 +121,11 @@ public class Classification {
     }
 
     public void printFindings() {
-        if(updatedResponsesSame) System.out.println(" - Updated responses are the same");;
-        if(updatedResponsesDifferByOne) System.out.println(" - Updated responses differ by one");;
-        if(updatedResponsesDifferByMoreThanOne) System.out.println(" - Updated responses differ by more than one");;
+        if(updatedResponsesSame) System.out.println(" - Updated responses are the same");
+        if(updatedResponsesDifferByOne) System.out.println(" - Updated responses differ by one");
+        if(updatedResponsesDifferByMoreThanOne) System.out.println(" - Updated responses differ by more than one");
         if(updatedGuessesSameLength) System.out.println(" - Updated guesses are the same length");
-        if(updatedGuessesDifferInLengthByOne) System.out.println(" - Updated guesses differ in length by one");;
-        if(updatedGuessesDifferInLengthByMoreThanOne) System.out.println(" - Updated guesses differ in length by one");;
+        if(updatedGuessesDifferInLengthByOne) System.out.println(" - Updated guesses differ in length by one");
+        if(updatedGuessesDifferInLengthByMoreThanOne) System.out.println(" - Updated guesses differ in length by one");
     }
 }

@@ -10,13 +10,20 @@ public class Dashboard {
 
     // STATE
     public Pairs pairs;
+    // GOSPEL
     public Set<Character> knownIn;
-    public Set<Character> changesToKnownIn;
     public Set<Character> knownOut;
+    // The source of truth for  changes that need to be processed
+    // (If determined characters are immediately added to GOSPEL,  and GOSPEL is the source of truth while making changes, changes become redundant and needlessly expensive)
+    public Set<Character> changesToKnownIn;
     public Set<Character> changesToKnownOut;
+    // A List of Turns
     public LinkedList<Turn> Turns;
+    // A number to be incremented iteratively to track the number of guesses needed to finish the game
     public int reportNumber = 1;
+    // The number of pairs of words remaining in Word_tbl that differ by ONLY ONE LETTER
     public int numWordPairs = 0;
+    // An array to back seeding of letter counts into the dashboard
     public int [] letterCounts = new int[26];
     public List<LetterScore> unknownLetters = new ArrayList<>();
 //    public List<String> knownTogether = new ArrayList<>();
@@ -122,15 +129,37 @@ public class Dashboard {
     public void updateDashboard() {
 
         if(!changesToKnownIn.isEmpty()) {
-            knownIn.addAll(changesToKnownIn);
+            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
+            for (Turn t : Turns) {
+                if (containsAny(t.guess, changesToKnownIn)) {
+                    removeChars(t.guess, changesToKnownIn);  //  REMOVE changesToKnownIn from t.guess
+                    t.updatedResponse--;  //  DECREMENT updatedResponse
+                }
+            }
             // delete all words from DB that DO NOT contain letters in this set
             // remove this set from all updatedTurns in 'Turns' AND decrement updatedResponse
         }
         if(!changesToKnownOut.isEmpty()) {
-            knownOut.addAll(changesToKnownOut);
+            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
+            for (Turn t : Turns) {
+                if (containsAny(t.guess, changesToKnownOut)) {
+                    removeChars(t.guess, changesToKnownOut);  //  REMOVE changesToKnownOut from t.guess
+                }
+            }
             // delete all words from DB that DO contain letters in this set
             // remove this set from all updatedTurns in 'Turns'
         }
+
+        //  WHAT has to change??
+
+
+
+        //  Update Words table (drop words without, drop words with)  //  ToDo: Any subsequent invocations should use dashboard as a parameter.  Avoids PARAMETER HELL
+        //  Regenerate/populate Words_tbl
+        //  Re-generate WordPairs
+        //  Clear changesTo sets
+
+
 
         // REBUILD THE DATABASE
         // REBUILD WORD PAIRS
@@ -143,6 +172,25 @@ public class Dashboard {
                 System.out.print(c);
             }
         }
+    }
+
+    public static String removeChars(String input, Set<Character> remove) {
+        StringBuilder sb = new StringBuilder(input.length());
+        for (char c : input.toCharArray()) {
+            if (!remove.contains(c)) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
+
+    private static boolean containsAny(String input, Set<Character> chars) {
+        for (char c : input.toCharArray()) {
+            if (chars.contains(c)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
 

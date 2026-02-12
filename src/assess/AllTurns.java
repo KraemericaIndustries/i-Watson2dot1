@@ -92,21 +92,51 @@ public class AllTurns {
 
                     // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
                     if(!classification.updatedGuessesSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
+
+                        //  THE MAGIC GOES HERE!!!  Put FINDINGS/DETERMINATIONS/ACTIONS all in the same if-else ladder!
                         System.out.println("FINDINGS:");
-                        classification.printFindings();
-                        System.out.println("DETERMINATIONS:");
-                        if(classification.updatedResponsesDifferByOne && classification.updatedGuessesSameLength) {
-                            System.out.println(" - Since updated responses are the same length, and the responses differ by 1, we know:");
-                            System.out.println("   " + classification.onlyInFirst + " is IN.");
-                            System.out.println("   " + classification.onlyInSecond + " is OUT.");
-                        } else if (classification.onlyInFirst.size() == 1  && classification.onlyInSecond.size() == 1) {
-                            System.out.println("All we can say for certain, is that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are together.  (Could both be IN, could both be OUT.)");
+                        if(classification.onlyInFirst.size() == 1 && classification.onlyInSecond.size() == 1) {  //  ONLY 1 LETTER HAS CHANGED
+                            System.out.println(" > Only 1 letter has changed.");
+                            if(classification.deltaUpdatedResponse == 1 || classification.deltaUpdatedResponse == -1) {  //  RESPONSE HAS CHANGED
+                                System.out.println(" > The (updated) response has changed by 1.");
+                                System.out.println("DETERMINATIONS:");
+                                if(classification.deltaUpdatedResponse == 1) {
+                                    System.out.println(" > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!");
+                                    dashboard.changesToKnownIn.addAll(classification.onlyInFirst);
+                                    dashboard.changesToKnownOut.addAll(classification.onlyInSecond);
+                                }
+                                else {
+                                    System.out.println(" > We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!");
+                                    dashboard.changesToKnownIn.addAll(classification.onlyInSecond);
+                                    dashboard.changesToKnownOut.addAll(classification.onlyInFirst);
+                                }
+                                System.out.println("ACTIONS:");
+                                if(classification.deltaUpdatedResponse == 1) System.out.println(" > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!");
+                                else System.out.println(" > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!");
+                                //  ToDo This invocation is where I left off.  Finish this!!!
+                                dashboard.updateDashboard();
+                                changesMade = true;
+                            } else if (classification.deltaUpdatedResponse == 0) {  //  RESPONSE IS SAME
+                                System.out.println(" > The (updated) response has NOT changed.");
+                                System.out.println(" > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case.");
+                                System.out.println("ACTIONS:");
+                                System.out.println(" > Adding " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to a set of letters that are Known TOGETHER.");
+                                classification.onlyInFirst.addAll(classification.onlyInSecond);  //  Since these are now known to be together, ADD the second set to the first
+                                dashboard.mergeSetToKnownTogether(classification.onlyInFirst);   //  MERGE the first set to the list of all sets known to be together
+                            }
                         }
-                        System.out.println("ACTIONS:");
-                        System.out.println("Add " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to 'knownTogether' on the dashboard");
-                        classification.onlyInFirst.addAll(classification.onlyInSecond);  //  Since these are now known to be together, ADD the second set to the first
-                        dashboard.mergeSetToKnownTogether(classification.onlyInFirst);   //  MERGE the first set to the list of all sets known to be together
-                        System.out.println();
+
+                        // LEGACY:
+//                        if(classification.updatedResponsesDifferByOne && classification.updatedGuessesSameLength) {
+//                            System.out.println(" - Since updated responses are the same length, and the responses differ by 1, we know:");
+//                            System.out.println("   " + classification.onlyInFirst + " is IN.");
+//                            System.out.println("   " + classification.onlyInSecond + " is OUT.");
+//                        } else if (classification.onlyInFirst.size() == 1  && classification.onlyInSecond.size() == 1) {
+//                            System.out.println("All we can say for certain, is that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are together.  (Could both be IN, could both be OUT.)");
+//                        }
+//                        System.out.println("ACTIONS:");
+//                        System.out.println("Add " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to 'knownTogether' on the dashboard");
+
                     }
                 }
             }
