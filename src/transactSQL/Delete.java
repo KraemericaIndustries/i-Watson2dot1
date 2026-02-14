@@ -39,7 +39,7 @@ public class Delete {
             }
         }
 
-        Create.rebuildWatsonDB(knownOut.letters, unknown);
+//        Create.rebuildWatsonDB(knownOut.letters, unknown);
 
         System.out.println("Delete.wordsWith: END");
     }
@@ -101,7 +101,8 @@ public class Delete {
     }
 
     public static void fromWordsTable(Set<Character> changesToKnownIn, Set<Character> changesToKnownOut) throws SQLException {
-
+//  ToDo SEND THIS BAD BOY dashboard
+        //  ToDo for loops should only run IF changesToKnownIn/changesToKnownOut !Empty
         Connection conn = DriverManager.getConnection(urlToWatson, user, password);
         Statement statement = conn.createStatement();
         {

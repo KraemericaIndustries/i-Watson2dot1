@@ -31,40 +31,40 @@ public class AllTurns {
         System.out.println("assess.AllTurns.makeDeterminations: END");
     }*/
 
-    public static void updateTurn(Turn turn, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
+//    public static void updateTurn(Turn turn, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
+//
+//        //  FOR every character in knownIn
+//        for (Character c : knownIn.letters) {
+//            if (turn.turn.contains(c)) {     //  IF the turn contains the character
+//                System.out.println("Removing all 'KNOWN IN' (" + c + ") from guess of " + turn.turn + "...");
+//                turn.turn.remove(c);        //  REMOVE the character from the turn
+//                System.out.println("Decrementing response from " + turn.updatedGuess + " to " + (turn.updatedResponse - 1) + " to account for the stripped letter known to be IN.");
+//                turn.updatedResponse -= 1;  //  DECREMENT the updatedResponse
+//
+//                //  Having removed all letters known to be IN, if the remaining response is 0, the remainder of the guess is known to be OUT...
+//                updatedResponseIsZero(turn, knownOut, unknown, Turns);
+//            }
+//        }
+//        turn.parseCollectionToString();  //  PARSE the collection back to a String
+//        removeKnownOutFromAllTurns(knownOut, Turns);
+//    }
 
-        //  FOR every character in knownIn
-        for (Character c : knownIn.letters) {
-            if (turn.turn.contains(c)) {     //  IF the turn contains the character
-                System.out.println("Removing all 'KNOWN IN' (" + c + ") from guess of " + turn.turn + "...");
-                turn.turn.remove(c);        //  REMOVE the character from the turn
-                System.out.println("Decrementing response from " + turn.updatedGuess + " to " + (turn.updatedResponse - 1) + " to account for the stripped letter known to be IN.");
-                turn.updatedResponse -= 1;  //  DECREMENT the updatedResponse
+//    private static void updatedResponseIsZero(Turn turn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
+//        if(turn.updatedResponse == 0) {
+//            turn.response = turn.updatedResponse;
+//            turn.parseCollectionToString();  //  PARSE the collection back to a String
+//            AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
+//        }
+//    }
 
-                //  Having removed all letters known to be IN, if the remaining response is 0, the remainder of the guess is known to be OUT...
-                updatedResponseIsZero(turn, knownOut, unknown, Turns);
-            }
-        }
-        turn.parseCollectionToString();  //  PARSE the collection back to a String
-        removeKnownOutFromAllTurns(knownOut, Turns);
-    }
-
-    private static void updatedResponseIsZero(Turn turn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
-        if(turn.updatedResponse == 0) {
-            turn.response = turn.updatedResponse;
-            turn.parseCollectionToString();  //  PARSE the collection back to a String
-            AllTurns.responseOfZero(turn, knownOut, unknown, Turns);
-        }
-    }
-
-    public static void removeKnownOutFromAllTurns(IdentifiedLetters knownOut, LinkedList<Turn> Turns) {
-        for (Turn t : Turns) {              //  FOR every turn in Turns
-            for (Character c : knownOut.letters) {  //  FOR every character in knownIn
-                t.turn.remove(c);           //  REMOVE the character from the turn
-            }
-            t.parseCollectionToString();    //  PARSE the collection back to a String
-        }
-    }
+//    public static void removeKnownOutFromAllTurns(IdentifiedLetters knownOut, LinkedList<Turn> Turns) {
+//        for (Turn t : Turns) {              //  FOR every turn in Turns
+//            for (Character c : knownOut.letters) {  //  FOR every character in knownIn
+//                t.turn.remove(c);           //  REMOVE the character from the turn
+//            }
+//            t.parseCollectionToString();    //  PARSE the collection back to a String
+//        }
+//    }
 
     //  COMPARE each updated turn against each other...
     public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Dashboard dashboard) throws SQLException {
@@ -114,7 +114,7 @@ public class AllTurns {
                                 if(classification.deltaUpdatedResponse == 1) System.out.println(" > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!");
                                 else System.out.println(" > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!");
                                 //  ToDo This invocation is where I left off.  Finish this!!!
-                                dashboard.updateDashboard();
+                                updateDashboard(dashboard);
                                 changesMade = true;
                             } else if (classification.deltaUpdatedResponse == 0) {  //  RESPONSE IS SAME
                                 System.out.println(" > The (updated) response has NOT changed.");
@@ -151,34 +151,34 @@ public class AllTurns {
         else return jUpdatedGuess;
     }
 
-    private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, int i, int j) throws SQLException {
-
-        //  If what remains is size = 1, then the turns MUST have been 1 letter different
-        //  Therefore, the remaining letter is OUT, so go ahead and do it
-
-        //  CREATE a temp pair of collections for a pair of turns to make the assessment...
-        Set<Character> a = Turns.get(i).turn;
-        Set<Character> b = Turns.get(i).turn;
-
-        //  Take the smaller (Set<Character>) away from the bigger
-        if(a.size() > b.size()) {
-            System.out.println("Removing " + b + " from " + a);
-            a.removeAll(b);
-            //  If what remains is size = 1, then the turns MUST have been 1 letter different
-            //  Therefore, the remaining letter is OUT, so go ahead and do it
-            if (a.size() == 1) Turns.get(i).turn = a;
-            updatedResponseIsZero(Turns.get(i), knownOut, unknown, Turns);
-            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
-        } else if (a.size() < b.size()){
-            System.out.println("Removing " + Turns.get(i).turn + " from " + Turns.get(j).turn);
-            b.removeAll(a);
-            //  If what remains is size = 1, then the turns MUST have been 1 letter different
-            //  Therefore, the remaining letter is OUT, so go ahead and do it
-            if (b.size() == 1) Turns.get(i).turn = b;
-            updatedResponseIsZero(Turns.get(j), knownOut, unknown, Turns);
-            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
-        }
-    }
+//    private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, int i, int j) throws SQLException {
+//
+//        //  If what remains is size = 1, then the turns MUST have been 1 letter different
+//        //  Therefore, the remaining letter is OUT, so go ahead and do it
+//
+//        //  CREATE a temp pair of collections for a pair of turns to make the assessment...
+//        Set<Character> a = Turns.get(i).turn;
+//        Set<Character> b = Turns.get(i).turn;
+//
+//        //  Take the smaller (Set<Character>) away from the bigger
+//        if(a.size() > b.size()) {
+//            System.out.println("Removing " + b + " from " + a);
+//            a.removeAll(b);
+//            //  If what remains is size = 1, then the turns MUST have been 1 letter different
+//            //  Therefore, the remaining letter is OUT, so go ahead and do it
+//            if (a.size() == 1) Turns.get(i).turn = a;
+//            updatedResponseIsZero(Turns.get(i), knownOut, unknown, Turns);
+//            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
+//        } else if (a.size() < b.size()){
+//            System.out.println("Removing " + Turns.get(i).turn + " from " + Turns.get(j).turn);
+//            b.removeAll(a);
+//            //  If what remains is size = 1, then the turns MUST have been 1 letter different
+//            //  Therefore, the remaining letter is OUT, so go ahead and do it
+//            if (b.size() == 1) Turns.get(i).turn = b;
+//            updatedResponseIsZero(Turns.get(j), knownOut, unknown, Turns);
+//            checkAllTurnsForSizeEqualsUpdatedResponse(Turns, knownIn, unknown);
+//        }
+//    }
 
     private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, Dashboard dashboard) {
 
@@ -229,26 +229,26 @@ public class AllTurns {
     }
 
     //  ANY guess with a response of zero is KNOWN OUT.  Remove all letters in the guess from ALL data sources...
-    public static void responseOfZero(Turn turn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
-
-        System.out.println("assess.AllTurns.responseOfZero(): BEGIN");
-
-        if(turn.response == 0) {
-            // DELETE every letter from the String (handle length programmatically) from the DB
-            try {
-                Delete.wordsWith(turn.updatedGuess, unknown, knownOut);
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-
-            regenerateWordPairsTable();
-
-            // DELETE every letter from the String from Unknown.letters
-            Unknown.removeFromUnknown(turn.updatedGuess);
-            removeStringFromAllTurns(turn.updatedGuess, Turns);
-        }
-        System.out.println("assess.AllTurns.responseOfZero(): END");
-    }
+//    public static void responseOfZero(Turn turn, IdentifiedLetters knownOut, Unknown unknown, LinkedList<Turn> Turns) {
+//
+//        System.out.println("assess.AllTurns.responseOfZero(): BEGIN");
+//
+//        if(turn.response == 0) {
+//            // DELETE every letter from the String (handle length programmatically) from the DB
+//            try {
+//                Delete.wordsWith(turn.updatedGuess, unknown, knownOut);
+//            } catch (SQLException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            regenerateWordPairsTable();
+//
+//            // DELETE every letter from the String from Unknown.letters
+//            Unknown.removeFromUnknown(turn.updatedGuess);
+//            removeStringFromAllTurns(turn.updatedGuess, Turns);
+//        }
+//        System.out.println("assess.AllTurns.responseOfZero(): END");
+//    }
 
     //  REGENERATE the WordPairs table as previously unknown letters are determined to be KNOWN OUT...
     public static void regenerateWordPairsTable() {
@@ -294,4 +294,46 @@ public class AllTurns {
 
         System.out.println("assess.AllTurns.removeStringFromAllTurns END");
     }
+
+
+
+    public static void updateDashboard(Dashboard dashboard) throws SQLException {
+
+        if(!dashboard.changesToKnownIn.isEmpty()) {  //  IF there are changes to Known IN
+            dashboard.knownIn.addAll(dashboard.changesToKnownIn);  //  UPDATE Known IN (GOSPEL)
+            for (Turn t : dashboard.Turns) {  //  UPDATE ALL Turns
+                if (dashboard.containsAny(t.guess, dashboard.changesToKnownIn)) {
+                    dashboard.removeChars(t.guess, dashboard.changesToKnownIn);  //  REMOVE changesToKnownIn from t.guess
+                    t.updatedResponse--;  //  DECREMENT updatedResponse
+                }
+            }
+        }
+        if(!dashboard.changesToKnownOut.isEmpty()) {  //  IF there are changes to Known OUT
+            dashboard.knownIn.addAll(dashboard.changesToKnownOut);  //  UPDATE Known OUT (GOSPEL)
+            for (Turn t : dashboard.Turns) {  //  UPDATE ALL Turns
+                if (dashboard.containsAny(t.guess, dashboard.changesToKnownOut)) {
+                    dashboard.removeChars(t.guess, dashboard.changesToKnownOut);  //  REMOVE changesToKnownOut from t.guess
+                }
+            }
+        }
+
+        //  WHAT has to change??
+
+        //  Update Words table (drop words without, drop words with)
+        //  ToDo: Any subsequent invocations should use dashboard as a parameter.  Avoids PARAMETER HELL
+        Delete.fromWordsTable(dashboard.changesToKnownIn, dashboard.changesToKnownOut);
+
+        //  Regenerate/populate Words_tbl
+        Create.rebuildWatsonDB(dashboard);
+        //  Re-generate WordPairs
+        //  Clear changesTo sets
+
+
+
+        // REBUILD THE DATABASE
+        // REBUILD WORD PAIRS
+
+    }
+
+
 }

@@ -21,7 +21,7 @@ public class IdentifiedLetters {
 
         Delete.wordsWithout(toAdd, unknown, letters);
 
-        Create.rebuildWatsonDB(letters, unknown);
+//        Create.rebuildWatsonDB(letters, unknown);
 
     }
 

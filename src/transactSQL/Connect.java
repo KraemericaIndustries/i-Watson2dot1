@@ -199,45 +199,45 @@ public class Connect {
         }
     }
 
-    public static void watson(String sqlQuery, Set<Character> set, Unknown unknown) throws SQLException {
+//    public static void watson(String sqlQuery, Set<Character> set, Unknown unknown) throws SQLException {
+//
+//        ResultSet rs6 = Query.select(sqlQuery);
+//
+//        while(!rs6.next()) {
+//            StringBuilder sb = new StringBuilder();
+//            sb.append("delete from Words_tbl " +
+//                      "where " +
+//                      "word like '%");
+//                      for (Character c : set) {
+//                          sb.append(c).append("%' or word like '%");
+//                      }
+//                      sb.delete((sb.length() - 18), (sb.length() - 1));
+//                      sb.append("';");
+//            Query.runStatement(sb.toString());
+//            break;
+//        }
+//        Create.rebuildWatsonDB(set, unknown);
+//        System.out.println();
+//    }
 
-        ResultSet rs6 = Query.select(sqlQuery);
-
-        while(!rs6.next()) {
-            StringBuilder sb = new StringBuilder();
-            sb.append("delete from Words_tbl " +
-                      "where " +
-                      "word like '%");
-                      for (Character c : set) {
-                          sb.append(c).append("%' or word like '%");
-                      }
-                      sb.delete((sb.length() - 18), (sb.length() - 1));
-                      sb.append("';");
-            Query.runStatement(sb.toString());
-            break;
-        }
-        Create.rebuildWatsonDB(set, unknown);
-        System.out.println();
-    }
-
-    public static void watson(String sqlQuery, Unknown unknown) throws SQLException {
-
-        if(Messages.numWordPairs > 0) {
-
-            char mostCommonUnknownLetter = Unknown.printFirstEntry();
-            String query = "select * from WordPairs " +
-                    "where " +
-                    "word1 like '%" + mostCommonUnknownLetter + "%' and " +
-                    "word2 not like '%" + mostCommonUnknownLetter + "%' or " +
-                    "word1 not like '%" + mostCommonUnknownLetter + "%' and " +
-                    "word2 like '%" + mostCommonUnknownLetter + "%;'";
-            ResultSet rs7 = Query.select(query);
-
-            while(rs7.next()) {
-                System.out.println(rs7.getString(1) + ", " + rs7.getString(2));
-            }
-        } else {
-            System.out.println();
-        }
-    }
+//    public static void watson(String sqlQuery, Unknown unknown) throws SQLException {
+//
+//        if(Messages.numWordPairs > 0) {
+//
+//            char mostCommonUnknownLetter = Unknown.printFirstEntry();
+//            String query = "select * from WordPairs " +
+//                    "where " +
+//                    "word1 like '%" + mostCommonUnknownLetter + "%' and " +
+//                    "word2 not like '%" + mostCommonUnknownLetter + "%' or " +
+//                    "word1 not like '%" + mostCommonUnknownLetter + "%' and " +
+//                    "word2 like '%" + mostCommonUnknownLetter + "%;'";
+//            ResultSet rs7 = Query.select(query);
+//
+//            while(rs7.next()) {
+//                System.out.println(rs7.getString(1) + ", " + rs7.getString(2));
+//            }
+//        } else {
+//            System.out.println();
+//        }
+//    }
 }

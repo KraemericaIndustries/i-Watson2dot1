@@ -38,7 +38,9 @@ public class Play {
                 System.out.println("\nLet's check for any pair of words where one word contains ANY of: ");
                 dashboard.printKnownTogether();
                 System.out.println(" while the other word DOES NOT...");
-                guesses = Select.findAsymmetricCharMatch(dashboard.knownTogether.get(0).toString());  //  ANY row in WordPairs where 1 word contains ANY letter in knownTogether, and the other word contains NO letter from knownTogether
+                String ouch = dashboard.knownTogether.get(0).toString();
+                System.out.println(ouch);
+                guesses = Select.findAsymmetricCharMatch(ouch);  //  ANY row in WordPairs where 1 word contains ANY letter in knownTogether, and the other word contains NO letter from knownTogether
                 System.out.println("Business business business... Numbers... (Is this working?");
 
 

@@ -1,8 +1,10 @@
 package dataStructures;
 
 import transactSQL.Connect;
+import transactSQL.Create;
 import transactSQL.Delete;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import static dataStructures.Unknown.letters;
@@ -128,48 +130,48 @@ public class Dashboard {
         }
     }
 
-    public void updateDashboard() {
-
-        if(!changesToKnownIn.isEmpty()) {
-            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
-            for (Turn t : Turns) {
-                if (containsAny(t.guess, changesToKnownIn)) {
-                    removeChars(t.guess, changesToKnownIn);  //  REMOVE changesToKnownIn from t.guess
-                    t.updatedResponse--;  //  DECREMENT updatedResponse
-                }
-            }
-            // delete all words from DB that DO NOT contain letters in this set
-            // remove this set from all updatedTurns in 'Turns' AND decrement updatedResponse
-        }
-        if(!changesToKnownOut.isEmpty()) {
-            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
-            for (Turn t : Turns) {
-                if (containsAny(t.guess, changesToKnownOut)) {
-                    removeChars(t.guess, changesToKnownOut);  //  REMOVE changesToKnownOut from t.guess
-                }
-            }
-            // delete all words from DB that DO contain letters in this set
-            // remove this set from all updatedTurns in 'Turns'
-        }
-
-        //  WHAT has to change??
-
-
-
-        //  Update Words table (drop words without, drop words with)  //  ToDo: Any subsequent invocations should use dashboard as a parameter.  Avoids PARAMETER HELL
-        Delete.fromWordsTable(changesToKnownIn, changesToKnownOut);
-
-
-        //  Regenerate/populate Words_tbl
-        //  Re-generate WordPairs
-        //  Clear changesTo sets
-
-
-
-        // REBUILD THE DATABASE
-        // REBUILD WORD PAIRS
-
-    }
+//    public void updateDashboard() throws SQLException {
+//
+//        if(!changesToKnownIn.isEmpty()) {
+//            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
+//            for (Turn t : Turns) {
+//                if (containsAny(t.guess, changesToKnownIn)) {
+//                    removeChars(t.guess, changesToKnownIn);  //  REMOVE changesToKnownIn from t.guess
+//                    t.updatedResponse--;  //  DECREMENT updatedResponse
+//                }
+//            }
+//            // delete all words from DB that DO NOT contain letters in this set
+//            // remove this set from all updatedTurns in 'Turns' AND decrement updatedResponse
+//        }
+//        if(!changesToKnownOut.isEmpty()) {
+//            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
+//            for (Turn t : Turns) {
+//                if (containsAny(t.guess, changesToKnownOut)) {
+//                    removeChars(t.guess, changesToKnownOut);  //  REMOVE changesToKnownOut from t.guess
+//                }
+//            }
+//            // delete all words from DB that DO contain letters in this set
+//            // remove this set from all updatedTurns in 'Turns'
+//        }
+//
+//        //  WHAT has to change??
+//
+//
+//
+//        //  Update Words table (drop words without, drop words with)  //  ToDo: Any subsequent invocations should use dashboard as a parameter.  Avoids PARAMETER HELL
+//        Delete.fromWordsTable(changesToKnownIn, changesToKnownOut);
+//
+//        //  Regenerate/populate Words_tbl
+//        Create.rebuildWatsonDB();
+//        //  Re-generate WordPairs
+//        //  Clear changesTo sets
+//
+//
+//
+//        // REBUILD THE DATABASE
+//        // REBUILD WORD PAIRS
+//
+//    }
 
     public void printKnownTogether() {
         for(Set<Character> set : knownTogether) {
@@ -189,7 +191,7 @@ public class Dashboard {
         return sb.toString();
     }
 
-    private static boolean containsAny(String input, Set<Character> chars) {
+    public static boolean containsAny(String input, Set<Character> chars) {
         for (char c : input.toCharArray()) {
             if (chars.contains(c)) {
                 return true;

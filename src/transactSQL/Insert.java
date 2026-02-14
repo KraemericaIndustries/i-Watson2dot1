@@ -1,7 +1,6 @@
 package transactSQL;
 
 import dataStructures.Dashboard;
-import dataStructures.Unknown;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,6 +8,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Insert extends DatabaseConnection{
@@ -52,17 +52,26 @@ public class Insert extends DatabaseConnection{
     }
 
     //  RE-LOAD the database with words previously exported to the test.txt file...
-    public static void reloadKnownWords() {
+    public static void reloadKnownWords(Dashboard dashboard) {
         System.out.println("Reloading known words into the 'watson' database...");
         wordCount = 0;
-        Unknown.letters.clear();
+//        Unknown.letters.clear();
+
+        //  RESET the array that backs unknownLetters to all zeros
+        Arrays.fill(dashboard.letterCounts, 0);
+        dashboard.unknownLetters.clear();  //  CLEAR unknownLetters in the dashboard
+
         try {
             File file = new File("test.txt");
             Scanner input = new Scanner(file);
 
             while (input.hasNextLine()) {
                 line = (input.nextLine().toUpperCase());
-                Unknown.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
+
+                for (int i = 0; i < line.length(); i++) {
+                    dashboard.letterCounts[line.charAt(i) - 'A']++;
+                }
+
                 try {
                     Connection conn = DriverManager.getConnection(urlToWatson, user, password);                                   //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                         //  Create a SQL statement object to send to the database
