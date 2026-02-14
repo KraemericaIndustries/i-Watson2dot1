@@ -216,25 +216,51 @@ public class Select {
         return guesses;
     }
 
-    public static List<String> findAsymmetricCharMatch(String s) throws SQLException {
+    public static List<String> findAsymmetricCharMatch(Set<Character> ktSet) throws SQLException {
+
+        /* I have a MSSQL database table created as follows:
+            create table WordPairs (Id int IDENTITY(1,1) PRIMARY KEY, word1 varchar(5), word2 varchar(5));
+           Each row in the table contains a pair of strings that differ by only one character.
+
+           My java application provides a set of characters.  I need to query this table for any rows where either word1 or word2 contains any character from the set, while the other contains no character from the set.
+           Only one result should be returned.  Can you help me write the database query?*/
 
         List<String> guesses = new ArrayList<>();
+
+        StringBuilder sb = new StringBuilder();
+
+        for (char c : ktSet) {
+            switch (c) {
+                case ']':
+                    sb.append("]]");   // escape closing bracket
+                    break;
+                case '-':
+                    sb.append("\\-");  // escape dash
+                    break;
+                case '^':
+                    sb.append("\\^");  // escape caret
+                    break;
+                default:
+                    sb.append(c);
+            }
+        }
+
 
         Connection conn = DriverManager.getConnection(urlToWatson, user, password);
         Statement statement = conn.createStatement(); {
 
-            ResultSet resultSet = transactSQL.Query.select("SELECT TOP (1) *\n" +
+            ResultSet resultSet = transactSQL.Query.select("DECLARE @chars VARCHAR(50) = '" + sb +"'; SELECT TOP 1 *\n" +
                     "FROM WordPairs\n" +
                     "WHERE\n" +
                     "(\n" +
-                    "    word1 LIKE '%['" + s + "']%' AND\n" +
-                    "    word2 NOT LIKE '%['" + s + "']%'\n" +
+                    "    word1 LIKE '%[' + @chars + ']%'   -- word1 contains at least one char from the set\n" +
+                    "    AND word2 NOT LIKE '%[' + @chars + ']%'  -- word2 contains none\n" +
                     ")\n" +
                     "OR\n" +
                     "(\n" +
-                    "    word2 LIKE '%['" + s + "']%' AND\n" +
-                    "    word1 NOT LIKE '%['" + s + "']%'\n" +
-                    ");");
+                    "    word2 LIKE '%[' + @chars + ']%'   -- word2 contains at least one char from the set\n" +
+                    "    AND word1 NOT LIKE '%[' + @chars + ']%'  -- word1 contains none\n" +
+                    ");\n");
 
             while(resultSet.next()) {
                 String w1 = resultSet.getString("word1");
