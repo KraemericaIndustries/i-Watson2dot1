@@ -28,7 +28,7 @@ public class Play {
 
             //  Look for any word pairs where one of the words contains ANY TWO letters in the set, and the other word contains ONE letter of those two
             //  (This WILL eliminate TWO of the most common letters)
-            //  ToDo: findTwoInOneOutFromWordPairs() NEEDS COPILOT WORK!!!  The IMPLEMENTATION is not QUITE right
+            //  SEE comment in findTwoInOneOutFromWordPairs().  This *SHOULD* scour ALL letters in ALL kT SETS!  Be DELIBERATE when TESTING this!!!
             System.out.print("Checking to see if we can use a pair of guesses to determine if any TWO of ");
             dashboard.printKnownTogether();
             System.out.println(" are IN or OUT...");
@@ -36,7 +36,7 @@ public class Play {
 
             //  Check ALL sets knownTogether for ANY WordPair where one word contains ANY letter from the set, and the other word contains NO letters from the set...
             //  (This would eliminate ALL letters in a given set)
-            //  ToDo:  Can this be made to iterate over sets from largest to smallest?  (This would ensure the most letters possible are attempted first)
+            //  SEE comment in findAsymmetricCharMatch().  This *SHOULD* scour ALL letters in ALL kT SETS!  Be DELIBERATE when TESTING this!!!
             if(guesses.isEmpty()) {
                 printDunno(dashboard);
                 System.out.println("\nLet's check for any pair of words where one word contains ANY of: ");
@@ -44,7 +44,7 @@ public class Play {
                 System.out.println(" while the other word DOES NOT...");
                 //  Check ALL sets knownTogether for ANY WordPair where one word contains ANY letter from the set, and the other word contains NO letters from the set...
                 for(Set<Character> ktSet: dashboard.knownTogether) {
-                    guesses = Select.findAsymmetricCharMatch(ktSet);
+                    guesses = Select.findAsymmetricCharMatch(dashboard);
                 }
 
                 if(guesses.isEmpty()) {

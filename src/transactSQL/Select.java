@@ -187,28 +187,28 @@ public class Select {
         for(Set<Character> kTset : dashboard.knownTogether) {
             for(char c : kTset) {
                 charTable.addRow(String.valueOf(c));
-            }
-        }
 
-        String sql = "{ call FindWordPair(?) }";
+                String sql = "{ call FindWordPair(?) }";
 
-        try (Connection conn = DriverManager.getConnection(urlToWatson, user, password);
-             SQLServerCallableStatement stmt =
-                     (SQLServerCallableStatement) conn.prepareCall(sql)) {
+                try (Connection conn = DriverManager.getConnection(urlToWatson, user, password);
+                     SQLServerCallableStatement stmt =
+                             (SQLServerCallableStatement) conn.prepareCall(sql)) {
 
-            stmt.setStructured(1, "CharList", charTable);
+                    stmt.setStructured(1, "CharList", charTable);
 
-            boolean hasResult = stmt.execute();
+                    boolean hasResult = stmt.execute();
 
-            if (hasResult) {
-                try (ResultSet rs = stmt.getResultSet()) {
-                    if (rs.next()) {
-                        int id = rs.getInt("Id");
-                        String w1 = rs.getString("word1");
-                        String w2 = rs.getString("word2");
-                        // Use the result
-                        guesses.add(w1);
-                        guesses.add(w2);
+                    if (hasResult) {
+                        try (ResultSet rs = stmt.getResultSet()) {
+                            if (rs.next()) {
+                                int id = rs.getInt("Id");
+                                String w1 = rs.getString("word1");
+                                String w2 = rs.getString("word2");
+                                // Use the result
+                                guesses.add(w1);
+                                guesses.add(w2);
+                            }
+                        }
                     }
                 }
             }
@@ -216,7 +216,7 @@ public class Select {
         return guesses;
     }
 
-    public static List<String> findAsymmetricCharMatch(Set<Character> ktSet) throws SQLException {
+    public static List<String> findAsymmetricCharMatch(Dashboard dashboard) throws SQLException {
 
         /* I have a MSSQL database table created as follows:
             create table WordPairs (Id int IDENTITY(1,1) PRIMARY KEY, word1 varchar(5), word2 varchar(5));
@@ -229,45 +229,47 @@ public class Select {
 
         StringBuilder sb = new StringBuilder();
 
-        for (char c : ktSet) {
-            switch (c) {
-                case ']':
-                    sb.append("]]");   // escape closing bracket
-                    break;
-                case '-':
-                    sb.append("\\-");  // escape dash
-                    break;
-                case '^':
-                    sb.append("\\^");  // escape caret
-                    break;
-                default:
-                    sb.append(c);
+        for(Set<Character> set : dashboard.knownTogether) {
+
+            for (char c : set) {
+                switch (c) {
+                    case ']':
+                        sb.append("]]");   // escape closing bracket
+                        break;
+                    case '-':
+                        sb.append("\\-");  // escape dash
+                        break;
+                    case '^':
+                        sb.append("\\^");  // escape caret
+                        break;
+                    default:
+                        sb.append(c);
+                }
             }
-        }
 
+            Connection conn = DriverManager.getConnection(urlToWatson, user, password);
+            Statement statement = conn.createStatement(); {
 
-        Connection conn = DriverManager.getConnection(urlToWatson, user, password);
-        Statement statement = conn.createStatement(); {
+                ResultSet resultSet = transactSQL.Query.select("DECLARE @chars VARCHAR(50) = '" + sb +"'; SELECT TOP 1 *\n" +
+                        "FROM WordPairs\n" +
+                        "WHERE\n" +
+                        "(\n" +
+                        "    word1 LIKE '%[' + @chars + ']%'   -- word1 contains at least one char from the set\n" +
+                        "    AND word2 NOT LIKE '%[' + @chars + ']%'  -- word2 contains none\n" +
+                        ")\n" +
+                        "OR\n" +
+                        "(\n" +
+                        "    word2 LIKE '%[' + @chars + ']%'   -- word2 contains at least one char from the set\n" +
+                        "    AND word1 NOT LIKE '%[' + @chars + ']%'  -- word1 contains none\n" +
+                        ");\n");
 
-            ResultSet resultSet = transactSQL.Query.select("DECLARE @chars VARCHAR(50) = '" + sb +"'; SELECT TOP 1 *\n" +
-                    "FROM WordPairs\n" +
-                    "WHERE\n" +
-                    "(\n" +
-                    "    word1 LIKE '%[' + @chars + ']%'   -- word1 contains at least one char from the set\n" +
-                    "    AND word2 NOT LIKE '%[' + @chars + ']%'  -- word2 contains none\n" +
-                    ")\n" +
-                    "OR\n" +
-                    "(\n" +
-                    "    word2 LIKE '%[' + @chars + ']%'   -- word2 contains at least one char from the set\n" +
-                    "    AND word1 NOT LIKE '%[' + @chars + ']%'  -- word1 contains none\n" +
-                    ");\n");
-
-            while(resultSet.next()) {
-                String w1 = resultSet.getString("word1");
-                String w2 = resultSet.getString("word2");
-                // Use the result
-                guesses.add(w1);
-                guesses.add(w2);
+                while(resultSet.next()) {
+                    String w1 = resultSet.getString("word1");
+                    String w2 = resultSet.getString("word2");
+                    // Use the result
+                    guesses.add(w1);
+                    guesses.add(w2);
+                }
             }
         }
         return guesses;
