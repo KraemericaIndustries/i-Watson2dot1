@@ -153,8 +153,6 @@ public class Create extends DatabaseConnection{
 //            Unknown.letters.remove(c);
 //        }
 
-        dashboard.sortUnknownLettersByFrequencyDescending();
 
-        regenerateWordPairsTable();  // rebuild WordPairs table
     }
 }

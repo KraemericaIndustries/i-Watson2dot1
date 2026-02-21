@@ -50,6 +50,9 @@ public class App {
                 latestResponse = Keyboard.responseFromOpponent();          //  GET the latest response
                 if(latestResponse ==5) break;                              //  BREAK the loop if the latest response is 5
                 Turn turn = new Turn(g, latestResponse);                   //  CREATE a turn from a guess
+
+                boolean changesMade = AllTurns.compareLatestTurnAgainstAllOthers(turn, dashboard);
+
                 Turns.add(turn);                                           //  ADD the turn to the Turns collection
             }
 

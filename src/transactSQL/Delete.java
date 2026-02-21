@@ -1,5 +1,6 @@
 package transactSQL;
 
+import dataStructures.Dashboard;
 import dataStructures.IdentifiedLetters;
 import dataStructures.Unknown;
 
@@ -100,18 +101,21 @@ public class Delete {
 //        System.out.println("transactSQL.Delete.rowFromWordPairs(): END");
     }
 
-    public static void fromWordsTable(Set<Character> changesToKnownIn, Set<Character> changesToKnownOut) throws SQLException {
-//  ToDo SEND THIS BAD BOY dashboard
-        //  ToDo for loops should only run IF changesToKnownIn/changesToKnownOut !Empty
+    public static void fromWordsTable(Dashboard dashboard) throws SQLException {
+
         Connection conn = DriverManager.getConnection(urlToWatson, user, password);
         Statement statement = conn.createStatement();
         {
-            for (Character c : changesToKnownIn) {
-                statement.addBatch("delete from Words_tbl where word not like '%" + c + "%'");
+            if(!dashboard.changesToKnownIn.isEmpty()) {
+                for (Character c : dashboard.changesToKnownIn) {
+                    statement.addBatch("delete from Words_tbl where word not like '%" + c + "%'");
+                }
             }
 
-            for (Character c : changesToKnownOut) {
-                statement.addBatch("delete from Words_tbl where word like '%" + c + "%'");
+            if(!dashboard.changesToKnownOut.isEmpty()) {
+                for (Character c : dashboard.changesToKnownOut) {
+                    statement.addBatch("delete from Words_tbl where word like '%" + c + "%'");
+                }
             }
             statement.executeBatch();
         }

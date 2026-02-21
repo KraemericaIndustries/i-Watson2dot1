@@ -146,10 +146,10 @@ public class AllTurns {
 
 
 
-    private static String getLongerUpdatedGuessInCurrentPair(String iUpdatedGuess, String jUpdatedGuess) {
-        if(iUpdatedGuess.length() > jUpdatedGuess.length()) return iUpdatedGuess;
-        else return jUpdatedGuess;
-    }
+//    private static String getLongerUpdatedGuessInCurrentPair(String iUpdatedGuess, String jUpdatedGuess) {
+//        if(iUpdatedGuess.length() > jUpdatedGuess.length()) return iUpdatedGuess;
+//        else return jUpdatedGuess;
+//    }
 
 //    private static void responseIsEqualWithOneLetterDifferent(LinkedList<Turn> Turns, IdentifiedLetters knownIn, IdentifiedLetters knownOut, Unknown unknown, int i, int j) throws SQLException {
 //
@@ -201,17 +201,17 @@ public class AllTurns {
     }
 
     //  FOR any turn where size = updatedResponse, ALL letters in the updatedGuess are KNOWN IN
-    public static void checkAllTurnsForSizeEqualsUpdatedResponse(LinkedList<Turn> Turns, IdentifiedLetters knownIn, Unknown unknown) throws SQLException {
-
-        System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): BEGIN");
-
-        for(Turn t : Turns) {
-            if(t.turn.size() == t.updatedResponse) {
-                knownIn.letters.addAll(t.turn);
-            }
-        }
-        System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): END");
-    }
+//    public static void checkAllTurnsForSizeEqualsUpdatedResponse(LinkedList<Turn> Turns, IdentifiedLetters knownIn, Unknown unknown) throws SQLException {
+//
+//        System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): BEGIN");
+//
+//        for(Turn t : Turns) {
+//            if(t.turn.size() == t.updatedResponse) {
+//                knownIn.letters.addAll(t.turn);
+//            }
+//        }
+//        System.out.println("assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse(): END");
+//    }
 
     //  PRETTY-PRINT the UPDATED turns being compared...
     private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i, int j) {
@@ -263,77 +263,163 @@ public class AllTurns {
     }
 
     //  UPDATE all turns as determinations on letters are made...
-    public static void removeStringFromAllTurns(String guess, LinkedList<Turn> Turns) {
-
-        System.out.println("assess.AllTurns.removeStringFromAllTurns(): BEGIN");
-
-        char[] guessArray = guess.toCharArray();
-        List<Character> guessList = new ArrayList<>();
-
-        for (char c : guessArray) guessList.add(c);
-
-        for (Turn t : Turns) {
-
-            char[] turnArray = t.updatedGuess.toCharArray();
-            List<Character> turnList = new ArrayList<>();
-
-            for (char c : turnArray) turnList.add(c);
-
-            turnList.removeAll(guessList);
-
-            StringBuilder sb = new StringBuilder();
-
-            for(Character c : turnList) sb.append(c);
-
-            t.updatedGuess = sb.toString();
-
-            System.out.println(t.updatedGuess);
-        }
-
-        for(Turn t : Turns) t.parseGuessToCollection(t.updatedGuess);
-
-        System.out.println("assess.AllTurns.removeStringFromAllTurns END");
-    }
+//    public static void removeStringFromAllTurns(String guess, LinkedList<Turn> Turns) {
+//
+//        System.out.println("assess.AllTurns.removeStringFromAllTurns(): BEGIN");
+//
+//        char[] guessArray = guess.toCharArray();
+//        List<Character> guessList = new ArrayList<>();
+//
+//        for (char c : guessArray) guessList.add(c);
+//
+//        for (Turn t : Turns) {
+//
+//            char[] turnArray = t.updatedGuess.toCharArray();
+//            List<Character> turnList = new ArrayList<>();
+//
+//            for (char c : turnArray) turnList.add(c);
+//
+//            turnList.removeAll(guessList);
+//
+//            StringBuilder sb = new StringBuilder();
+//
+//            for(Character c : turnList) sb.append(c);
+//
+//            t.updatedGuess = sb.toString();
+//
+//            System.out.println(t.updatedGuess);
+//        }
+//
+//        for(Turn t : Turns) t.parseGuessToCollection(t.updatedGuess);
+//
+//        System.out.println("assess.AllTurns.removeStringFromAllTurns END");
+//    }
 
 
 
     public static void updateDashboard(Dashboard dashboard) throws SQLException {
 
-        if(!dashboard.changesToKnownIn.isEmpty()) {  //  IF there are changes to Known IN
-            dashboard.knownIn.addAll(dashboard.changesToKnownIn);  //  UPDATE Known IN (GOSPEL)
-            for (Turn t : dashboard.Turns) {  //  UPDATE ALL Turns
-                if (dashboard.containsAny(t.guess, dashboard.changesToKnownIn)) {
-                    dashboard.removeChars(t.guess, dashboard.changesToKnownIn);  //  REMOVE changesToKnownIn from t.guess
-                    t.updatedResponse--;  //  DECREMENT updatedResponse
+        boolean reprocessingNeeded = false;
+
+        do {
+            //  PROCESS changes to KNOWN IN
+            if(!dashboard.changesToKnownIn.isEmpty()) {                                             //  IF there are any changes to Known IN
+                dashboard.knownIn.addAll(dashboard.changesToKnownIn);                               //  UPDATE Known IN (GOSPEL)
+                //  UPDATE ALL Turns
+                for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
+                    if (Dashboard.containsAny(t.updatedGuess, dashboard.changesToKnownIn)) {               //  IF the Turn contains ANY letter within changesToKnownIn
+                        Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownIn);                 //  REMOVE ALL letters in changesToKnownIn from the updatedGuess for that Turn
+                        t.updatedResponse = t.updatedResponse - dashboard.changesToKnownIn.size();  //  CORRECT the updatedResponse (<-- Used to use the '--' operator, but this is more robust)
+                        //  CHECK for Turns where updatedGuess.length == updatedResponse
+                        if(t.updatedGuess.length() == t.updatedResponse) {                          //  IF updatedGuess.length == updatedResponse
+                            System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known IN!  Updating the dashboard...");
+                            for (char c : t.updatedGuess.toCharArray()) {                           //  FOR EVERY CHARACTER in updatedGuess
+                                dashboard.changesToKnownIn.add(c);                                  //  ADD the character to changesToKnownIn
+                                reprocessingNeeded = true;                                          //  SET the reprocessingNeeded flag
+                            }
+                        }
+                    }
                 }
             }
-        }
-        if(!dashboard.changesToKnownOut.isEmpty()) {  //  IF there are changes to Known OUT
-            dashboard.knownIn.addAll(dashboard.changesToKnownOut);  //  UPDATE Known OUT (GOSPEL)
-            for (Turn t : dashboard.Turns) {  //  UPDATE ALL Turns
-                if (dashboard.containsAny(t.guess, dashboard.changesToKnownOut)) {
-                    dashboard.removeChars(t.guess, dashboard.changesToKnownOut);  //  REMOVE changesToKnownOut from t.guess
+            //  PROCESS changes to KNOWN OUT
+            if(!dashboard.changesToKnownOut.isEmpty()) {                                            //  IF there are changes to Known OUT
+                dashboard.knownIn.addAll(dashboard.changesToKnownOut);                              //  UPDATE Known OUT (GOSPEL)
+                //  UPDATE ALL Turns
+                for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
+                    if (Dashboard.containsAny(t.updatedGuess, dashboard.changesToKnownOut)) {       //  IF the Turn contains ANY letter within changesToKnownIn
+                        Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownOut);         //  REMOVE ALL letters in changesToKnownOut from the updatedGuess for that Turn
+                        //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0
+                        if((!t.updatedGuess.isEmpty()) && t.updatedResponse == 0) {
+                            System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known OUT!  Updating the dashboard...");
+                            for (char c : t.updatedGuess.toCharArray()) {                           //  FOR EVERY CHARACTER in updatedGuess
+                                dashboard.changesToKnownOut.add(c);                                 //  ADD the character to changesToKnownOut
+                                reprocessingNeeded = true;                                          //  SET the reprocessingNeeded flag
+                            }
+                        }
+                    }
                 }
             }
-        }
+        } while (reprocessingNeeded);
 
-        //  WHAT has to change??
+        //  UPDATE Words_tbl (drop words without Known IN, drop words with Known OUT)
+        Delete.fromWordsTable(dashboard);
 
-        //  Update Words table (drop words without, drop words with)
-        //  ToDo: Any subsequent invocations should use dashboard as a parameter.  Avoids PARAMETER HELL
-        Delete.fromWordsTable(dashboard.changesToKnownIn, dashboard.changesToKnownOut);
-
-        //  Regenerate/populate Words_tbl
+        //  REGENERATE Words_tbl...
         Create.rebuildWatsonDB(dashboard);
-        //  Re-generate WordPairs
+
+        //  REGENERATE WordPairs table...
+        regenerateWordPairsTable();  // rebuild WordPairs table
+
+        //  SORT UNKNOWN letters remaining...
+        dashboard.sortUnknownLettersByFrequencyDescending();
+
         //  Clear changesTo sets
-
-
-
-        // REBUILD THE DATABASE
-        // REBUILD WORD PAIRS
-
+        dashboard.changesToKnownIn.clear();
+        dashboard.changesToKnownOut.clear();
     }
 
+    public static boolean compareLatestTurnAgainstAllOthers(Turn latestTurn, Dashboard dashboard) throws SQLException {
+
+        boolean changesMade = false;
+        int comparisonNumber = 1;
+        
+        for(int i = 0; i < dashboard.Turns.size(); i++) {  //  ITERATE over every Turn in 'Turns' collection)
+
+            System.out.println("COMPARISON #" + comparisonNumber + ".  Now comparing most recent turn with turn #" + i + ":");
+
+            StringBuilder sb = new StringBuilder();
+
+            sb.append("    ORIGINAL: ").append(latestTurn.guess).append(", ").append(latestTurn.response).append(" > UPDATED: [").append(latestTurn.updatedGuess).append("]").append(" = ").append(latestTurn.updatedResponse);
+            System.out.println(sb);
+            sb.setLength(0);
+            sb.append("    ORIGINAL: ").append(dashboard.Turns.get(i).guess).append(", ").append(dashboard.Turns.get(i).response).append(" > UPDATED: [").append(dashboard.Turns.get(i).updatedGuess).append("]").append(" = ").append(dashboard.Turns.get(i).updatedResponse);
+            System.out.println(sb);
+            
+
+            //  CLASSIFICATION:
+            System.out.println("CLASSIFICATION:");
+            Classification classification;
+            classification = new Classification(latestTurn.updatedResponse, dashboard.Turns.get(i).updatedResponse, latestTurn.updatedGuess, dashboard.Turns.get(i).updatedGuess);
+            classification.printClassification();
+
+            // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
+            if(!classification.updatedGuessesSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
+
+                //  THE MAGIC GOES HERE!!!  Put FINDINGS/DETERMINATIONS/ACTIONS all in the same if-else ladder!
+                System.out.println("FINDINGS:");
+                if(classification.onlyInFirst.size() == 1 && classification.onlyInSecond.size() == 1) {  //  ONLY 1 LETTER HAS CHANGED
+                    System.out.println(" > Only 1 letter has changed.");
+                    if(classification.deltaUpdatedResponse == 1 || classification.deltaUpdatedResponse == -1) {  //  RESPONSE HAS CHANGED
+                        System.out.println(" > The (updated) response has changed by 1.");
+                        System.out.println("DETERMINATIONS:");
+                        if(classification.deltaUpdatedResponse == 1) {
+                            System.out.println(" > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!");
+                            dashboard.changesToKnownIn.addAll(classification.onlyInFirst);
+                            dashboard.changesToKnownOut.addAll(classification.onlyInSecond);
+                        }
+                        else {
+                            System.out.println(" > We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!");
+                            dashboard.changesToKnownIn.addAll(classification.onlyInSecond);
+                            dashboard.changesToKnownOut.addAll(classification.onlyInFirst);
+                        }
+                        System.out.println("ACTIONS:");
+                        if(classification.deltaUpdatedResponse == 1) System.out.println(" > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!");
+                        else System.out.println(" > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!");
+                        //  ToDo This invocation is where I left off.  Finish this!!!
+                        updateDashboard(dashboard);
+                        changesMade = true;
+                    } else if (classification.deltaUpdatedResponse == 0) {  //  RESPONSE IS SAME
+                        System.out.println(" > The (updated) response has NOT changed.");
+                        System.out.println(" > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case.");
+                        System.out.println("ACTIONS:");
+                        System.out.println(" > Adding " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to a set of letters that are Known TOGETHER.");
+                        classification.onlyInFirst.addAll(classification.onlyInSecond);  //  Since these are now known to be together, ADD the second set to the first
+                        dashboard.mergeSetToKnownTogether(classification.onlyInFirst);   //  MERGE the first set to the list of all sets known to be together
+                    }
+                }
+            }
+        }
+        return changesMade;
+    }
 
 }
