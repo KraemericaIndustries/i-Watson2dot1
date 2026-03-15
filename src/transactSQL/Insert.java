@@ -1,6 +1,7 @@
 package transactSQL;
 
 import dataStructures.Dashboard;
+import print.Colors;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +20,7 @@ public class Insert extends DatabaseConnection{
 
     //  READ FiveLetterWords.txt into the 'watson' database Words.tbl...
     public static void loadKnownWords(Dashboard dashboard) {
-        System.out.println("Loading known words into the 'watson' database...");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "Loading known words into the 'watson' database..."));
         try {
             File file = new File("FiveLetterWords.txt");
             Scanner input = new Scanner(file);
@@ -41,14 +42,14 @@ public class Insert extends DatabaseConnection{
                 } catch (SQLException e) {
 					  e.printStackTrace();
                 }
-                System.out.print("Words added: " + wordCount + " " + animationChars[wordCount % 4] + '\r');
+                System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Words added: " + wordCount + " " + animationChars[wordCount % 4] + '\r'));
             }
             input.close();
         } catch (FileNotFoundException e) {
-            System.out.println("file not found");
+            System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_RED, "file not found"));
             //  e.printStackTrace();
         }
-        System.out.println(" > Number of words successfully added to the Database: " + wordCount);
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, " > Number of words successfully added to the Database: " + wordCount));
     }
 
     //  RE-LOAD the database with words previously exported to the test.txt file...

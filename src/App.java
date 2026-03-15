@@ -1,5 +1,6 @@
 import assess.AllTurns;
 import dataStructures.*;
+import print.Colors;
 import print.Messages;
 import read.Keyboard;
 import transactSQL.*;
@@ -45,7 +46,8 @@ public class App {
             List<String> guesses = fetch.Play.nextPlay(dashboard, Turns);  //  FETCH the next play
 
             for(String g : guesses) {                                      //  ITERATE all guesses, submit the guess, prompt for the response, add the play to 'Turns' collection
-                System.out.println("Your guess is: " + g);                 //  VERIFY the guess
+                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "Your guess is: "));                 //  VERIFY the guess
+                System.out.println(Colors.Ansi.paint(Colors.Ansi.BG_BLACK, g));                 //  VERIFY the guess
                 latestGuess = g;
                 latestResponse = Keyboard.responseFromOpponent();          //  GET the latest response
                 if(latestResponse ==5) break;                              //  BREAK the loop if the latest response is 5

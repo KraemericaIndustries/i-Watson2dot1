@@ -1,5 +1,7 @@
 package transactSQL;
 
+import print.Colors;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -17,7 +19,8 @@ public class DatabaseConnection {
 
     //  READ the watson DB url and credentials from the configuration file...
     public static void getProperties() {
-        System.out.println("Reading the watson.properties file...");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "********************************************************************************  SETUP  ***********************************************************************************"));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "Reading the watson.properties file..."));
         java.util.Properties props = new java.util.Properties();
         try {
             props.load(new FileInputStream("watson.properties"));
@@ -29,11 +32,11 @@ public class DatabaseConnection {
         user = props.getProperty("user");
         password = props.getProperty("password");
         //  DEBUG:
-        System.out.println(" > Successfully read the following values: ");
-        System.out.println(" > Database url: " + url);
-        System.out.println(" > Database urlToWatson: " + urlToWatson);
-        System.out.println(" > Username: " + user);
-        System.out.println(" > Password: " + password);
-        System.out.println(" > Success!\n");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, " > Successfully read the following values: "));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, " > Database url: " + url));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, " > Database urlToWatson: " + urlToWatson));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, " > Username: " + user));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, " > Password: " + password));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, " > Success!\n"));
     }
 }

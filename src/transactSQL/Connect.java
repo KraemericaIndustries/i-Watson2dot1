@@ -3,6 +3,7 @@ package transactSQL;
 import dataStructures.IdentifiedLetters;
 import dataStructures.Pairs;
 import dataStructures.Unknown;
+import print.Colors;
 import print.Messages;
 
 import java.sql.*;
@@ -49,9 +50,10 @@ public class Connect {
                          CASE WHEN SUBSTRING(w1.word,5,1) = SUBSTRING(w2.word,5,1) THEN 0 ELSE 1 END
                         ) = 1;""";
 
-                    System.out.println("Creating a table of word pairs that only DIFFER by 1 letter...");
+                    System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "Creating a table of word pairs that only DIFFER by 1 letter..."));
                     transactSQL.Query.runStatement(wordPairsTable);
-                    System.out.println(" > Finished creating WordPairs table!");
+                    System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, " > Finished creating WordPairs table!"));
+                    System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "*********************************************************************************************************************************************************************************\n"));
                     break;
                 case "countWordPairs":
 

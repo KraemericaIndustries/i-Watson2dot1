@@ -1,5 +1,6 @@
 package dataStructures;
 
+import print.Colors;
 import transactSQL.Connect;
 import transactSQL.Create;
 import transactSQL.Delete;
@@ -19,8 +20,8 @@ public class Dashboard {
     public Set<Character> knownOut;
     // The source of truth for  changes that need to be processed
     // (If determined characters are immediately added to GOSPEL,  and GOSPEL is the source of truth while making changes, changes become redundant and needlessly expensive)
-    public Set<Character> changesToKnownIn;
-    public Set<Character> changesToKnownOut;
+    public Set<Character> changesToKnownIn = new HashSet<>();
+    public Set<Character> changesToKnownOut = new HashSet<>();
     // A List of Turns
     public LinkedList<Turn> Turns;
     // A number to be incremented iteratively to track the number of guesses needed to finish the game
@@ -45,12 +46,12 @@ public class Dashboard {
     // BEHAVIOUR (methods)
     public void printDashboard(LinkedList<Turn> Turns) {
 
-        System.out.println("*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "*****************************************************************  DASHBOARD REPORT # " + reportNumber + " ************************************************************************************"));
 
         //  PRINT the LinkedHashMaps...
-        System.out.println("Known IN:  " + knownIn);
-        System.out.println("Known OUT: " + knownOut);
-        System.out.println("Known Together: " + knownTogether);
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Known IN:  " + knownIn));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Known OUT: " + knownOut));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Known Together: " + knownTogether));
         prettyPrintUnknownLetters(unknownLetters);
 
         prettyPrintPreviousGuesses(Turns);  //  PRINT all previous guesses
@@ -59,26 +60,26 @@ public class Dashboard {
         int numWords = (int) Connect.watson("getNumWordsInDB");
         numWordPairs = (int) Connect.watson("countWordPairs");
 
-        System.out.print("There are " + numWords + " words remaining in the database.\n");
-        System.out.println("There are " + numWordPairs + " word pairs that differ by only 1 letter.");
-        System.out.println("*******************************************************************************************************************************************************************************\n");
+        System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "There are " + numWords + " words remaining in the database.\n"));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "There are " + numWordPairs + " word pairs that differ by only 1 letter."));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "*******************************************************************************************************************************************************************************\n"));
 
     }
     public static void prettyPrintUnknownLetters(List<LetterScore> unknownLetters) {
 
-        System.out.println("------------------------------------------------------------------------UNKNOWN LETTERS AND FREQUENCY OF OCCURRENCE------------------------------------------------------");
-        System.out.print("Unknown:   ");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "------------------------------------------------------------------------UNKNOWN LETTERS AND FREQUENCY OF OCCURRENCE------------------------------------------------------"));
+        System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Unknown:   "));
         for(int i = 0; i < 26; i++) {
-            System.out.printf(" | %3s", unknownLetters.get(i).letter);
+            System.out.printf(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, " | %3s"), unknownLetters.get(i).letter);
         }
         System.out.println();
 
-        System.out.print("Frequency: ");
+        System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Frequency: "));
         for(int i = 0; i < 26; i++) {
-            System.out.printf(" | %3d", unknownLetters.get(i).score);
+            System.out.printf(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, " | %3d"), unknownLetters.get(i).score);
         }
         System.out.println();
-        System.out.println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "-------------------------------------------------------------------------------------------------------------------------------------------------------------------------"));
     }
 
     public void buildUnknownLettersList() {

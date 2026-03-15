@@ -14,7 +14,7 @@ public class Messages {
 
     //  Introduce the game, and how it is played...
     public static void welcome() {
-        System.out.println("""
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_BLUE,"""
                 *****************************************************************  WELCOME  *******************************************************************************************
                 Welcome to the Word Guessing Game Helper!
 
@@ -26,16 +26,16 @@ public class Messages {
                 I'm going to help - by suggesting your most strategic plays possible!
                 First - let me get myself set up...
                 ***********************************************************************************************************************************************************************
-                """);
+                """));
     }
 
     //  START the game...
     public static void play() {
-        System.out.println("""
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, """
         ********************************************************************************  THE GAME  ***********************************************************************************
         Let's play!!!
         *******************************************************************************************************************************************************************************
-        """);
+        """));
     }
 
     //  PRINT a report...
@@ -107,7 +107,7 @@ public class Messages {
 
         //  https://www.geeksforgeeks.org/how-to-print-all-keys-of-the-linkedhashmap-in-java/
         //  System.out.println("print.Messages.prettyPrintPreviousGuesses(): BEGIN");
-        System.out.println("Previous Guesses: ");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Previous Guesses: "));
 
         for(Turn t : Turns) {
             System.out.println(t.guess + " = " + t.response + ".  We now know " + t.updatedResponse + " of [" + t.updatedGuess + "] are in your opponents word.");

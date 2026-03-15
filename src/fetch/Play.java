@@ -2,6 +2,7 @@ package fetch;
 
 import dataStructures.Dashboard;
 import dataStructures.Turn;
+import print.Colors;
 import transactSQL.Delete;
 import transactSQL.Select;
 
@@ -17,9 +18,11 @@ public class Play {
 
         List<String> guesses = new ArrayList<>();
 
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "********************************************************************************  NEXT PLAY  ***********************************************************************************"));
+
         //  SELECT WordPair from most frequent letters (to try and eliminate a most common letter)...
         if(Turns.isEmpty() && dashboard.knownTogether.isEmpty()) {
-            System.out.println("Since there are no previous turns, and I have no knowledge of any letters known to be together, Lets make a pair of guesses to try and eliminate the most common letter...");
+            System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "Since there are no previous turns, and I have no knowledge of any letters known to be together, Lets make a pair of guesses to try and eliminate the most common letter..."));
             guesses = Select.bestWordPair(dashboard);
             playWordPairConsecutively(guesses);
 
@@ -68,6 +71,7 @@ public class Play {
                     playWordPairConsecutively(guesses);
                 }
             }
+            System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "********************************************************************************************************************************************************************************"));
         }
         return guesses;
     }
@@ -78,9 +82,9 @@ public class Play {
     }
 
     private static void playWordPairConsecutively(List<String> guesses) throws SQLException {
-        System.out.println("Let's play these two guesses back to back: ");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "Let's play these two guesses back to back: "));
         for(String s : guesses) {
-            System.out.println(s);
+            System.out.println(Colors.Ansi.paint(Colors.Ansi.BG_BLACK, s));
         }
         Delete.rowFromWordPairs(guesses.get(0));  //  PREVENT previously selected bestWordPairs from being selected again
     }

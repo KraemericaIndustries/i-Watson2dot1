@@ -7,7 +7,7 @@ import transactSQL.Delete;
 import java.sql.SQLException;
 import java.util.*;
 
-import static assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse;
+//import static assess.AllTurns.checkAllTurnsForSizeEqualsUpdatedResponse;
 
 public class Pairs {
 

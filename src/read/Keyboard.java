@@ -1,5 +1,6 @@
 package read;
 
+import print.Colors;
 import print.Messages;
 
 import java.util.Scanner;
@@ -29,7 +30,7 @@ public class Keyboard {
         int response;
 
         do {
-            System.out.print("What was the response?: ");
+            System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "What was the response?: "));
             Scanner input= new Scanner(System.in);
             response = input.nextInt();
 
