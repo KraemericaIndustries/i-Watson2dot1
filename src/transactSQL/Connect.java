@@ -69,10 +69,10 @@ public class Connect {
                     Query.runStatement("delete from Words_tbl");
                     System.out.println("Finished deleting all words from the Words_tbl table!");
                     break;
-                case "dropWordPairsTable":
-                    System.out.println("Dropping the WordPairs table (so it can be re-created)...");
-                    Query.runStatement("DROP TABLE IF EXISTS WordPairs");
-                    System.out.println("Finished dropping the WordPairs table!");
+                case "truncateWordPairsTable":
+                    System.out.println("Truncating WordPairs table...");
+                    Query.runStatement("truncate table WordPairs");
+                    System.out.println("Finished truncating WordPairs table!");
                     break;
                 case "selectAllFromWordsTable":
                     System.out.println("Selecting all remaining words from Words_tbl...");
