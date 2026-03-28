@@ -7,10 +7,7 @@ import transactSQL.Delete;
 import transactSQL.Select;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Play {
 
@@ -24,6 +21,11 @@ public class Play {
         if(Turns.isEmpty() && dashboard.knownTogether.isEmpty()) {
             System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "Since there are no previous turns, and I have no knowledge of any letters known to be together, Lets make a pair of guesses to try and eliminate the most common letter..."));
             guesses = Select.bestWordPair(dashboard);
+
+            // Attempting to remove duplicates...
+            guesses = new ArrayList<>(new LinkedHashSet<>(guesses));
+            System.out.println("BREAKPOINT FETCH PLAY");
+
             playWordPairConsecutively(guesses);
 
             //  At least 1 pair of letters are knownTogether...
@@ -36,7 +38,7 @@ public class Play {
             dashboard.printKnownTogether();
             System.out.println(" are IN or OUT...");
             guesses = Select.findTwoInOneOutFromWordPairs(dashboard);
-
+            System.out.println("BREAKPOINT!");
             //  Check ALL sets knownTogether for ANY WordPair where one word contains ANY letter from the set, and the other word contains NO letters from the set...
             //  (This would eliminate ALL letters in a given set)
             //  SEE comment in findAsymmetricCharMatch().  This *SHOULD* scour ALL letters in ALL kT SETS!  Be DELIBERATE when TESTING this!!!

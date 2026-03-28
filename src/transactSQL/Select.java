@@ -6,6 +6,7 @@ import dataStructures.Dashboard;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -207,12 +208,17 @@ public class Select {
                                 // Use the result
                                 guesses.add(w1);
                                 guesses.add(w2);
+                                System.out.println("BREAKPOINT findTwoInOneOutFromOneOutFromWordPairs");
                             }
                         }
                     }
                 }
             }
         }
+
+        // Attempting to remove duplicates...
+        guesses = new ArrayList<>(new LinkedHashSet<>(guesses));
+
         return guesses;
     }
 
