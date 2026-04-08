@@ -67,182 +67,10 @@ public class AllTurns {
 //        }
 //    }
 
-    //  COMPARE each updated turn against each other...
-    public static void compareAllTurnsAgainstEachOther(LinkedList<Turn> Turns, Dashboard dashboard) throws SQLException {
-
-        removeDeterminedLettersFromAllTurns(Turns, dashboard);
-        int comparisonNumber = 1;
-
-        //  ToDo: I think I can re-factor this to do a better job.  Lets add a section that does only the most recent turn against all turns (color = GREEN), and a boolean to track changes.
-        boolean changesMade = false;
-
-        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "********************************************************************************  COMPARING MOST RECENT TURN AGAINST ALL OTHERS  ***********************************************************************************"));
-        for(int i = 0; i < Turns.size() - 1; i++) {      //  FOR every turn in 'Turns' (up until the SECOND LAST Turn in 'Turns')
-            System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (Turns.size() - 1) + ":"));
-            prettyPrintLinkedHashMap(Turns, i, Turns.size() - 1);
-
-            //  CLASSIFICATION:
-            System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    CLASSIFICATION:"));
-            Classification classification;
-            classification = new Classification(Turns.get(i).updatedResponse, Turns.get(Turns.size() - 1).updatedResponse, Turns.get(i).updatedGuess, Turns.get(Turns.size() - 1).updatedGuess);
-            classification.printClassification();
-//  ToDo:  When does it make sense to check for updatedResponse = 0?  Make sure this is handled correctly...
-//  ToDo:  As soon as changes are made, updates should happen, and the exercise (present turn v. allTurns) should be restarted.  How do I do this?  Make sure this is handled correctly...
-            // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
-            if(!classification.updatedGuessesSame) {
-                String assessment = assess.Classification.assessClassification(classification);
-                System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    FINDINGS:"));
-
-                // Now that we have an assessment, take action based on the assessment...
-                switch (assessment) {
-                    case "    One letter changed, delta is 1":
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) responses are different by 1"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!\n"));
-                        dashboard.changesToKnownIn.addAll(classification.onlyInFirst);
-                        dashboard.changesToKnownOut.addAll(classification.onlyInSecond);
-                        //  ToDo This invocation is where I left off.  Finish this!!!
-                        updateDashboard(dashboard);
-                        changesMade = true;
-                        break;
-
-                    case "One letter changed, delta is -1":
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) responses are different by 1"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!\n"));
-                        dashboard.changesToKnownIn.addAll(classification.onlyInSecond);
-                        dashboard.changesToKnownOut.addAll(classification.onlyInFirst);
-                        //  ToDo This invocation is where I left off.  Finish this!!!
-                        updateDashboard(dashboard);
-                        changesMade = true;
-                        break;
-
-                    case "One letter changed, delta is 0":
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) response has NOT changed."));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case."));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Adding " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to a set of letters that are Known TOGETHER.\n"));
-                        classification.onlyInFirst.addAll(classification.onlyInSecond);  //  Since these are now known to be together, ADD the second set to the first
-                        dashboard.mergeSetToKnownTogether(classification.onlyInFirst);   //  MERGE the first set to the list of all sets known to be together
-                        break;
-
-                    // ToDo: Add cases for onlyInFirst or onlyInSecond = 0 (some determination is possible based on commonToBoth and only in other)...  What is the logic here??
-
-                    // more cases...
-
-                    default:
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > More than 1 letter is different between these 2 turns"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Since more than 1 letter has changed, few determinations are possible.  Continuing to the next pair...\n"));
-                        break;
-                }
-                comparisonNumber++;
-            }
-
-        }
-
-        //  Todo: If a change is made, process the change IMMEDIATELY and set the boolean to TRUE
-        //  Todo: If the boolean is true, then compareAllTurnsAgainstEachOther (color = BG_GREEN)
-        //  Todo: PROCESS and changes IMMEDIATELY!
-        //  Todo: When should we check for zeros?  When should we check for removing determined letters?
-
-
-        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "********************************************************************************  COMPARING ALL PREVIOUS TURNS AGAINST EACH OTHER  ***********************************************************************************"));
-
-//        boolean changesMade = false;
-
-
-//  This do-while runs so long as changesMade is TRUE...
-        do {
-            for(int i = 0; i < Turns.size() - 1; i++) {      //  Take the FIRST turn in 'Turns' (then the second, then the third, up until the SECOND LAST Turn in 'Turns')
-                for(int j = i + 1; j < Turns.size(); j++) {  //  Take the SECOND turn in 'Turns' (then the third, then the fourth, up until the LAST Turn in 'Turns')
-
-                    System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (j + 1) + ":"));
-                    prettyPrintLinkedHashMap(Turns, i, j);
-
-                    //  CLASSIFICATION:
-                    System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    CLASSIFICATION:"));
-                    Classification classification;
-                    classification = new Classification(Turns.get(i).updatedResponse, Turns.get(j).updatedResponse, Turns.get(i).updatedGuess, Turns.get(j).updatedGuess);
-                    classification.printClassification();
-//  ToDo:  When does it make sense to check for updatedResponse = 0?  Make sure this is handled correctly...
-//  ToDo:  As soon as changes are made, updates should happen, and the exercise (present turn v. allTurns) should be restarted.  How do I do this?  Make sure this is handled correctly...
-                    // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
-                    if(!classification.updatedGuessesSame) {
-                        String assessment = assess.Classification.assessClassification(classification);
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    FINDINGS:"));
-
-                        // Now that we have an assessment, take action based on the assessment...
-                        switch (assessment) {
-                            case "    One letter changed, delta is 1":
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > Only 1 letter has changed"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > The (updated) responses are different by 1"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    Determinations:"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    ACTIONS:"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!\n"));
-                                dashboard.changesToKnownIn.addAll(classification.onlyInFirst);
-                                dashboard.changesToKnownOut.addAll(classification.onlyInSecond);
-                                //  ToDo This invocation is where I left off.  Finish this!!!
-                                updateDashboard(dashboard);
-                                changesMade = true;
-                                break;
-
-                            case "One letter changed, delta is -1":
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > Only 1 letter has changed"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > The (updated) responses are different by 1"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    Determinations:"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    ACTIONS:"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!\n"));
-                                dashboard.changesToKnownIn.addAll(classification.onlyInSecond);
-                                dashboard.changesToKnownOut.addAll(classification.onlyInFirst);
-                                //  ToDo This invocation is where I left off.  Finish this!!!
-                                updateDashboard(dashboard);
-                                changesMade = true;
-                                break;
-
-                            case "One letter changed, delta is 0":
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > Only 1 letter has changed"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > The (updated) response has NOT changed."));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case."));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    ACTIONS:"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > Adding " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to a set of letters that are Known TOGETHER.\n"));
-                                classification.onlyInFirst.addAll(classification.onlyInSecond);  //  Since these are now known to be together, ADD the second set to the first
-                                dashboard.mergeSetToKnownTogether(classification.onlyInFirst);   //  MERGE the first set to the list of all sets known to be together
-                                break;
-
-                            // ToDo: Add cases for onlyInFirst or onlyInSecond = 0 (some determination is possible based on commonToBoth and only in other)...  What is the logic here??
-
-                                // more cases...
-
-                            default:
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > More than 1 letter is different between these 2 turns"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "    Determinations:"));
-                                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     > Since more than 1 letter has changed, few determinations are possible.  Continuing to the next pair...\n"));
-                                break;
-                        }
-                        comparisonNumber++;
-                    }
-                }
-                changesMade = false;
-            }
-
-        } while (changesMade);
-        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "*****************************************************************************************************************************************************************************"));
-    }
-
-    private static void removeDeterminedLettersFromAllTurns(LinkedList<Turn> Turns, Dashboard dashboard) {
+    public static void removeDeterminedLettersFromAllTurns(Dashboard dashboard) {
 
         for(Character c : dashboard.knownIn) {  //  walks knownIn
-            for(Turn t : Turns) {     //  walks a turn
+            for(Turn t : dashboard.Turns) {     //  walks a turn
                 if(t.turn.contains(c)) {
                     t.turn.remove(c);
                     t.updatedResponse -= 1;
@@ -252,7 +80,7 @@ public class AllTurns {
         }
 
         for(Character c : dashboard.knownOut) {  //  walks knownIn
-            for(Turn t : Turns) {      // walks a turn
+            for(Turn t : dashboard.Turns) {      // walks a turn
                 t.turn.remove(c);
                 t.parseCollectionToString();
             }
@@ -273,7 +101,7 @@ public class AllTurns {
 //    }
 
     //  PRETTY-PRINT the UPDATED turns being compared...
-    private static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i, int j) {
+    public static void prettyPrintLinkedHashMap(LinkedList<Turn> Turns, int i, int j) {
 
         //  System.out.println("assess.AllTurns.prettyPrintLinkedHashMap(): BEGIN");
 
@@ -367,7 +195,7 @@ public class AllTurns {
                 //  UPDATE ALL Turns
                 for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
                     if (Dashboard.containsAny(t.updatedGuess, dashboard.changesToKnownIn)) {               //  IF the Turn contains ANY letter within changesToKnownIn
-                        Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownIn);                 //  REMOVE ALL letters in changesToKnownIn from the updatedGuess for that Turn
+                        t.updatedGuess = Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownIn);                 //  REMOVE ALL letters in changesToKnownIn from the updatedGuess for that Turn
                         t.updatedResponse = t.updatedResponse - dashboard.changesToKnownIn.size();  //  CORRECT the updatedResponse (<-- Used to use the '--' operator, but this is more robust)
                         //  CHECK for Turns where updatedGuess.length == updatedResponse
                         if(t.updatedGuess.length() == t.updatedResponse) {                          //  IF updatedGuess.length == updatedResponse
@@ -386,6 +214,7 @@ public class AllTurns {
                 //  UPDATE ALL Turns
                 for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
                     if (Dashboard.containsAny(t.updatedGuess, dashboard.changesToKnownOut)) {       //  IF the Turn contains ANY letter within changesToKnownIn
+                        System.out.println("Infinite loop?");
                         Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownOut);         //  REMOVE ALL letters in changesToKnownOut from the updatedGuess for that Turn
                         //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0
                         if((!t.updatedGuess.isEmpty()) && t.updatedResponse == 0) {
@@ -424,7 +253,7 @@ public class AllTurns {
         
         for(int i = 0; i < dashboard.Turns.size(); i++) {  //  ITERATE over every Turn in 'Turns' collection
 
-            System.out.println("COMPARISON #" + comparisonNumber + ".  Now comparing most recent turn with turn #" + i + ":");
+            System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "COMPARISON #" + comparisonNumber + ".  Now comparing most recent turn with turn #" + (i + 1) + ":"));
 
             StringBuilder sb = new StringBuilder();
 
@@ -433,10 +262,9 @@ public class AllTurns {
             sb.setLength(0);
             sb.append("    ORIGINAL: ").append(dashboard.Turns.get(i).guess).append(", ").append(dashboard.Turns.get(i).response).append(" > UPDATED: [").append(dashboard.Turns.get(i).updatedGuess).append("]").append(" = ").append(dashboard.Turns.get(i).updatedResponse);
             System.out.println(sb);
-            
 
             //  CLASSIFICATION:
-            System.out.println("CLASSIFICATION:");
+            System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "CLASSIFICATION:"));
             Classification classification;
             classification = new Classification(latestTurn.updatedResponse, dashboard.Turns.get(i).updatedResponse, latestTurn.updatedGuess, dashboard.Turns.get(i).updatedGuess);
             classification.printClassification();
@@ -445,29 +273,51 @@ public class AllTurns {
             if(!classification.updatedGuessesSame) {  // One (or more) letters has changed.  Letters in common are IN.  All others are OUT.
 
                 //  THE MAGIC GOES HERE!!!  Put FINDINGS/DETERMINATIONS/ACTIONS all in the same if-else ladder!
-                System.out.println("FINDINGS:");
+                System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "FINDINGS:"));
                 if(classification.onlyInFirst.size() == 1 && classification.onlyInSecond.size() == 1) {  //  ONLY 1 LETTER HAS CHANGED
-                    System.out.println(" > Only 1 letter has changed.");
+                    System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, " > Only 1 letter has changed."));
                     if(classification.deltaUpdatedResponse == 1 || classification.deltaUpdatedResponse == -1) {  //  RESPONSE HAS CHANGED
-                        System.out.println(" > The (updated) response has changed by 1.");
-                        System.out.println("DETERMINATIONS:");
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, " > The (updated) response has changed by 1."));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "DETERMINATIONS:"));
+
+                        // ToDo PRIORITY1:  Consolidate this:
                         if(classification.deltaUpdatedResponse == 1) {
-                            System.out.println(" > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!");
+                            System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!"));
                             dashboard.changesToKnownIn.addAll(classification.onlyInFirst);
                             dashboard.changesToKnownOut.addAll(classification.onlyInSecond);
+
+                            checkDeterminedLettersAgainstKnownTogether(dashboard);
+
+                            System.out.println("ACTIONS:");
+                            System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!"));
+
+                            updateDashboard(dashboard);
+                            dashboard.buildUnknownLettersList();
+                            dashboard.sortUnknownLettersByFrequencyDescending();
+                            removeDeterminedLettersFromAllTurns(dashboard);
+                            print.object.dashboard(dashboard);                               //  PRINT the dashboard
+                            changesMade = true;
+
                         }
                         else {
-                            System.out.println(" > We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!");
+                            System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!"));
                             dashboard.changesToKnownIn.addAll(classification.onlyInSecond);
                             dashboard.changesToKnownOut.addAll(classification.onlyInFirst);
+
+                            checkDeterminedLettersAgainstKnownTogether(dashboard);
+
+                            System.out.println("ACTIONS:");
+                            System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!"));
+
+                            updateDashboard(dashboard);
+                            dashboard.buildUnknownLettersList();
+                            dashboard.sortUnknownLettersByFrequencyDescending();
+                            removeDeterminedLettersFromAllTurns(dashboard);
+                            print.object.dashboard(dashboard);                               //  PRINT the dashboard
+                            changesMade = true;
+
                         }
-                        System.out.println("ACTIONS:");
-                        if(classification.deltaUpdatedResponse == 1) System.out.println(" > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!");
-                        else System.out.println(" > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!");
-                        //  ToDo This invocation is where I left off.  Finish this!!!
-                        updateDashboard(dashboard);
-                        changesMade = true;
-                    } else if (classification.deltaUpdatedResponse == 0) {  //  RESPONSE IS SAME
+                    } else {  //  RESPONSE IS SAME
                         System.out.println(" > The (updated) response has NOT changed.");
                         System.out.println(" > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case.");
                         System.out.println("ACTIONS:");
@@ -479,6 +329,31 @@ public class AllTurns {
             }
         }
         return changesMade;
+    }
+
+
+    public static void checkDeterminedLettersAgainstKnownTogether(Dashboard dashboard) {
+
+        for(Set<Character> s : dashboard.knownTogether) {
+            for(Character c : dashboard.changesToKnownIn) {
+                if (s.contains(c)) {
+                    System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > We now know that " + s + " are all IN!  Updating the dashboard..."));
+                    dashboard.changesToKnownIn.addAll(s);
+                    break;
+                }
+            }
+        }
+
+        for(Set<Character> s : dashboard.knownTogether) {
+            for(Character c : dashboard.changesToKnownOut) {
+                if (s.contains(c)) {
+                    System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > We now know that " + s + " are all OUT!  Updating the dashboard..."));
+                    dashboard.changesToKnownOut.addAll(s);
+                    break;
+                }
+            }
+        }
+
     }
 
 }

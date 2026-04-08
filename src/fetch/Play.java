@@ -35,7 +35,7 @@ public class Play {
             //  (This WILL eliminate TWO of the most common letters)
             //  SEE comment in findTwoInOneOutFromWordPairs().  This *SHOULD* scour ALL letters in ALL kT SETS!  Be DELIBERATE when TESTING this!!!
             System.out.print("Checking to see if we can use a pair of guesses to determine if any TWO of ");
-            dashboard.printKnownTogether();
+            print.object.knownTogether(dashboard);
             System.out.println(" are IN or OUT...");
             guesses = Select.findTwoInOneOutFromWordPairs(dashboard);
             System.out.println("BREAKPOINT!");
@@ -45,7 +45,7 @@ public class Play {
             if(guesses.isEmpty()) {
                 printDunno(dashboard);
                 System.out.println("\nLet's check for any pair of words where one word contains ANY of: ");
-                dashboard.printKnownTogether();
+                print.object.knownTogether(dashboard);
                 System.out.println(" while the other word DOES NOT...");
                 //  Check ALL sets knownTogether for ANY WordPair where one word contains ANY letter from the set, and the other word contains NO letters from the set...
                 for(Set<Character> ktSet: dashboard.knownTogether) {
@@ -55,15 +55,15 @@ public class Play {
                 if(guesses.isEmpty()) {
                     printDunno(dashboard);
                     System.out.println("\nLet's check for any words that contains ANY of: ");
-                    dashboard.printKnownTogether();
+                    print.object.knownTogether(dashboard);
                     System.out.println(" and as many letters in the turn that has the HIGHEST (updated) response as possible...");  //  <-- ToDo: Write the code that identifies this
                     //  ToDo:  Next tier is pull all words from words_tbl that contain kT Set, and as many letters in turn that has the highest updatedResponse as possible.  Play these guesses one at a time
                     //  ToDo:       > order these guesses by most in set, descending.  Play in that order
                 }  if (guesses.isEmpty()) {
                     System.out.print(" > I don't know any pair of words that can DOE DEE DOE DEE DOE ");  //  <-- ToDo: Write a fancy print statement, here
-                    dashboard.printKnownTogether();
+                    print.object.knownTogether(dashboard);
                     System.out.println("\nLet's check for any words that contains ANY of: ");
-                    dashboard.printKnownTogether();
+                    print.object.knownTogether(dashboard);
                     System.out.println(" and as many letters in the turn that has the LOWEST (updated) response as possible...");  //  <-- ToDo: Write the code that identifies this
                     //  ToDo:  Next tier is pull all words from words_tbl that contain kT Set, and as many letters in turn that has the lowest updatedResponse as possible.  Play these guesses one at a time
                     //  ToDo:       > order these guesses by fewest in set, ascending.  Play in that order
@@ -80,7 +80,7 @@ public class Play {
 
     private static void printDunno(Dashboard dashboard) {
         System.out.print(" > I don't know any pair of words that can eliminate ");
-        dashboard.printKnownTogether();
+        print.object.knownTogether(dashboard);
     }
 
     private static void playWordPairConsecutively(List<String> guesses) throws SQLException {

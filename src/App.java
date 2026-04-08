@@ -1,4 +1,3 @@
-import assess.AllTurns;
 import dataStructures.*;
 import print.Colors;
 import print.Messages;
@@ -42,7 +41,7 @@ public class App {
         Messages.play();
 
         do {
-            dashboard.printDashboard(Turns);                               //  PRINT the dashboard
+            print.object.dashboard(dashboard);                             //  PRINT the dashboard
             List<String> guesses = fetch.Play.nextPlay(dashboard, Turns);  //  FETCH the next play
 
             for(String g : guesses) {                                      //  ITERATE all guesses, submit the guess, prompt for the response, add the play to 'Turns' collection
@@ -52,13 +51,16 @@ public class App {
                 latestResponse = Keyboard.responseFromOpponent();          //  GET the latest response
                 if(latestResponse ==5) break;                              //  BREAK the loop if the latest response is 5
                 Turn turn = new Turn(g, latestResponse);                   //  CREATE a turn from a guess
+                //  ToDo: Need protection here in case reposne is 0!!!
+                dashboard.Turns.add(turn);                                 //  ADD the turn to the Turns collection
 
-                boolean changesMade = AllTurns.compareLatestTurnAgainstAllOthers(turn, dashboard);
+                boolean changesMade = compare.MostRecentTurn.againstAllOthers(dashboard);
+                if(changesMade) compare.AllTurns.againstEachOther(dashboard);
 
-                Turns.add(turn);                                           //  ADD the turn to the Turns collection
+
             }
 
-            AllTurns.compareAllTurnsAgainstEachOther(Turns, dashboard);    //  COMPARE all previous turns against each other
+//            AllTurns.compareAllTurnsAgainstEachOther(dashboard);    //  COMPARE all previous turns against each other
 
             dashboard.reportNumber++;                                      //  INCREMENT the report number (lets us know how many turns we've taken)
 
