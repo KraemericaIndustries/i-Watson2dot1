@@ -51,7 +51,7 @@ public class App {
                 latestResponse = Keyboard.responseFromOpponent();          //  GET the latest response
                 if(latestResponse ==5) break;                              //  BREAK the loop if the latest response is 5
                 Turn turn = new Turn(g, latestResponse);                   //  CREATE a turn from a guess
-                //  ToDo: Need protection here in case reposne is 0!!!
+                //  ToDo: Need protection here in case response is 0!!!
                 dashboard.Turns.add(turn);                                 //  ADD the turn to the Turns collection
 
                 boolean changesMade = compare.MostRecentTurn.againstAllOthers(dashboard);

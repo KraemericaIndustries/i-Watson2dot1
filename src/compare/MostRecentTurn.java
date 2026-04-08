@@ -74,9 +74,11 @@ public class MostRecentTurn {
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) response has NOT changed."));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case."));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Adding " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to a set of letters that are Known TOGETHER.\n"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > Adding " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to a set of letters that are Known TOGETHER."));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > Changing this: Known Together: " + dashboard.knownTogether));
                         classification.onlyInFirst.addAll(classification.onlyInSecond);  //  Since these are now known to be together, ADD the second set to the first
                         dashboard.mergeSetToKnownTogether(classification.onlyInFirst);   //  MERGE the first set to the list of all sets known to be together
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > To this:       Known Together: " + dashboard.knownTogether));
                         break;
 
                     // ToDo: Add cases for onlyInFirst or onlyInSecond = 0 (some determination is possible based on commonToBoth and only in other)...  What is the logic here??
@@ -91,7 +93,6 @@ public class MostRecentTurn {
                 }
                 comparisonNumber++;
             }
-
         }
 
         //  Todo: If a change is made, process the change IMMEDIATELY and set the boolean to TRUE
@@ -101,5 +102,4 @@ public class MostRecentTurn {
 
         return changesMade;
     }
-
 }

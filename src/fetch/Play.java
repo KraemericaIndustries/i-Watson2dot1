@@ -24,7 +24,6 @@ public class Play {
 
             // Attempting to remove duplicates...
             guesses = new ArrayList<>(new LinkedHashSet<>(guesses));
-            System.out.println("BREAKPOINT FETCH PLAY");
 
             playWordPairConsecutively(guesses);
 

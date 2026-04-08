@@ -93,12 +93,7 @@ public class AllTurns {
                 }
                 changesMade = false;
             }
-
         } while (changesMade);
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "*****************************************************************************************************************************************************************************"));
-
-
     }
-
-
 }
