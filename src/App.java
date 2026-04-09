@@ -38,6 +38,9 @@ public class App {
         String latestGuess = "ABC";
         int latestResponse = 0;
         boolean guessIsWord;
+
+        boolean changesMade = false;
+
         Messages.play();
 
         do {
@@ -54,10 +57,8 @@ public class App {
                 //  ToDo: Need protection here in case response is 0!!!
                 dashboard.Turns.add(turn);                                 //  ADD the turn to the Turns collection
 
-                boolean changesMade = compare.MostRecentTurn.againstAllOthers(dashboard);
+                if(dashboard.Turns.size() > 1) changesMade = compare.MostRecentTurn.againstAllOthers(dashboard);  //  PREVENT any attempt to compare turns when only 1 exists
                 if(changesMade) compare.AllTurns.againstEachOther(dashboard);
-
-
             }
 
 //            AllTurns.compareAllTurnsAgainstEachOther(dashboard);    //  COMPARE all previous turns against each other

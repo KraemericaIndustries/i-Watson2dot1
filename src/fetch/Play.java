@@ -33,19 +33,18 @@ public class Play {
             //  Look for any word pairs where one of the words contains ANY TWO letters in the set, and the other word contains ONE letter of those two
             //  (This WILL eliminate TWO of the most common letters)
             //  SEE comment in findTwoInOneOutFromWordPairs().  This *SHOULD* scour ALL letters in ALL kT SETS!  Be DELIBERATE when TESTING this!!!
-            System.out.print("Checking to see if we can use a pair of guesses to determine if any TWO of ");
+            System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "Trying to use a pair of guesses to determine if "));
             print.object.knownTogether(dashboard);
-            System.out.println(" are IN or OUT...");
+            System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, " are ALL IN or ALL OUT...\n"));
             guesses = Select.findTwoInOneOutFromWordPairs(dashboard);
-            System.out.println("BREAKPOINT!");
             //  Check ALL sets knownTogether for ANY WordPair where one word contains ANY letter from the set, and the other word contains NO letters from the set...
             //  (This would eliminate ALL letters in a given set)
             //  SEE comment in findAsymmetricCharMatch().  This *SHOULD* scour ALL letters in ALL kT SETS!  Be DELIBERATE when TESTING this!!!
             if(guesses.isEmpty()) {
                 printDunno(dashboard);
-                System.out.println("\nLet's check for any pair of words where one word contains ANY of: ");
+                System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "\nLet's check for any pair of words where one word contains ANY of: "));
                 print.object.knownTogether(dashboard);
-                System.out.println(" while the other word DOES NOT...");
+                System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, " while the other word DOES NOT..."));
                 //  Check ALL sets knownTogether for ANY WordPair where one word contains ANY letter from the set, and the other word contains NO letters from the set...
                 for(Set<Character> ktSet: dashboard.knownTogether) {
                     guesses = Select.findAsymmetricCharMatch(dashboard);
@@ -53,21 +52,22 @@ public class Play {
 
                 if(guesses.isEmpty()) {
                     printDunno(dashboard);
-                    System.out.println("\nLet's check for any words that contains ANY of: ");
+                    System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "\nLet's check for any words that contains ANY of: "));
                     print.object.knownTogether(dashboard);
-                    System.out.println(" and as many letters in the turn that has the HIGHEST (updated) response as possible...");  //  <-- ToDo: Write the code that identifies this
+                    System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, " and as many letters in the turn that has the HIGHEST (updated) response as possible..."));  //  <-- ToDo: Write the code that identifies this?
                     //  ToDo:  Next tier is pull all words from words_tbl that contain kT Set, and as many letters in turn that has the highest updatedResponse as possible.  Play these guesses one at a time
                     //  ToDo:       > order these guesses by most in set, descending.  Play in that order
                 }  if (guesses.isEmpty()) {
-                    System.out.print(" > I don't know any pair of words that can DOE DEE DOE DEE DOE ");  //  <-- ToDo: Write a fancy print statement, here
+                    System.out.print("");  //  <-- ToDo: Write a fancy print statement, here
+                    System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, " > I don't know any pair of words that can DOE DEE DOE DEE DOE "));
                     print.object.knownTogether(dashboard);
-                    System.out.println("\nLet's check for any words that contains ANY of: ");
+                    System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "\nLet's check for any words that contains ANY of: "));
                     print.object.knownTogether(dashboard);
-                    System.out.println(" and as many letters in the turn that has the LOWEST (updated) response as possible...");  //  <-- ToDo: Write the code that identifies this
+                    System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, " and as many letters in the turn that has the LOWEST (updated) response as possible..."));  //  <-- ToDo: Write the code that identifies this
                     //  ToDo:  Next tier is pull all words from words_tbl that contain kT Set, and as many letters in turn that has the lowest updatedResponse as possible.  Play these guesses one at a time
                     //  ToDo:       > order these guesses by fewest in set, ascending.  Play in that order
                 }  else {
-                    System.out.println("I am unable to draw any conclusions from previous turns, or any letters known to be together.  Lets make a pair of guesses to try and eliminate the most common letter, and bolster what we know...");
+                    System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "\n > I am unable to draw any conclusions from previous turns, or any letters known to be together.\n\nLets make a pair of guesses to try and eliminate the most common letter, and bolster what we know..."));
                     guesses = Select.bestWordPair(dashboard);
                     playWordPairConsecutively(guesses);
                 }
@@ -78,8 +78,10 @@ public class Play {
     }
 
     private static void printDunno(Dashboard dashboard) {
-        System.out.print(" > I don't know any pair of words that can eliminate ");
+        System.out.print("");
+        System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "\n > Of the pairs of words I know that differ by one letter, none of the pairs contain "));
         print.object.knownTogether(dashboard);
+        System.out.print(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, ".\n"));
     }
 
     private static void playWordPairConsecutively(List<String> guesses) throws SQLException {

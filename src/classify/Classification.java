@@ -31,8 +31,6 @@ public class Classification {
         if (!updatedGuessesSameLength) updatedGuessesDifferInLengthByOne = checkForUpdatedGuessesDifferInLengthByOne(iUpdatedGuess, jUpdatedGuess);
         if (!updatedGuessesSameLength && !updatedGuessesDifferInLengthByOne) updatedGuessesDifferInLengthByMoreThanOne = checkForUpdatedGuessesDifferInLengthByMoreThanOne(iUpdatedGuess, jUpdatedGuess);
 
-        if(iUpdatedGuess.equals(jUpdatedGuess)) updatedGuessesSame = true;
-
         //  COPILOT String comparison:
         Set<Character> set1 = toCharSet(iUpdatedGuess);
         Set<Character> temp = toCharSet(iUpdatedGuess);
@@ -59,7 +57,7 @@ public class Classification {
         temp.removeAll(set1);
         temp.removeAll(set2);
         inBoth = temp;
-
+        if(inBoth.size() == 5) updatedGuessesSame = true;
 
         // Characters in s2 but not s1
 //        Set<Character> onlyInSecondCons = new HashSet<>(set2);

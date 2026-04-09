@@ -18,7 +18,7 @@ public class MostRecentTurn {
 
         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "********************************************************************************  COMPARING MOST RECENT TURN AGAINST ALL OTHERS  ***********************************************************************************"));
         for(int i = 0; i < dashboard.Turns.size() - 1; i++) {      //  FOR every turn in 'Turns' (up until the SECOND LAST Turn in 'Turns')
-            System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (dashboard.Turns.size() - 1) + ":"));
+            System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (dashboard.Turns.size()) + ":"));
             assess.AllTurns.prettyPrintLinkedHashMap(dashboard.Turns, i, dashboard.Turns.size() - 1);
 
             //  CLASSIFICATION:
@@ -29,12 +29,18 @@ public class MostRecentTurn {
 //  ToDo:  When does it make sense to check for updatedResponse = 0?  Make sure this is handled correctly...
 //  ToDo:  As soon as changes are made, updates should happen, and the exercise (present turn v. allTurns) should be restarted.  How do I do this?  Make sure this is handled correctly...
             // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
-            if(!classification.updatedGuessesSame) {
+//            if(!classification.updatedGuessesSame) {
                 String assessment = assess.Classification.assessClassification(classification);
                 System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    FINDINGS:"));
 
                 // Now that we have an assessment, take action based on the assessment...
                 switch (assessment) {
+                    case "Updated guesses are the same":
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > This pair of guesses each contain the same letters"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > No determinations are possible"));
+                        break;
+
                     case "    One letter changed, delta is 1":
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) responses are different by 1"));
@@ -72,7 +78,7 @@ public class MostRecentTurn {
                     case "One letter changed, delta is 0":
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) response has NOT changed."));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case."));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case)."));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > Adding " + classification.onlyInFirst + " and " + classification.onlyInSecond + " to a set of letters that are Known TOGETHER."));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > Changing this: Known Together: " + dashboard.knownTogether));
@@ -91,8 +97,8 @@ public class MostRecentTurn {
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Since more than 1 letter has changed, few determinations are possible.  Continuing to the next pair...\n"));
                         break;
                 }
-                comparisonNumber++;
-            }
+//            }
+            comparisonNumber++;
         }
 
         //  Todo: If a change is made, process the change IMMEDIATELY and set the boolean to TRUE

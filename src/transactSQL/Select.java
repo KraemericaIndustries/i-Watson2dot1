@@ -208,7 +208,7 @@ public class Select {
                                 // Use the result
                                 guesses.add(w1);
                                 guesses.add(w2);
-                                System.out.println("BREAKPOINT findTwoInOneOutFromOneOutFromWordPairs");
+//                                System.out.println("BREAKPOINT findTwoInOneOutFromOneOutFromWordPairs");
                             }
                         }
                     }
