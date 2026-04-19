@@ -95,49 +95,125 @@ public class Dashboard {
         }
     }
 
-//    public void updateDashboard() throws SQLException {
-//
-//        if(!changesToKnownIn.isEmpty()) {
-//            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
-//            for (Turn t : Turns) {
-//                if (containsAny(t.guess, changesToKnownIn)) {
-//                    removeChars(t.guess, changesToKnownIn);  //  REMOVE changesToKnownIn from t.guess
-//                    t.updatedResponse--;  //  DECREMENT updatedResponse
-//                }
-//            }
-//            // delete all words from DB that DO NOT contain letters in this set
-//            // remove this set from all updatedTurns in 'Turns' AND decrement updatedResponse
-//        }
-//        if(!changesToKnownOut.isEmpty()) {
-//            knownIn.addAll(changesToKnownIn);  //  UPDATE GOSPEL
-//            for (Turn t : Turns) {
-//                if (containsAny(t.guess, changesToKnownOut)) {
-//                    removeChars(t.guess, changesToKnownOut);  //  REMOVE changesToKnownOut from t.guess
-//                }
-//            }
-//            // delete all words from DB that DO contain letters in this set
-//            // remove this set from all updatedTurns in 'Turns'
-//        }
-//
-//        //  WHAT has to change??
-//
-//
-//
-//        //  Update Words table (drop words without, drop words with)  //  ToDo: Any subsequent invocations should use dashboard as a parameter.  Avoids PARAMETER HELL
-//        Delete.fromWordsTable(changesToKnownIn, changesToKnownOut);
-//
-//        //  Regenerate/populate Words_tbl
-//        Create.rebuildWatsonDB();
-//        //  Re-generate WordPairs
-//        //  Clear changesTo sets
-//
-//
-//
-//        // REBUILD THE DATABASE
-//        // REBUILD WORD PAIRS
-//
-//    }
 
+    public static void processChangesToKnownIn(Dashboard dashboard) throws SQLException {
+
+        boolean reprocessingNeeded = false;
+
+        do {
+            //  PROCESS changes to KNOWN IN
+            if(!dashboard.changesToKnownIn.isEmpty()) {                                             //  IF there are any changes to Known IN
+                dashboard.knownIn.addAll(dashboard.changesToKnownIn);                               //  UPDATE Known IN (GOSPEL)
+                //  UPDATE ALL Turns
+                for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
+                    if (Dashboard.containsAny(t.updatedGuess, dashboard.changesToKnownIn)) {               //  IF the Turn contains ANY letter within changesToKnownIn
+                        t.updatedGuess = Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownIn);                 //  REMOVE ALL letters in changesToKnownIn from the updatedGuess for that Turn
+                        t.updatedResponse = t.updatedResponse - dashboard.changesToKnownIn.size();  //  CORRECT the updatedResponse (<-- Used to use the '--' operator, but this is more robust)
+                        //  CHECK for Turns where updatedGuess.length == updatedResponse
+                        if(t.updatedGuess.length() == t.updatedResponse) {                          //  IF updatedGuess.length == updatedResponse
+                            System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known IN!  Updating the dashboard...");
+                            for (char c : t.updatedGuess.toCharArray()) {                           //  FOR EVERY CHARACTER in updatedGuess
+                                dashboard.changesToKnownIn.add(c);                                  //  ADD the character to changesToKnownIn
+                                reprocessingNeeded = true;                                          //  SET the reprocessingNeeded flag
+                            }
+                        }
+                    }
+                }
+            }
+
+        } while (reprocessingNeeded);
+
+        //  UPDATE Words_tbl (drop words without Known IN, drop words with Known OUT)
+        Delete.fromWordsTable(dashboard);
+
+        //  REGENERATE Words_tbl...
+        Create.rebuildWatsonDB(dashboard);
+
+        //  REGENERATE WordPairs table...
+        regenerateWordPairsTable();  // rebuild WordPairs table
+
+        //  SORT UNKNOWN letters remaining...
+        dashboard.sortUnknownLettersByFrequencyDescending();
+
+        //  Clear changesTo sets
+        dashboard.changesToKnownIn.clear();
+    }
+
+
+    public static void processChangesToKnownIn(Dashboard dashboard) throws SQLException {
+
+        boolean reprocessingNeeded = false;
+
+        do {
+            //  PROCESS changes to KNOWN IN
+            if(!dashboard.changesToKnownIn.isEmpty()) {                                             //  IF there are any changes to Known IN
+                dashboard.knownIn.addAll(dashboard.changesToKnownIn);                               //  UPDATE Known IN (GOSPEL)
+                //  UPDATE ALL Turns
+                for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
+                    if (Dashboard.containsAny(t.updatedGuess, dashboard.changesToKnownIn)) {               //  IF the Turn contains ANY letter within changesToKnownIn
+                        t.updatedGuess = Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownIn);                 //  REMOVE ALL letters in changesToKnownIn from the updatedGuess for that Turn
+                        t.updatedResponse = t.updatedResponse - dashboard.changesToKnownIn.size();  //  CORRECT the updatedResponse (<-- Used to use the '--' operator, but this is more robust)
+                        //  CHECK for Turns where updatedGuess.length == updatedResponse
+                        if(t.updatedGuess.length() == t.updatedResponse) {                          //  IF updatedGuess.length == updatedResponse
+                            System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known IN!  Updating the dashboard...");
+                            for (char c : t.updatedGuess.toCharArray()) {                           //  FOR EVERY CHARACTER in updatedGuess
+                                dashboard.changesToKnownIn.add(c);                                  //  ADD the character to changesToKnownIn
+                                reprocessingNeeded = true;                                          //  SET the reprocessingNeeded flag
+                            }
+                        }
+                    }
+                }
+            }
+            //  PROCESS changes to KNOWN OUT
+            if(!dashboard.changesToKnownOut.isEmpty()) {                                            //  IF there are changes to Known OUT
+                dashboard.knownIn.addAll(dashboard.changesToKnownOut);                              //  UPDATE Known OUT (GOSPEL)
+                //  UPDATE ALL Turns
+                for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
+                    if (Dashboard.containsAny(t.updatedGuess, dashboard.changesToKnownOut)) {       //  IF the Turn contains ANY letter within changesToKnownIn
+                        System.out.println("Infinite loop?");
+                        Dashboard.removeChars(t.updatedGuess, dashboard.changesToKnownOut);         //  REMOVE ALL letters in changesToKnownOut from the updatedGuess for that Turn
+                        //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0
+                        if((!t.updatedGuess.isEmpty()) && t.updatedResponse == 0) {
+                            System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known OUT!  Updating the dashboard...");
+                            for (char c : t.updatedGuess.toCharArray()) {                           //  FOR EVERY CHARACTER in updatedGuess
+                                dashboard.changesToKnownOut.add(c);                                 //  ADD the character to changesToKnownOut
+                                reprocessingNeeded = true;                                          //  SET the reprocessingNeeded flag
+                            }
+                        }
+                    }
+                }
+            }
+        } while (reprocessingNeeded);
+
+        //  UPDATE Words_tbl (drop words without Known IN, drop words with Known OUT)
+        Delete.fromWordsTable(dashboard);
+
+        //  REGENERATE Words_tbl...
+        Create.rebuildWatsonDB(dashboard);
+
+        //  REGENERATE WordPairs table...
+        regenerateWordPairsTable();  // rebuild WordPairs table
+
+        //  SORT UNKNOWN letters remaining...
+        dashboard.sortUnknownLettersByFrequencyDescending();
+
+        //  Clear changesTo sets
+        dashboard.changesToKnownOut.clear();
+
+    }
+
+
+    //  REGENERATE the WordPairs table as previously unknown letters are determined to be KNOWN OUT...
+    public static void regenerateWordPairsTable() {
+
+        System.out.println("assess.AllTurns.regenerateWordPairsTable(): BEGIN");
+
+        Connect.watson("truncateWordPairsTable");    //  DROP the WordPairs table...
+        Connect.watson("createWordPairsTable");  //  REGENERATE the WordPairs table...
+        Connect.watson("deleteDups");            //  DELETE dups from the WordPairs table...
+
+        System.out.println("assess.AllTurns.regenerateWordPairsTable(): END");
+    }
 
 
     public static String removeChars(String input, Set<Character> remove) {
