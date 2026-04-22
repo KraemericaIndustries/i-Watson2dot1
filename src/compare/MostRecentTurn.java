@@ -45,13 +45,13 @@ public class MostRecentTurn {
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) responses are different by 1"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > BAA We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!\n"));
-                        dashboard.changesToKnownIn.addAll(classification.onlyInFirst);
-                        dashboard.changesToKnownOut.addAll(classification.onlyInSecond);
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > SHEEP Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!\n"));
+                        process.DashboardChanges.changesToKnownIn.addAll(classification.onlyInFirst);
+                        process.DashboardChanges.changesToKnownOut.addAll(classification.onlyInSecond);
                         //  ToDo This invocation is where I left off.  Finish this!!!
-                        assess.AllTurns.updateDashboard(dashboard);
+//                        assess.AllTurns.updateDashboard(dashboard);
                         changesMade = true;
                         break;
 
@@ -59,15 +59,18 @@ public class MostRecentTurn {
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) responses are different by 1"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > SIS We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!\n"));
-                        dashboard.changesToKnownIn.addAll(classification.onlyInSecond);
-                        dashboard.changesToKnownOut.addAll(classification.onlyInFirst);
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > BOOM Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!\n"));
+                        process.DashboardChanges.changesToKnownIn.addAll(classification.onlyInSecond);
+                        process.DashboardChanges.changesToKnownOut.addAll(classification.onlyInFirst);
+
+                        process.DashboardChanges.updateDashboard(dashboard);
+
                         //  ToDo This invocation is where I left off.  Finish this!!!
                         //  ToDo PRIORITY ONE:  Turns are NOT updating!!!
                         //  ToDo PRIORITY TWO:  Need to check kT... if a letter matches, the REST OF kT is known!!!
-                        assess.AllTurns.updateDashboard(dashboard);
+//                        assess.AllTurns.updateDashboard(dashboard);
                         dashboard.buildUnknownLettersList();
                         dashboard.sortUnknownLettersByFrequencyDescending();
                         assess.AllTurns.removeDeterminedLettersFromAllTurns(dashboard);

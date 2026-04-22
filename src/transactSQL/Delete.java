@@ -106,14 +106,14 @@ public class Delete {
         Connection conn = DriverManager.getConnection(urlToWatson, user, password);
         Statement statement = conn.createStatement();
         {
-            if(!dashboard.changesToKnownIn.isEmpty()) {
-                for (Character c : dashboard.changesToKnownIn) {
+            if(!process.DashboardChanges.changesToKnownIn.isEmpty()) {
+                for (Character c : process.DashboardChanges.changesToKnownIn) {
                     statement.addBatch("delete from Words_tbl where word not like '%" + c + "%'");
                 }
             }
 
-            if(!dashboard.changesToKnownOut.isEmpty()) {
-                for (Character c : dashboard.changesToKnownOut) {
+            if(!process.DashboardChanges.changesToKnownOut.isEmpty()) {
+                for (Character c : process.DashboardChanges.changesToKnownOut) {
                     statement.addBatch("delete from Words_tbl where word like '%" + c + "%'");
                 }
             }
