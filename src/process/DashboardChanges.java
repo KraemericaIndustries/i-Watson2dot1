@@ -26,10 +26,19 @@ public class DashboardChanges {
 
     public static void updateDashboard(Dashboard dashboard) throws SQLException {
 
-        if(!changesToKnownIn.isEmpty()) processChangesToKnownIn(dashboard);
-        print.object.dashboard(dashboard);
-        if(!changesToKnownOut.isEmpty()) processChangesToKnownOut(dashboard);
-        if(!changesToKnownTogether.isEmpty()) processChangesToKnownIn(dashboard);
+        boolean reprocessingNeeded = false;
+
+        do {
+            if(!changesToKnownIn.isEmpty()) reprocessingNeeded = processChangesToKnownIn(dashboard);
+            System.out.println("AFTER processChangesToKnownIn:");
+            print.object.dashboard(dashboard);
+            System.out.println();
+            if(!changesToKnownOut.isEmpty()) reprocessingNeeded = processChangesToKnownOut(dashboard);
+            System.out.println("AFTER processChangesToKnownOut:");
+            print.object.dashboard(dashboard);
+            System.out.println();
+            if(!changesToKnownTogether.isEmpty()) processChangesToKnownIn(dashboard);
+        } while (reprocessingNeeded);
 
         Delete.fromWordsTable(dashboard);        //  UPDATE Words_tbl (drop words without Known IN, drop words with Known OUT)
         Create.rebuildWatsonDB(dashboard);//  REGENERATE Words_tbl...
@@ -41,99 +50,83 @@ public class DashboardChanges {
         removeDeterminedLettersFromAllTurns(dashboard);
 
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "The dashboard has been changed to:"));
+        System.out.println("AFTER updateDashboard:");
         print.object.dashboard(dashboard);                             //  PRINT the dashboard
+        System.out.println();
     }
 
-    public static void processChangesToKnownIn(Dashboard dashboard) throws SQLException {
+    public static boolean processChangesToKnownIn(Dashboard dashboard) {
 
-        boolean reprocessingNeeded = false;
+        boolean changesMade =  false;
 
-        do {
-            dashboard.knownIn.addAll(changesToKnownIn);                               //  UPDATE Known IN (GOSPEL)
+        dashboard.knownIn.addAll(changesToKnownIn);  //  UPDATE Known IN (GOSPEL)
+        for (Turn t : dashboard.Turns) {             //  FOR EVERY PREVIOUS TURN in the Turns collection
 
-            for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
+            StringBuilder sb = new StringBuilder(t.updatedGuess.length());
 
-                StringBuilder sb = new StringBuilder(t.updatedGuess.length());
+            for (char c : t.updatedGuess.toCharArray()) {
+                if (!changesToKnownIn.contains(c)) {
+                    sb.append(c);
+                } else t.updatedResponse--;
+            }
+            t.updatedGuess = sb.toString();
 
-                for (char c : t.updatedGuess.toCharArray()) {
+            System.out.println("Turn is now: " + sb + t.updatedResponse);
+            System.out.println();
 
-                    if (!changesToKnownIn.contains(c)) {
-                        sb.append(c);
-                    } else t.updatedResponse--;
+            if(t.updatedGuess.length() == t.updatedResponse) {  //  CHECK for Turns where updatedGuess length is the same as updatedResponse (means all letters in updatedGuess are IN)
+                System.out.println(t.updatedGuess + t.updatedResponse);
+                System.out.println(" MEOW:  We now know that every letter in " + t.updatedGuess + " is now Known IN!  Updating the dashboard...");
+                for (char c : t.updatedGuess.toCharArray()) {  //  FOR EVERY CHARACTER in updatedGuess
+                    changesToKnownIn.add(c);                   //  ADD the character to changesToKnownIn
                 }
-                t.updatedGuess = sb.toString();
+                changesMade = true;
+            } else if((!t.updatedGuess.isEmpty()) && t.updatedResponse == 0) {  //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0 (means all letters in updatedGuess are OUT)
+                System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known OUT!  Updating the dashboard...");
+                for (char c : t.updatedGuess.toCharArray()) {  //  FOR EVERY CHARACTER in updatedGuess
+                    changesToKnownOut.add(c);                  //  ADD the character to changesToKnownOut
+                }
+                changesMade = true;
+            } else changesMade = false;
+        }
+        changesToKnownIn.clear();
+        return changesMade;
+    }
 
-                System.out.println("Turn is now: " +sb.toString() + t.updatedResponse);
-                System.out.println();
+    public static boolean processChangesToKnownOut(Dashboard dashboard) {
 
-                if(t.updatedGuess.length() == t.updatedResponse) {                          //  IF updatedGuess.length == updatedResponse
+        boolean changesMade =  false;
+
+        dashboard.knownOut.addAll(changesToKnownOut);                         //  UPDATE Known OUT (GOSPEL)
+        for (Turn t : dashboard.Turns) {                                     //  FOR EVERY PREVIOUS TURN in the Turns collection
+            if (Dashboard.containsAny(t.updatedGuess, changesToKnownOut)) {  //  IF the Turn contains ANY letter within changesToKnownIn
+                System.out.println("Infinite loop?");
+                System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > Checking if " + t.updatedGuess + " contains " + changesToKnownOut + " is IN!"));
+                System.out.println(Dashboard.removeChars(t.updatedGuess, changesToKnownOut));         //  REMOVE ALL letters in changesToKnownOut from the updatedGuess for that Turn
+                //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0
+
+                if(t.updatedGuess.length() == t.updatedResponse) {  //  CHECK for Turns where updatedGuess length is the same as updatedResponse (means all letters in updatedGuess are IN)
                     System.out.println(t.updatedGuess + t.updatedResponse);
                     System.out.println(" MEOW:  We now know that every letter in " + t.updatedGuess + " is now Known IN!  Updating the dashboard...");
-                    for (char c : t.updatedGuess.toCharArray()) {                           //  FOR EVERY CHARACTER in updatedGuess
-                        changesToKnownIn.add(c);                                  //  ADD the character to changesToKnownIn
-                        reprocessingNeeded = true;                                          //  SET the reprocessingNeeded flag
+                    for (char c : t.updatedGuess.toCharArray()) {  //  FOR EVERY CHARACTER in updatedGuess
+                        changesToKnownIn.add(c);                   //  ADD the character to changesToKnownIn
                     }
-                }
-
-
-
-//                if (Dashboard.containsAny(t.updatedGuess, changesToKnownIn)) {               //  IF the Turn contains ANY letter within changesToKnownIn
-//
-//                    removeKnownChars(t.updatedGuess, changesToKnownIn);
-//
-//                    t.updatedGuess = Dashboard.removeChars(t.updatedGuess, t.updatedResponse, changesToKnownIn);                 //  REMOVE ALL letters in changesToKnownIn from the updatedGuess for that Turn
-//                    t.updatedResponse = t.updatedResponse - changesToKnownIn.size();  //  CORRECT the updatedResponse (<-- Used to use the '--' operator, but this is more robust)
-//                    //  CHECK for Turns where updatedGuess.length == updatedResponse
-//
-//                }
-
-
-
-
-            }
-        } while (reprocessingNeeded);
-        changesToKnownIn.clear();
-    }
-
-    public static void processChangesToKnownOut(Dashboard dashboard) throws SQLException {
-
-        boolean reprocessingNeeded = false;
-
-        do {
-
-            dashboard.knownIn.addAll(changesToKnownOut);                              //  UPDATE Known OUT (GOSPEL)
-            //  UPDATE ALL Turns
-            for (Turn t : dashboard.Turns) {                                                    //  FOR EVERY PREVIOUS TURN in the Turns collection
-                if (Dashboard.containsAny(t.updatedGuess, changesToKnownOut)) {       //  IF the Turn contains ANY letter within changesToKnownIn
-                    System.out.println("Infinite loop?");
-                    System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, " > Checking if " + t.updatedGuess + " contains " + changesToKnownOut + " is IN!"));
-
-                    System.out.println(Dashboard.removeChars(t.updatedGuess, changesToKnownOut));         //  REMOVE ALL letters in changesToKnownOut from the updatedGuess for that Turn
-
-                    //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0
-                    if((!t.updatedGuess.isEmpty()) && t.updatedResponse == 0) {
-                        System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known OUT!  Updating the dashboard...");
-                        for (char c : t.updatedGuess.toCharArray()) {                           //  FOR EVERY CHARACTER in updatedGuess
-                            changesToKnownOut.add(c);                                 //  ADD the character to changesToKnownOut
-                            reprocessingNeeded = true;                                          //  SET the reprocessingNeeded flag
-                        }
+                    changesMade = true;
+                } else if((!t.updatedGuess.isEmpty()) && t.updatedResponse == 0) {  //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0 (means all letters in updatedGuess are OUT)
+                    System.out.println("We now know that every letter in " + t.updatedGuess + " is now Known OUT!  Updating the dashboard...");
+                    for (char c : t.updatedGuess.toCharArray()) {  //  FOR EVERY CHARACTER in updatedGuess
+                        changesToKnownOut.add(c);                  //  ADD the character to changesToKnownOut
                     }
-                }
-            }
-            System.out.println("BREAK!!!");
-            System.out.println();
-        } while (reprocessingNeeded);
-        changesToKnownOut.clear();
-    }
-
-    public static String removeKnownChars(String input, Set<Character> remove) {
-        StringBuilder sb = new StringBuilder(input.length());
-        for (char c : input.toCharArray()) {
-            if (!remove.contains(c)) {
-                sb.append(c);
+                    print.object.dashboard(dashboard);
+                    System.out.println();
+                    changesMade = true;
+                } else changesMade = false;
             }
         }
-        return sb.toString();
-    }
+        System.out.println("BREAK!!!");
+        System.out.println();
 
+        changesToKnownOut.clear();
+        return changesMade;
+    }
 }

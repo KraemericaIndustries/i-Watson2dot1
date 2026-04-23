@@ -1,16 +1,8 @@
 package print;
 
-import dataStructures.*;
-import transactSQL.Connect;
-import transactSQL.Select;
-
-import java.sql.SQLException;
-import java.util.*;
-
 public class Messages {
 
     public static int reportNumber = 1;
-    public static int numWordPairs = 0;
 
     //  Introduce the game, and how it is played...
     public static void welcome() {

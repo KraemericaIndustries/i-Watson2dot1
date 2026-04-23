@@ -1,6 +1,5 @@
 package dataStructures;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Turn {
 
@@ -41,23 +40,5 @@ public class Turn {
         }
 
         this.updatedGuess = sb.toString();
-
-    }
-
-    public static void sortTurn(LinkedHashMap<Character, Integer> turn) {
-//        System.out.println("sortTurn() original:             " + turn);  DEBUG
-        LinkedHashMap<Character, Integer> sortedTurn = turn.entrySet()
-                .stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                .collect(Collectors.toMap(
-                        Map.Entry::getKey,
-                        Map.Entry::getValue,
-                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-//        System.out.println("sortTurn() sortedTurn:           " + sortedTurn);  DEBUG
-        turn.clear();
-        turn.putAll(sortedTurn);
-//        System.out.println("sortTurn() result:               " + turn);  DEBUG
-        sortedTurn.clear();
-        System.out.println();
     }
 }

@@ -1,11 +1,5 @@
 package dataStructures;
-
-import print.Colors;
 import transactSQL.Connect;
-import transactSQL.Create;
-import transactSQL.Delete;
-
-import java.sql.SQLException;
 import java.util.*;
 
 import static dataStructures.Unknown.letters;

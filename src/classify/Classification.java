@@ -37,10 +37,6 @@ public class Classification {
         Set<Character> set2 = toCharSet(jUpdatedGuess);
 
         // Characters in s1 but not s2
-//        Set<Character> onlyInFirstCons = new HashSet<>(set1);
-//        onlyInFirstCons.removeAll(set2);
-//        onlyInFirst = onlyInFirstCons;
-//        onlyInFirst.addAll(onlyInFirstCons);
         set1.removeAll(set2);
         onlyInFirst = set1;
 
@@ -48,22 +44,11 @@ public class Classification {
         set2.removeAll(temp);
         onlyInSecond = set2;
 
-
         // Characters in both
-//        Set<Character> inBothCons = new HashSet<>(set1);
-//        inBothCons.retainAll(set2);
-//        inBoth = inBothCons;
-//        inBoth.addAll(inBothCons);
         temp.removeAll(set1);
         temp.removeAll(set2);
         inBoth = temp;
         if(inBoth.size() == 5) updatedGuessesSame = true;
-
-        // Characters in s2 but not s1
-//        Set<Character> onlyInSecondCons = new HashSet<>(set2);
-//        onlyInSecondCons.removeAll(temp);
-//        onlyInSecond = onlyInSecondCons;
-//        onlyInSecond.addAll(onlyInSecondCons);
     }
 
     private static boolean checkForUpdatedGuessesDifferInLengthByMoreThanOne(String iUpdatedGuess, String jUpdatedGuess) {
@@ -75,8 +60,7 @@ public class Classification {
     }
 
     private static boolean checkForUpdatedGuessesSameLength(String iUpdatedGuess, String jUpdatedGuess) {
-        if(iUpdatedGuess.length() == jUpdatedGuess.length()) return true;
-        else return false;
+        return iUpdatedGuess.length() == jUpdatedGuess.length();
     }
 
     private static boolean checkForUpdatedResponsesDifferByMoreThanOne(int i, int j) {
@@ -85,11 +69,6 @@ public class Classification {
 
     private static boolean checkForUpdatedResponsesDifferByOne(int i, int j) {
         return i - j == 1 || i - j == -1;
-    }
-
-    private static boolean checkForUpdatedResponseSame(int i, int j) {
-        if(i == j) return true;
-        else return false;
     }
 
     private static Set<Character> toCharSet(String s) {

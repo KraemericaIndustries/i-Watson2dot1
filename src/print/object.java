@@ -67,11 +67,7 @@ public class object {
     }
 
     public static void knownTogether(Dashboard dashboard) {
-//        for(Set<Character> set : dashboard.knownTogether) {
-//            for(Character c: set) {
-//                System.out.print(c);
-//            }
-//        }
+
         for (Set<Character> set : dashboard.knownTogether) {
             StringBuilder sb = new StringBuilder();
             for (Character c : set) {
