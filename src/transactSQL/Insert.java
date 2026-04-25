@@ -54,7 +54,7 @@ public class Insert extends DatabaseConnection{
 
     //  RE-LOAD the database with words previously exported to the test.txt file...
     public static void reloadKnownWords(Dashboard dashboard) {
-        System.out.println("Reloading known words into the 'watson' database...");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "Reloading known words into the 'watson' database..."));
         wordCount = 0;
 //        Unknown.letters.clear();
 
@@ -87,6 +87,6 @@ public class Insert extends DatabaseConnection{
             System.out.println("file not found");
 			e.printStackTrace();
         }
-        System.out.println(" > Number of words successfully added to the Database: " + wordCount + "\n");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, " > Number of words successfully added to the Database: " + wordCount + "\n"));
     }
 }

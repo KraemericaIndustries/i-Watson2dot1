@@ -1,5 +1,7 @@
 package transactSQL;
 
+import print.Colors;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -35,8 +37,8 @@ public class Query extends DatabaseConnection{
     public static void wordsFromDB() {
 
         File file = new File("test.txt");
-
-        System.out.println("Retrieving all remaining words from the 'watson' database...");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "***************************************************************************** Updating Database ******************************************************************************"));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "Retrieving all remaining words from the 'watson' database..."));
         int counter = 0;
         try {
             conn = DriverManager.getConnection(urlToWatson, user, password);  		       //  Establish Connection Object
@@ -56,7 +58,7 @@ public class Query extends DatabaseConnection{
         } catch (SQLException e) {
             //  e.printStackTrace();
         }
-        System.out.println(" > " + counter + " words have been retrieved from the 'watson' database.");
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, " > " + counter + " words have been retrieved from the 'watson' database."));
     }
 
     //  Generic method that takes a String{} of a sql query, and returns a ResultSet handled following invocation...

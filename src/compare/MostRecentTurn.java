@@ -17,6 +17,7 @@ public class MostRecentTurn {
         boolean changesMade = false;
 
         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "********************************************************************************  COMPARING MOST RECENT TURN AGAINST ALL OTHERS  ***********************************************************************************"));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "compare.MostRecentTurn.againstAllOthers()"));
         for(int i = 0; i < dashboard.Turns.size() - 1; i++) {      //  FOR every turn in 'Turns' (up until the SECOND LAST Turn in 'Turns')
             System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "COMPARISON #" + comparisonNumber + ".  Now comparing turn #" + (i + 1) + " with turn #" + (dashboard.Turns.size()) + ":"));
             assess.AllTurns.prettyPrintLinkedHashMap(dashboard.Turns, i, dashboard.Turns.size() - 1);
@@ -36,18 +37,20 @@ public class MostRecentTurn {
                 // Now that we have an assessment, take action based on the assessment...
                 switch (assessment) {
                     case "Updated guesses are the same":
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    compare.MostRecentTurn.againstAllOthers(), case Updated guesses are the same"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > This pair of guesses each contain the same letters"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > No determinations are possible"));
                         break;
 
                     case "    One letter changed, delta is 1":
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    compare.MostRecentTurn.againstAllOthers(), case One letter changed, delta is 1"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) responses are different by 1"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > BAA We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know " + classification.onlyInFirst + " is IN, and " + classification.onlyInSecond + " is OUT!"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > SHEEP Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!\n"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!\n"));
                         process.DashboardChanges.changesToKnownIn.addAll(classification.onlyInFirst);
                         process.DashboardChanges.changesToKnownOut.addAll(classification.onlyInSecond);
                         //  ToDo This invocation is where I left off.  Finish this!!!
@@ -56,14 +59,21 @@ public class MostRecentTurn {
                         break;
 
                     case "One letter changed, delta is -1":
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    compare.MostRecentTurn.againstAllOthers(), case One letter changed, delta is -1"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) responses are different by 1"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > SIS We now know " + classification.onlyInFirst + " is OUT, and " + classification.onlyInSecond + " is IN!"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "         > We now know " + classification.onlyInFirst + " is Known OUT, and " + classification.onlyInSecond + " is Known IN!"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    ACTIONS:"));
-                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "     > BOOM Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!\n"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "         > Adding " + classification.onlyInSecond + " to changesToKnownIn, and " + classification.onlyInFirst + " to changesToKnownOut!"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "         > Changing this:"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_BLUE, "           Pending changes to Known IN: " + process.DashboardChanges.changesToKnownIn));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_BLUE, "           Pending changes to Known OUT: " + process.DashboardChanges.changesToKnownOut));
                         process.DashboardChanges.changesToKnownIn.addAll(classification.onlyInSecond);
                         process.DashboardChanges.changesToKnownOut.addAll(classification.onlyInFirst);
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "         > To this:"));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_BLUE, "           Pending changes to Known IN: " + process.DashboardChanges.changesToKnownIn));
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_BLUE, "           Pending changes to Known OUT: " + process.DashboardChanges.changesToKnownOut));
 
                         process.DashboardChanges.updateDashboard(dashboard);
 
@@ -79,6 +89,7 @@ public class MostRecentTurn {
                         break;
 
                     case "One letter changed, delta is 0":
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "compare.MostRecentTurn.againstAllOthers(), case One letter changed, delta is 0"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Only 1 letter has changed"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > The (updated) response has NOT changed."));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > We now know that " + classification.onlyInFirst + " and " + classification.onlyInSecond + " are either BOTH IN, or BOTH OUT (but can't be certain which is the case)."));
@@ -95,6 +106,7 @@ public class MostRecentTurn {
                     // more cases...
 
                     default:
+                        System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    compare.MostRecentTurn.againstAllOthers(), case default"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > More than 1 letter is different between these 2 turns"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "    Determinations:"));
                         System.out.println(Colors.Ansi.paint(Colors.Ansi.GREEN, "     > Since more than 1 letter has changed, few determinations are possible.  Continuing to the next pair...\n"));

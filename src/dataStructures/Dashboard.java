@@ -1,4 +1,5 @@
 package dataStructures;
+import print.Colors;
 import transactSQL.Connect;
 import java.util.*;
 
@@ -90,24 +91,20 @@ public class Dashboard {
     //  REGENERATE the WordPairs table as previously unknown letters are determined to be KNOWN OUT...
     public static void regenerateWordPairsTable() {
 
-        System.out.println("assess.AllTurns.regenerateWordPairsTable(): BEGIN");
-
         Connect.watson("truncateWordPairsTable");    //  DROP the WordPairs table...
         Connect.watson("createWordPairsTable");  //  REGENERATE the WordPairs table...
         Connect.watson("deleteDups");            //  DELETE dups from the WordPairs table...
-
-        System.out.println("assess.AllTurns.regenerateWordPairsTable(): END");
     }
 
 
-    public static String removeChars(String input, Set<Character> remove) {
+    public static void removeChars(String input, Set<Character> remove) {
         StringBuilder sb = new StringBuilder(input.length());
         for (char c : input.toCharArray()) {
             if (!remove.contains(c)) {
                 sb.append(c);
             }
         }
-        return sb.toString();
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.RED, "           > Changed " + input + " to " + sb));
     }
 
     public static boolean containsAny(String input, Set<Character> chars) {

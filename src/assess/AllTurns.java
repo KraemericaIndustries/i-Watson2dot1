@@ -40,12 +40,8 @@ public class AllTurns {
 
     public static void regenerateWordPairsTable() {
 
-        System.out.println("assess.AllTurns.regenerateWordPairsTable(): BEGIN");
-
         Connect.watson("truncateWordPairsTable");    //  DROP the WordPairs table...
         Connect.watson("createWordPairsTable");  //  REGENERATE the WordPairs table...
         Connect.watson("deleteDups");            //  DELETE dups from the WordPairs table...
-
-        System.out.println("assess.AllTurns.regenerateWordPairsTable(): END");
     }
 }

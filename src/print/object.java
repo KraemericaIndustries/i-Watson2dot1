@@ -20,6 +20,8 @@ public class object {
         //  PRINT the LinkedHashMaps...
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Known IN:  " + dashboard.knownIn));
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Known OUT: " + dashboard.knownOut));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_BLUE, "Pending changes to Known IN: " + process.DashboardChanges.changesToKnownIn));
+        System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_BLUE, "Pending changes to Known OUT: " + process.DashboardChanges.changesToKnownOut));
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "Known Together: " + dashboard.knownTogether));
         unknownLetters(dashboard.unknownLetters);
 
