@@ -1,7 +1,5 @@
 package transactSQL;
 
-import dataStructures.Dashboard;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -31,7 +29,7 @@ public class Delete {
 //        System.out.println("transactSQL.Delete.rowFromWordPairs(): END");
     }
 
-    public static void fromWordsTable(Dashboard dashboard) throws SQLException {
+    public static void fromWordsTable() throws SQLException {
 
         Connection conn = DriverManager.getConnection(urlToWatson, user, password);
         Statement statement = conn.createStatement();

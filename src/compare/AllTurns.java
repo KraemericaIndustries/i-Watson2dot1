@@ -31,8 +31,6 @@ public class AllTurns {
                     Classification classification;
                     classification = new Classification(dashboard.Turns.get(i).updatedResponse, dashboard.Turns.get(j).updatedResponse, dashboard.Turns.get(i).updatedGuess, dashboard.Turns.get(j).updatedGuess);
                     classification.printClassification();
-//  ToDo:  When does it make sense to check for updatedResponse = 0?  Make sure this is handled correctly...
-//  ToDo:  As soon as changes are made, updates should happen, and the exercise (present turn v. allTurns) should be restarted.  How do I do this?  Make sure this is handled correctly...
                     // Now that the selected pair of turns has been CLASSIFIED, Identify Findings, make Determinations, and take ACTION...
                     if(!classification.updatedGuessesSame) {
                         String assessment = assess.Classification.assessClassification(classification);
@@ -49,8 +47,7 @@ public class AllTurns {
                                 System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     STEADY > Adding " + classification.onlyInFirst + " to Known IN, and " + classification.onlyInSecond + " to Known OUT!\n"));
                                 process.DashboardChanges.changesToKnownIn.addAll(classification.onlyInFirst);
                                 process.DashboardChanges.changesToKnownOut.addAll(classification.onlyInSecond);
-                                //  ToDo This invocation is where I left off.  Finish this!!!
-//                                updateDashboard(dashboard);
+                                process.DashboardChanges.updateDashboard(dashboard);
                                 changesMade = true;
                                 break;
 
@@ -63,7 +60,6 @@ public class AllTurns {
                                 System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "     BOP > Adding " + classification.onlyInSecond + " to Known IN, and " + classification.onlyInFirst + " to Known OUT!\n"));
                                 process.DashboardChanges.changesToKnownIn.addAll(classification.onlyInSecond);
                                 process.DashboardChanges.changesToKnownOut.addAll(classification.onlyInFirst);
-                                //  ToDo This invocation is where I left off.  Finish this!!!
                                 process.DashboardChanges.updateDashboard(dashboard);
                                 changesMade = true;
                                 break;
@@ -91,7 +87,6 @@ public class AllTurns {
                         comparisonNumber++;
                     }
                 }
-                changesMade = false;
             }
         } while (changesMade);
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_GREEN, "*****************************************************************************************************************************************************************************"));

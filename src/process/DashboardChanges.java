@@ -22,47 +22,30 @@ public class DashboardChanges {
     public static Set<Character> changesToKnownOut = new HashSet<>();
 
     // BEHAVIOR
-
     public static void updateDashboard(Dashboard dashboard) throws SQLException {
 
         boolean reprocessingNeeded = false;
 
-//        System.out.println("Before: checkAgainstKnownInAndKnownOut:");
-//        print.object.dashboard(dashboard);
-
-
-
         do {
-
-
             dashboard.knownIn.addAll(changesToKnownIn);  //  UPDATE Known IN (GOSPEL)
             dashboard.knownOut.addAll(changesToKnownOut);                         //  UPDATE Known OUT (GOSPEL)
             if(!dashboard.knownTogether.isEmpty()) checkAgainstKnownInAndKnownOut(dashboard);
-//            System.out.println("AFTER checkAgainstKnownInAndKnownOut:");
-//            print.object.dashboard(dashboard);
-
-
-
             if(!changesToKnownIn.isEmpty()) reprocessingNeeded = processChangesToKnownIn(dashboard);
-//            System.out.println("AFTER processChangesToKnownIn:");
-//            print.object.dashboard(dashboard);
             if(!changesToKnownOut.isEmpty()) reprocessingNeeded = processChangesToKnownOut(dashboard);
-//            System.out.println("AFTER processChangesToKnownOut:");
-//            print.object.dashboard(dashboard);
             System.out.println();
         } while (reprocessingNeeded);
 
         dashboard.knownIn.addAll(changesToKnownIn);
         dashboard.knownOut.addAll(changesToKnownOut);
 
-        Delete.fromWordsTable(dashboard);        //  UPDATE Words_tbl (drop words without Known IN, drop words with Known OUT)
+        Delete.fromWordsTable();        //  UPDATE Words_tbl (drop words without Known IN, drop words with Known OUT)
 
         changesToKnownIn.clear();
         changesToKnownOut.clear();
 
-        Create.rebuildWatsonDB(dashboard);//  REGENERATE Words_tbl...
-        regenerateWordPairsTable();  // rebuild WordPairs table
-        dashboard.sortUnknownLettersByFrequencyDescending();//  SORT UNKNOWN letters remaining...
+        Create.rebuildWatsonDB(dashboard);  //  REGENERATE Words_tbl...
+        regenerateWordPairsTable();         //  REBUILD WordPairs table
+        dashboard.sortUnknownLettersByFrequencyDescending();  //  SORT UNKNOWN letters remaining...
 
         dashboard.buildUnknownLettersList();
         dashboard.sortUnknownLettersByFrequencyDescending();
@@ -86,8 +69,7 @@ public class DashboardChanges {
 
         boolean changesMade =  false;
 
-        for (Turn t : dashboard.Turns) {             //  FOR EVERY PREVIOUS TURN in the Turns collection
-
+        for (Turn t : dashboard.Turns) {  //  FOR EVERY PREVIOUS TURN in the Turns collection
             if (Dashboard.containsAny(t.updatedGuess, changesToKnownIn)) {  //  IF the Turn contains ANY letter within changesToKnownOut
 
                 StringBuilder sb = new StringBuilder(t.updatedGuess.length());
@@ -120,12 +102,7 @@ public class DashboardChanges {
                 } else changesMade = false;
 
             }
-
-
-
-
         }
-//        changesToKnownIn.clear();
         return changesMade;
     }
 
@@ -138,9 +115,9 @@ public class DashboardChanges {
 
         for (Turn t : dashboard.Turns) {                                     //  FOR EVERY PREVIOUS TURN in the Turns collection
             if (Dashboard.containsAny(t.updatedGuess, changesToKnownOut)) {  //  IF the Turn contains ANY letter within changesToKnownOut
-                Dashboard.removeChars(t.updatedGuess, changesToKnownOut);         //  REMOVE ALL letters in changesToKnownOut from the updatedGuess for that Turn
-                //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0
+                Dashboard.removeChars(t.updatedGuess, changesToKnownOut);    //  REMOVE ALL letters in changesToKnownOut from the updatedGuess for that Turn
 
+                //  CHECK for Turns where updatedGuess IS NOT empty, and updatedResponse > 0
                 if(t.updatedGuess.length() == t.updatedResponse) {  //  CHECK for Turns where updatedGuess length is the same as updatedResponse (means all letters in updatedGuess are IN)
                     System.out.println(t.updatedGuess + t.updatedResponse);
                     System.out.println(" MEOW:  We now know that every letter in " + t.updatedGuess + " is Known IN!  Updating the dashboard...");
@@ -194,6 +171,5 @@ public class DashboardChanges {
                 }
             }
         }
-
     }
 }

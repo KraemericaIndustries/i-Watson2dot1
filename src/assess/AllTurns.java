@@ -37,11 +37,4 @@ public class AllTurns {
         sb.append("    ORIGINAL: ").append(Turns.get(j).guess).append(", ").append(Turns.get(j).response).append(" > UPDATED: [").append(Turns.get(j).updatedGuess).append("]").append(" = ").append(Turns.get(j).updatedResponse);
         System.out.println(sb);
     }
-
-    public static void regenerateWordPairsTable() {
-
-        Connect.watson("truncateWordPairsTable");    //  DROP the WordPairs table...
-        Connect.watson("createWordPairsTable");  //  REGENERATE the WordPairs table...
-        Connect.watson("deleteDups");            //  DELETE dups from the WordPairs table...
-    }
 }

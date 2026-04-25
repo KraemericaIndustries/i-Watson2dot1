@@ -14,24 +14,6 @@ public class Query extends DatabaseConnection{
     /*
     https://stackoverflow.com/questions/77309450/sql-query-to-return-only-the-most-exclusive-pattern-matches-for-varchar-data-t
     */
-//    public static void getWords(int numWords, char first, char second, char third, char fourth, char fifth) throws SQLException {
-//
-//        ResultSet resultSet = transactSQL.Query.select(
-//"SELECT TOP (" + numWords + ") Word " +
-//          "FROM Words_tbl YT " +
-//          "CROSS JOIN (VALUES('" +
-//          first + "'),('" +
-//          second + "'),('" +
-//          third + "'),('" +
-//          fourth + "'),('" +
-//          fifth + "'))L(Letter) " +
-//          "GROUP BY YT.Word " +
-//          "ORDER BY COUNT(CASE WHEN YT.Word LIKE '%' + L.Letter + '%' THEN 1 END) DESC");
-//
-//        while(resultSet.next()) {
-//            System.out.println(resultSet.getString(1));
-//        }
-//    }
 
     //  QUERY remaining words in the database out to a file (so that remaining letter counts may be re-generated upon re-entry)...
     public static void wordsFromDB() {
@@ -41,7 +23,7 @@ public class Query extends DatabaseConnection{
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "Retrieving all remaining words from the 'watson' database..."));
         int counter = 0;
         try {
-            conn = DriverManager.getConnection(urlToWatson, user, password);  		       //  Establish Connection Object
+            conn = DriverManager.getConnection(urlToWatson, user, password);  	   //  Establish Connection Object
             statement = conn.createStatement();  								   //  Create a SQL statement object to send to the database
             resultSet = statement.executeQuery("select * from Words_tbl");     //  Execute the statement object
 

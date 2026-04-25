@@ -24,19 +24,15 @@ public class Insert extends DatabaseConnection{
         try {
             File file = new File("FiveLetterWords.txt");
             Scanner input = new Scanner(file);
-
             while (input.hasNextLine()) {
-
                 line = (input.nextLine().toUpperCase());
-
-//                dashboard.letterEnumerator(line.toUpperCase());  //  INVOKE letterEnumerator to count the occurrence of each letter in each word in the FiveLetterWords.txt file
 
                 for (int i = 0; i < line.length(); i++) {
                     dashboard.letterCounts[line.charAt(i) - 'A']++;
                 }
 
                 try {
-                    Connection conn = DriverManager.getConnection(urlToWatson, user, password);                                   //  Establish Connection Object
+                    Connection conn = DriverManager.getConnection(urlToWatson, user, password);                           //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                         //  Create a SQL statement object to send to the database
                     wordCount = wordCount + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
                 } catch (SQLException e) {
@@ -56,7 +52,6 @@ public class Insert extends DatabaseConnection{
     public static void reloadKnownWords(Dashboard dashboard) {
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_PURPLE, "Reloading known words into the 'watson' database..."));
         wordCount = 0;
-//        Unknown.letters.clear();
 
         //  RESET the array that backs unknownLetters to all zeros
         Arrays.fill(dashboard.letterCounts, 0);
@@ -74,7 +69,7 @@ public class Insert extends DatabaseConnection{
                 }
 
                 try {
-                    Connection conn = DriverManager.getConnection(urlToWatson, user, password);                                   //  Establish Connection Object
+                    Connection conn = DriverManager.getConnection(urlToWatson, user, password);                           //  Establish Connection Object
                     Statement statement = conn.createStatement();                                                         //  Create a SQL statement object to send to the database
                     wordCount = wordCount + statement.executeUpdate("insert into Words_tbl values('" + line + "')");  //  Execute the statement object
                 } catch (SQLException e) {

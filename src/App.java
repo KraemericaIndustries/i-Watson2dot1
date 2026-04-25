@@ -22,9 +22,6 @@ public class App {
         DatabaseConnection.getProperties();
         Create.copilotWatsonDB();
 
-        //  SETUP: Create datastore objects to facilitate play...
-        LinkedList<Turn> Turns = new LinkedList<>();
-
         //  CREATE a dashboard...
         Dashboard dashboard = new Dashboard();
 
@@ -44,28 +41,25 @@ public class App {
         Messages.play();
 
         do {
-            print.object.dashboard(dashboard);                             //  PRINT the dashboard
-            List<String> guesses = fetch.Play.nextPlay(dashboard, Turns);  //  FETCH the next play
+            print.object.dashboard(dashboard);                      //  PRINT the dashboard
+            List<String> guesses = fetch.Play.nextPlay(dashboard);  //  FETCH the next play
 
-            for(String g : guesses) {                                      //  ITERATE all guesses, submit the guess, prompt for the response, add the play to 'Turns' collection
-                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "Your guess is: "));                 //  VERIFY the guess
-                System.out.println(Colors.Ansi.paint(Colors.Ansi.BG_BLACK, g));                 //  VERIFY the guess
+            for(String g : guesses) {                                                                      //  ITERATE all guesses, submit the guess, prompt for the response, add the play to 'Turns' collection
+                System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_YELLOW, "Your guess is: "));  //  VERIFY the guess
+                System.out.println(Colors.Ansi.paint(Colors.Ansi.BG_BLACK, g));                            //  VERIFY the guess
                 latestGuess = g;
-                latestResponse = Keyboard.responseFromOpponent();          //  GET the latest response
-                if(latestResponse ==5) break;                              //  BREAK the loop if the latest response is 5
-                Turn turn = new Turn(g, latestResponse);                   //  CREATE a turn from a guess
+                latestResponse = Keyboard.responseFromOpponent();  //  GET the latest response
+                if(latestResponse ==5) break;                      //  BREAK the loop if the latest response is 5
+                Turn turn = new Turn(g, latestResponse);           //  CREATE a turn from a guess
                 //  ToDo: Need protection here in case response is 0!!!
-                dashboard.Turns.add(turn);                                 //  ADD the turn to the Turns collection
+                dashboard.Turns.add(turn);                         //  ADD the turn to the Turns collection
 
                 if(dashboard.Turns.size() > 1) changesMade = compare.MostRecentTurn.againstAllOthers(dashboard);  //  PREVENT any attempt to compare turns when only 1 exists
                 if(changesMade) compare.AllTurns.againstEachOther(dashboard);
             }
 
-//            AllTurns.compareAllTurnsAgainstEachOther(dashboard);    //  COMPARE all previous turns against each other
-
-            dashboard.reportNumber++;                                      //  INCREMENT the report number (lets us know how many turns we've taken)
-
-        } while (!(latestResponse == 5));                                  //  WHILE the latest response is not 5
+            dashboard.reportNumber++;      //  INCREMENT the report number (lets us know how many turns we've taken)
+        } while (!(latestResponse == 5));  //  WHILE the latest response is not 5
 
         //  THE HOME STRETCH.  (The latest response was 5, but the last guess is NOT the word)
         guessIsWord = Keyboard.verify(latestGuess);

@@ -51,6 +51,7 @@ public class Classification {
         if(inBoth.size() == 5) updatedGuessesSame = true;
     }
 
+    //  BEHAVIOR
     private static boolean checkForUpdatedGuessesDifferInLengthByMoreThanOne(String iUpdatedGuess, String jUpdatedGuess) {
         return iUpdatedGuess.length() - jUpdatedGuess.length() >= 2 || iUpdatedGuess.length() - jUpdatedGuess.length() <= -2;
     }
@@ -79,30 +80,9 @@ public class Classification {
         return set;
     }
 
-    public Set<Character> getOnlyInFirst() {
-        return onlyInFirst;
-    }
-
-    public Set<Character> getInBoth() {
-        return inBoth;
-    }
-
-    public Set<Character> getOnlyInSecond() {
-        return onlyInSecond;
-    }
-
     public void printClassification() {
         System.out.println("    Only in first:  " + onlyInFirst);
         System.out.println("    In both:        " + inBoth);
         System.out.println("    Only in second: " + onlyInSecond);
-    }
-
-    public void printFindings() {
-        if(updatedResponsesSame) System.out.println(" - Updated responses are the same");
-        if(updatedResponsesDifferByOne) System.out.println(" - Updated responses differ by one");
-        if(updatedResponsesDifferByMoreThanOne) System.out.println(" - Updated responses differ by more than one");
-        if(updatedGuessesSameLength) System.out.println(" - Updated guesses are the same length");
-        if(updatedGuessesDifferInLengthByOne) System.out.println(" - Updated guesses differ in length by one");
-        if(updatedGuessesDifferInLengthByMoreThanOne) System.out.println(" - Updated guesses differ in length by one");
     }
 }

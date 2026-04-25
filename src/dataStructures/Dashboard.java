@@ -84,10 +84,6 @@ public class Dashboard {
         }
     }
 
-
-
-
-
     //  REGENERATE the WordPairs table as previously unknown letters are determined to be KNOWN OUT...
     public static void regenerateWordPairsTable() {
 
@@ -95,7 +91,6 @@ public class Dashboard {
         Connect.watson("createWordPairsTable");  //  REGENERATE the WordPairs table...
         Connect.watson("deleteDups");            //  DELETE dups from the WordPairs table...
     }
-
 
     public static void removeChars(String input, Set<Character> remove) {
         StringBuilder sb = new StringBuilder(input.length());
@@ -116,4 +111,3 @@ public class Dashboard {
         return false;
     }
 }
-
