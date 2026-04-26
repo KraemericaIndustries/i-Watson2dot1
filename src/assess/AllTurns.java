@@ -8,22 +8,30 @@ public class AllTurns {
 
     public static void removeDeterminedLettersFromAllTurns(Dashboard dashboard) {
 
-        for(Character c : dashboard.knownIn) {  //  walks knownIn
-            for(Turn t : dashboard.Turns) {     //  walks a turn
-                if(t.turn.contains(c)) {
-                    t.turn.remove(c);
-                    t.updatedResponse -= 1;
+        for (Character c : dashboard.knownIn) {
+            for (Turn t : dashboard.Turns) {
+
+                if (t.updatedGuess != null && t.updatedGuess.indexOf(c) >= 0) {
+
+                    // Remove all occurrences of c from updatedGuess
+                    t.updatedGuess = t.updatedGuess.replace(c.toString(), "");
+
+                    t.updatedResponse--;
                 }
-                t.parseCollectionToString();
             }
         }
 
-        for(Character c : dashboard.knownOut) {  //  walks knownIn
-            for(Turn t : dashboard.Turns) {      // walks a turn
-                t.turn.remove(c);
-                t.parseCollectionToString();
+        for (Character c : dashboard.knownOut) {
+            for (Turn t : dashboard.Turns) {
+
+                if (t.updatedGuess != null && t.updatedGuess.indexOf(c) >= 0) {
+
+                    // Remove all occurrences of c from updatedGuess
+                    t.updatedGuess = t.updatedGuess.replace(c.toString(), "");
+                }
             }
         }
+        System.out.println();
     }
 
     //  PRETTY-PRINT the UPDATED turns being compared...

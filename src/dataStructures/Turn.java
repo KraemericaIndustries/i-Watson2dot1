@@ -30,15 +30,4 @@ public class Turn {
             turn.add(guess.charAt(i));
         }
     }
-
-    public void parseCollectionToString() {
-
-        StringBuilder sb = new StringBuilder();
-
-        for(Character c : turn) {
-            sb.append(c);
-        }
-
-        this.updatedGuess = sb.toString();
-    }
 }

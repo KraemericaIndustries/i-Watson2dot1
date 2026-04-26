@@ -58,7 +58,7 @@ public class DashboardChanges {
         changesToKnownOut.clear();
 
         System.out.println(Colors.Ansi.paint(Colors.Ansi.BRIGHT_CYAN, "The dashboard has been changed to:"));
-        print.object.dashboard(dashboard);                             //  PRINT the dashboard
+        print.object.dashboard(dashboard);
         System.out.println();
     }
 
